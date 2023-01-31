@@ -1,5 +1,5 @@
 import { HStack } from '@chakra-ui/react';
-import { Card } from './Card';
+import { Card } from './Card/Card';
 
 interface HandProps {
   // TODO: Make these real cards

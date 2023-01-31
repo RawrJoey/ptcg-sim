@@ -1,18 +1,12 @@
 import { CARD_TRANSITION_DURATION } from '@/styles/constants';
 import { Box, keyframes } from '@chakra-ui/react';
 import { MouseEvent, useCallback, useState } from 'react';
-
-interface CardProps {
-  size: 'sm' | 'md';
-  hoverBehavior: 'bevel' | 'float';
-  entranceBehavior?: 'draw';
-  clickToZoom?: boolean;
-}
+import { CardProps } from './CardProps';
+import { getCardDimensions } from './helpers';
 
 export const Card = (props: CardProps) => {
   const THRESHOLD = 15;
-  const WIDTH = props.size === 'md' ? 250 : 150;
-  const HEIGHT = WIDTH * 1.396;
+  const { height, width } = getCardDimensions(props.size);
 
   const [transform, setTransform] = useState('');
   const [glowBackgroundImage, setGlowBackgroundImage] = useState('');
@@ -81,16 +75,16 @@ export const Card = (props: CardProps) => {
       transitionTimingFunction='ease-out'
       aria-label='Colress'
       backgroundSize='cover'
-      height={`${HEIGHT}px`}
-      width={`${WIDTH}px`}
+      height={`${height}px`}
+      width={`${width}px`}
       borderRadius={13}
       boxShadow={transform ? '0 5px 20px 5px #00000044;' : 'none'}
       animation={props.entranceBehavior === 'draw' ? drawAnimation : undefined}
       _before={{
         content: '" "',
         position: 'absolute',
-        width: `${WIDTH}px`,
-        height: `${HEIGHT}px`,
+        width: `${width}px`,
+        height: `${height}px`,
         backgroundImage:
           'url(https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png)',
         backgroundSize: 'cover',
