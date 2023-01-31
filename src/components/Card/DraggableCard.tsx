@@ -22,5 +22,5 @@ export const DraggableCard = (props: CardProps) => {
     }),
   }));
 
-  return <Card ref={drag} {...props} />;
+  return <Card ref={drag} isDragging={isDragging} {...props} />;
 };

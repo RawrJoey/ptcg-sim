@@ -20,6 +20,8 @@ export const Card = forwardRef(
     const [showBig, setShowBig] = useState(false);
 
     const handleHover = useCallback((e: MouseEvent<HTMLDivElement>) => {
+      if (props.isDragging) return;
+
       const { clientX, clientY, currentTarget } = e;
       const { clientWidth, clientHeight, offsetLeft, offsetTop } =
         currentTarget;
@@ -73,44 +75,47 @@ export const Card = forwardRef(
       CARD_TRANSITION_DURATION * 0.75
     }ms ease`;
 
+    const dynamicWidth = props.isDragging ? 0 : width;
+
     return (
-      <Box height={`${height}px`} width={`${width}px`} ref={ref}>
-        <Box
-          borderRadius={13}
-          cursor='pointer'
-          boxShadow={transform ? '0 5px 20px 5px #00000044;' : 'none'}
-          _before={{
-            content: '" "',
-            position: 'absolute',
-            width: `${width}px`,
-            height: `${height}px`,
-            backgroundImage:
-              'url(https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png)',
-            backgroundSize: 'cover',
-          }}
-          onMouseMove={handleHover}
-          onMouseLeave={resetStyles}
-          onClick={handleClick}
-          transform={transform}
-          transitionDuration={`${CARD_TRANSITION_DURATION}ms`}
-          transitionTimingFunction='ease-out'
-          animation={
-            props.entranceBehavior === 'draw' ? drawAnimation : undefined
-          }
-        >
-          {glowBackgroundImage && (
-            <Box
-              position={'absolute'}
-              width='100%'
-              height='100%'
-              top={0}
-              left={0}
-              opacity={0.23}
-              backgroundImage={glowBackgroundImage}
-              borderRadius={13}
-            />
-          )}
-        </Box>
+      <Box
+        height={`${height}px`}
+        width={`${dynamicWidth}px`}
+        ref={ref}
+        borderRadius={13}
+        cursor='pointer'
+        boxShadow={transform ? '0 5px 20px 5px #00000044;' : 'none'}
+        _before={{
+          content: '" "',
+          position: 'absolute',
+          width: `${dynamicWidth}px`,
+          height: `${height}px`,
+          backgroundImage:
+            'url(https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png)',
+          backgroundSize: 'cover',
+        }}
+        onMouseMove={handleHover}
+        onMouseLeave={resetStyles}
+        onClick={handleClick}
+        transform={transform}
+        transitionDuration={`${CARD_TRANSITION_DURATION}ms`}
+        transitionTimingFunction='ease-out'
+        animation={
+          props.entranceBehavior === 'draw' ? drawAnimation : undefined
+        }
+      >
+        {glowBackgroundImage && (
+          <Box
+            position={'absolute'}
+            width='100%'
+            height='100%'
+            top={0}
+            left={0}
+            opacity={0.23}
+            backgroundImage={glowBackgroundImage}
+            borderRadius={13}
+          />
+        )}
       </Box>
     );
   }

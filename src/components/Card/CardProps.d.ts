@@ -3,6 +3,7 @@ export interface CardProps {
   hoverBehavior: 'bevel' | 'float';
   entranceBehavior?: 'draw';
   clickToZoom?: boolean;
+  isDragging?: boolean
 }
 
 export type CardSize = 'sm' | 'md' | 'lg';
