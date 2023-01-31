@@ -1,9 +1,9 @@
 import { HStack } from '@chakra-ui/react';
+import { CardInterface } from './Card/CardInterface';
 import { DraggableCard } from './Card/DraggableCard';
 
 interface HandProps {
-  // TODO: Make these real cards
-  cards: string[];
+  cards: CardInterface[];
 }
 
 export const Hand = (props: HandProps) => {

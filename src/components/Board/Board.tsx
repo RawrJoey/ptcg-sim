@@ -1,14 +1,26 @@
 import { Grid, GridItem } from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
+import { CardInterface } from '../Card/CardInterface';
 import { DeckOnBoard } from '../Deck/DeckOnBoard';
 import { Hand } from '../Hand';
 import { DiscardPile } from './DiscardPile';
 
 export const Board = () => {
-  const [handCards, setHandCards] = useState(['colress', 'colress', 'colress']);
+  const [handCards, setHandCards] = useState<CardInterface[]>([
+    {
+      id: 1,
+      name: 'colress',
+    },
+  ]);
 
   const drawCard = useCallback(() => {
-    setHandCards([...handCards, 'colress']);
+    setHandCards([
+      ...handCards,
+      {
+        id: handCards.length,
+        name: 'colress',
+      },
+    ]);
   }, [handCards, setHandCards]);
 
   return (
