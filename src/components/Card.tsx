@@ -6,9 +6,7 @@ export const Card = () => {
   const WIDTH = 250;
 
   const [transform, setTransform] = useState('');
-  const [glowBackgroundImage, setGlowBackgroundImage] = useState(
-    'radial-gradient(circle at 50% -20%, #ffffff22, #0000000f)'
-  );
+  const [glowBackgroundImage, setGlowBackgroundImage] = useState('');
   const [showBig, setShowBig] = useState(false);
 
   const handleHover = useCallback((e: MouseEvent<HTMLDivElement>) => {
@@ -26,7 +24,7 @@ export const Card = () => {
       circle at
       ${horizontal * 2 + clientX / 2}px
       ${vertical * 2 + clientY / 2}px,
-      #ffffff55,
+      #ffffffff,
       #0000000f
     )
   `);
@@ -47,6 +45,7 @@ export const Card = () => {
       `perspective(${e.currentTarget.clientWidth}px) rotateX(0deg) rotateY(0deg)`
     );
     setShowBig(false);
+    setGlowBackgroundImage('');
   }, []);
 
   const transformCard = useCallback(
@@ -82,6 +81,7 @@ export const Card = () => {
         height='100%'
         top={0}
         left={0}
+        opacity={0.23}
         backgroundImage={glowBackgroundImage}
         borderRadius={13}
       />
