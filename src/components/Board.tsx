@@ -1,6 +1,7 @@
 import { Button, Grid, GridItem } from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
 import { BlankCard } from './Card/BlankCard';
+import { DeckOnBoard } from './Deck/DeckOnBoard';
 import { Hand } from './Hand';
 
 export const Board = () => {
@@ -21,8 +22,8 @@ export const Board = () => {
       gridTemplateColumns={'1fr 5fr 1fr'}
       width='100%'
     >
-      <GridItem area='deck' onClick={drawCard}>
-        <BlankCard />
+      <GridItem area='deck'>
+        <DeckOnBoard drawCard={drawCard} />
       </GridItem>
       <GridItem area='hand'>
         <Hand cards={handCards} />
