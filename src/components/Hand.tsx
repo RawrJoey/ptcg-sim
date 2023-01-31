@@ -1,9 +1,15 @@
 import { HStack } from '@chakra-ui/react';
+import { Area } from './Board/Area';
 import { CardInterface } from './Card/CardInterface';
 import { DraggableCard } from './Card/DraggableCard';
 
 interface HandProps {
   cards: CardInterface[];
+  handleMoveCard: (
+    card: CardInterface,
+    source: Area,
+    destination: Area
+  ) => void;
 }
 
 export const Hand = (props: HandProps) => {
@@ -11,10 +17,12 @@ export const Hand = (props: HandProps) => {
     <HStack maxWidth={'100%'} spacing={0} justifyContent='center'>
       {props.cards.map((card, key) => (
         <DraggableCard
+          card={card}
           key={key}
           hoverBehavior='float'
           size='md'
           entranceBehavior='draw'
+          handleMoveCard={props.handleMoveCard}
         />
       ))}
     </HStack>

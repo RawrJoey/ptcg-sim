@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import { CardInterface } from '../Card/CardInterface';
 import { DeckOnBoard } from '../Deck/DeckOnBoard';
 import { Hand } from '../Hand';
+import { Area } from './Area';
 import { DiscardPile } from './DiscardPile';
 
 export const Board = () => {
@@ -13,15 +14,32 @@ export const Board = () => {
     },
   ]);
 
-  const drawCard = useCallback(() => {
-    setHandCards([
-      ...handCards,
-      {
-        id: handCards.length,
-        name: 'colress',
-      },
-    ]);
-  }, [handCards, setHandCards]);
+  const drawCard = useCallback(
+    (card: CardInterface) => {
+      setHandCards([...handCards, card]);
+    },
+    [handCards, setHandCards]
+  );
+
+  const handleMoveCard = (
+    card: CardInterface,
+    source: Area,
+    destination: Area
+  ) => {
+    if (source === 'deck') {
+      // Pop from deck
+      if (destination === 'hand') {
+        drawCard(card);
+      }
+    }
+
+    if (source === 'hand') {
+      setHandCards(handCards.filter(({ id }) => id !== card.id));
+      if (destination === 'discard') {
+        // Push to discard
+      }
+    }
+  };
 
   return (
     <Grid
@@ -36,10 +54,12 @@ export const Board = () => {
       width='100%'
     >
       <GridItem area='deck'>
-        <DeckOnBoard drawCard={drawCard} />
+        <DeckOnBoard
+          drawCard={() => drawCard({ id: handCards.length, name: 'colress' })}
+        />
       </GridItem>
       <GridItem area='hand'>
-        <Hand cards={handCards} />
+        <Hand cards={handCards} handleMoveCard={handleMoveCard} />
       </GridItem>
       <GridItem area='discard'>
         <DiscardPile />
