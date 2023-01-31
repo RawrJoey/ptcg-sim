@@ -1,6 +1,5 @@
-import { Button, Grid, GridItem } from '@chakra-ui/react';
+import { Grid, GridItem } from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
-import { BlankCard } from './Card/BlankCard';
 import { DeckOnBoard } from './Deck/DeckOnBoard';
 import { Hand } from './Hand';
 
@@ -14,8 +13,9 @@ export const Board = () => {
   return (
     <Grid
       templateAreas={`
-    "prizes . active . deck"
-    ". bench bench bench discard"
+    "lost-zone . . . deck"
+    "prizes . active . discard"
+    ". bench bench bench ."
     "hand hand hand hand hand"
     `}
       gridTemplateRows={'1fr 1fr 1fr'}
