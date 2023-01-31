@@ -33,14 +33,20 @@ export const Card = () => {
   }, []);
 
   const handleClick = useCallback(() => {
-    setTransform(`scale3d(1.8, 1.8, 1.8)`)
+    if (!showBig) {
+      setTransform(`scale3d(1.55, 1.55, 1.55)`);
+    } else {
+      setTransform(`scale3d(1, 1, 1)`);
+    }
+
     setShowBig(!showBig);
   }, [showBig, setShowBig]);
 
   const resetStyles = useCallback((e: MouseEvent<HTMLDivElement>) => {
     setTransform(
-      `perspective(${e.currentTarget.clientWidth}px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`
+      `perspective(${e.currentTarget.clientWidth}px) rotateX(0deg) rotateY(0deg)`
     );
+    setShowBig(false);
   }, []);
 
   const transformCard = useCallback(
