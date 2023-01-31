@@ -9,6 +9,7 @@ export const Card = () => {
   const [glowBackgroundImage, setGlowBackgroundImage] = useState(
     'radial-gradient(circle at 50% -20%, #ffffff22, #0000000f)'
   );
+  const [showBig, setShowBig] = useState(false);
 
   const handleHover = useCallback((e: MouseEvent<HTMLDivElement>) => {
     const { clientX, clientY, currentTarget } = e;
@@ -31,6 +32,11 @@ export const Card = () => {
   `);
   }, []);
 
+  const handleClick = useCallback(() => {
+    setTransform(`scale3d(1.8, 1.8, 1.8)`)
+    setShowBig(!showBig);
+  }, [showBig, setShowBig]);
+
   const resetStyles = useCallback((e: MouseEvent<HTMLDivElement>) => {
     setTransform(
       `perspective(${e.currentTarget.clientWidth}px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`
@@ -50,6 +56,7 @@ export const Card = () => {
     <Box
       onMouseMove={handleHover}
       onMouseLeave={resetStyles}
+      onClick={handleClick}
       transform={transform}
       transitionDuration='300ms'
       transitionTimingFunction='ease-out'
