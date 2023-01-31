@@ -13,7 +13,7 @@ export const Hand = (props: HandProps) => {
         <Card
           key={key}
           hoverBehavior='float'
-          size='sm'
+          size='md'
           entranceBehavior='draw'
         />
       ))}

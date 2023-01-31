@@ -1,6 +1,8 @@
 export interface CardProps {
-  size: 'sm' | 'md';
+  size: CardSize;
   hoverBehavior: 'bevel' | 'float';
   entranceBehavior?: 'draw';
   clickToZoom?: boolean;
 }
+
+export type CardSize = 'sm' | 'md' | 'lg';
