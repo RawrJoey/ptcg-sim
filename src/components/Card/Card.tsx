@@ -89,6 +89,7 @@ export const Card = (props: CardProps) => {
           'url(https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png)',
         backgroundSize: 'cover',
       }}
+      cursor='pointer'
     >
       {glowBackgroundImage && (
         <Box
