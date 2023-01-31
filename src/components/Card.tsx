@@ -1,9 +1,10 @@
 import { Box } from '@chakra-ui/react';
 import { MouseEvent, useCallback, useState } from 'react';
 
-const THRESHOLD = 15;
-
 export const Card = () => {
+  const THRESHOLD = 15;
+  const WIDTH = 250;
+
   const [transform, setTransform] = useState('');
   const [glowBackgroundImage, setGlowBackgroundImage] = useState(
     'radial-gradient(circle at 50% -20%, #ffffff22, #0000000f)'
@@ -55,8 +56,8 @@ export const Card = () => {
       aria-label='Colress'
       backgroundImage='url(https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png)'
       backgroundSize='cover'
-      height={`${250 * 1.396}px`}
-      width='250px'
+      height={`${WIDTH * 1.396}px`}
+      width={`${WIDTH}px`}
       borderRadius={13}
       _hover={{
         boxShadow: '0 5px 20px 5px #00000044;',
