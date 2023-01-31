@@ -1,4 +1,4 @@
-import { HStack } from '@chakra-ui/react';
+import { Grid, HStack } from '@chakra-ui/react';
 import { Card } from './Card';
 
 interface HandProps {
@@ -8,9 +8,14 @@ interface HandProps {
 
 export const Hand = (props: HandProps) => {
   return (
-    <HStack>
+    <HStack maxWidth={'100%'} spacing={0} justifyContent='center'>
       {props.cards.map((card, key) => (
-        <Card key={key} hoverBehavior='float' size='sm' entranceBehavior='draw' />
+        <Card
+          key={key}
+          hoverBehavior='float'
+          size='sm'
+          entranceBehavior='draw'
+        />
       ))}
     </HStack>
   );

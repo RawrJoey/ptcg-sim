@@ -12,6 +12,7 @@ interface CardProps {
 export const Card = (props: CardProps) => {
   const THRESHOLD = 15;
   const WIDTH = props.size === 'md' ? 250 : 150;
+  const HEIGHT = WIDTH * 1.396;
 
   const [transform, setTransform] = useState('');
   const [glowBackgroundImage, setGlowBackgroundImage] = useState('');
@@ -40,7 +41,7 @@ export const Card = (props: CardProps) => {
       )
     `);
     } else if (props.hoverBehavior === 'float') {
-      setTransform(`translateY(-1.5rem)`);
+      setTransform(`translateY(-2rem)`);
     }
   }, []);
 
@@ -62,10 +63,13 @@ export const Card = (props: CardProps) => {
     setGlowBackgroundImage('');
   }, []);
 
-  const drawAnimation = keyframes`
+  const drawKeyframe = keyframes`
     from {transform: translateY(50px);}
     to {transform: translateY(0)}
   `;
+  const drawAnimation = `${drawKeyframe} 1 ${
+    CARD_TRANSITION_DURATION * 0.75
+  }ms ease`;
 
   return (
     <Box
@@ -76,17 +80,21 @@ export const Card = (props: CardProps) => {
       transitionDuration={`${CARD_TRANSITION_DURATION}ms`}
       transitionTimingFunction='ease-out'
       aria-label='Colress'
-      backgroundImage='url(https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png)'
       backgroundSize='cover'
-      height={`${WIDTH * 1.396}px`}
+      height={`${HEIGHT}px`}
       width={`${WIDTH}px`}
       borderRadius={13}
       boxShadow={transform ? '0 5px 20px 5px #00000044;' : 'none'}
-      animation={
-        props.entranceBehavior === 'draw'
-          ? `${drawAnimation} 1 ${CARD_TRANSITION_DURATION * 0.75}ms ease`
-          : undefined
-      }
+      animation={props.entranceBehavior === 'draw' ? drawAnimation : undefined}
+      _before={{
+        content: '" "',
+        position: 'absolute',
+        width: `${WIDTH}px`,
+        height: `${HEIGHT}px`,
+        backgroundImage:
+          'url(https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png)',
+        backgroundSize: 'cover',
+      }}
     >
       {glowBackgroundImage && (
         <Box
