@@ -1,6 +1,7 @@
 import { CARD_TRANSITION_DURATION } from '@/styles/constants';
 import { Box, keyframes } from '@chakra-ui/react';
 import { MouseEvent, useCallback, useState } from 'react';
+import Draggable from 'react-draggable';
 import { CardProps } from './CardProps';
 import { getCardDimensions } from './helpers';
 
@@ -66,43 +67,45 @@ export const Card = (props: CardProps) => {
   }ms ease`;
 
   return (
-    <Box
-      onMouseMove={handleHover}
-      onMouseLeave={resetStyles}
-      onClick={handleClick}
-      transform={transform}
-      transitionDuration={`${CARD_TRANSITION_DURATION}ms`}
-      transitionTimingFunction='ease-out'
-      aria-label='Colress'
-      backgroundSize='cover'
-      height={`${height}px`}
-      width={`${width}px`}
-      borderRadius={13}
-      boxShadow={transform ? '0 5px 20px 5px #00000044;' : 'none'}
-      animation={props.entranceBehavior === 'draw' ? drawAnimation : undefined}
-      _before={{
-        content: '" "',
-        position: 'absolute',
-        width: `${width}px`,
-        height: `${height}px`,
-        backgroundImage:
-          'url(https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png)',
-        backgroundSize: 'cover',
-      }}
-      cursor='pointer'
-    >
-      {glowBackgroundImage && (
+    <Draggable>
+      <Box height={`${height}px`} width={`${width}px`}>
         <Box
-          position={'absolute'}
-          width='100%'
-          height='100%'
-          top={0}
-          left={0}
-          opacity={0.23}
-          backgroundImage={glowBackgroundImage}
           borderRadius={13}
-        />
-      )}
-    </Box>
+          cursor='pointer'
+          boxShadow={transform ? '0 5px 20px 5px #00000044;' : 'none'}
+          _before={{
+            content: '" "',
+            position: 'absolute',
+            width: `${width}px`,
+            height: `${height}px`,
+            backgroundImage:
+              'url(https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png)',
+            backgroundSize: 'cover',
+          }}
+          onMouseMove={handleHover}
+          onMouseLeave={resetStyles}
+          onClick={handleClick}
+          transform={transform}
+          transitionDuration={`${CARD_TRANSITION_DURATION}ms`}
+          transitionTimingFunction='ease-out'
+          animation={
+            props.entranceBehavior === 'draw' ? drawAnimation : undefined
+          }
+        >
+          {glowBackgroundImage && (
+            <Box
+              position={'absolute'}
+              width='100%'
+              height='100%'
+              top={0}
+              left={0}
+              opacity={0.23}
+              backgroundImage={glowBackgroundImage}
+              borderRadius={13}
+            />
+          )}
+        </Box>
+      </Box>
+    </Draggable>
   );
 };

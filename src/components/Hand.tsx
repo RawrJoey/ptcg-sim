@@ -1,4 +1,5 @@
 import { HStack } from '@chakra-ui/react';
+import Draggable from 'react-draggable';
 import { Card } from './Card/Card';
 
 interface HandProps {
