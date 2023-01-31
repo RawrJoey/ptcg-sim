@@ -1,7 +1,8 @@
 import { Grid, GridItem } from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
-import { DeckOnBoard } from './Deck/DeckOnBoard';
-import { Hand } from './Hand';
+import { DeckOnBoard } from '../Deck/DeckOnBoard';
+import { Hand } from '../Hand';
+import { DiscardPile } from './DiscardPile';
 
 export const Board = () => {
   const [handCards, setHandCards] = useState(['colress', 'colress', 'colress']);
@@ -27,6 +28,9 @@ export const Board = () => {
       </GridItem>
       <GridItem area='hand'>
         <Hand cards={handCards} />
+      </GridItem>
+      <GridItem area='discard'>
+        <DiscardPile />
       </GridItem>
     </Grid>
   );

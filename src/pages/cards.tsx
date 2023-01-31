@@ -1,4 +1,4 @@
-import { Board } from '@/components/Board';
+import { Board } from '@/components/Board/Board';
 import { Hand } from '@/components/Hand';
 import { CARD_TRANSITION_DURATION } from '@/styles/constants';
 import { Button, Stack } from '@chakra-ui/react';

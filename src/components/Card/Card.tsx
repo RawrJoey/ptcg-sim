@@ -1,33 +1,40 @@
 import { CARD_TRANSITION_DURATION } from '@/styles/constants';
 import { Box, keyframes } from '@chakra-ui/react';
-import { MouseEvent, useCallback, useState } from 'react';
-import Draggable from 'react-draggable';
+import {
+  ForwardedRef,
+  forwardRef,
+  MouseEvent,
+  useCallback,
+  useState,
+} from 'react';
 import { CardProps } from './CardProps';
 import { getCardDimensions } from './helpers';
 
-export const Card = (props: CardProps) => {
-  const THRESHOLD = 15;
-  const { height, width } = getCardDimensions(props.size);
+export const Card = forwardRef(
+  (props: CardProps, ref: ForwardedRef<HTMLDivElement>) => {
+    const THRESHOLD = 15;
+    const { height, width } = getCardDimensions(props.size);
 
-  const [transform, setTransform] = useState('');
-  const [glowBackgroundImage, setGlowBackgroundImage] = useState('');
-  const [showBig, setShowBig] = useState(false);
+    const [transform, setTransform] = useState('');
+    const [glowBackgroundImage, setGlowBackgroundImage] = useState('');
+    const [showBig, setShowBig] = useState(false);
 
-  const handleHover = useCallback((e: MouseEvent<HTMLDivElement>) => {
-    const { clientX, clientY, currentTarget } = e;
-    const { clientWidth, clientHeight, offsetLeft, offsetTop } = currentTarget;
+    const handleHover = useCallback((e: MouseEvent<HTMLDivElement>) => {
+      const { clientX, clientY, currentTarget } = e;
+      const { clientWidth, clientHeight, offsetLeft, offsetTop } =
+        currentTarget;
 
-    const horizontal = (clientX - offsetLeft) / clientWidth;
-    const vertical = (clientY - offsetTop) / clientHeight;
+      const horizontal = (clientX - offsetLeft) / clientWidth;
+      const vertical = (clientY - offsetTop) / clientHeight;
 
-    if (props.hoverBehavior === 'bevel') {
-      const rotateX = (THRESHOLD / 2 - horizontal * THRESHOLD).toFixed(2);
-      const rotateY = (vertical * THRESHOLD - THRESHOLD / 2).toFixed(2);
+      if (props.hoverBehavior === 'bevel') {
+        const rotateX = (THRESHOLD / 2 - horizontal * THRESHOLD).toFixed(2);
+        const rotateY = (vertical * THRESHOLD - THRESHOLD / 2).toFixed(2);
 
-      setTransform(
-        `perspective(${clientWidth}px) rotateX(${rotateY}deg) rotateY(${rotateX}deg) scale3d(1.1, 1.1, 1.1)`
-      );
-      setGlowBackgroundImage(`radial-gradient(
+        setTransform(
+          `perspective(${clientWidth}px) rotateX(${rotateY}deg) rotateY(${rotateX}deg) scale3d(1.1, 1.1, 1.1)`
+        );
+        setGlowBackgroundImage(`radial-gradient(
         circle at
         ${horizontal * 2 + clientX / 2}px
         ${vertical * 2 + clientY / 2}px,
@@ -35,40 +42,39 @@ export const Card = (props: CardProps) => {
         #0000000f
       )
     `);
-    } else if (props.hoverBehavior === 'float') {
-      setTransform(`translateY(-2rem)`);
-    }
-  }, []);
-
-  const handleClick = useCallback(() => {
-    if (props.clickToZoom) {
-      if (!showBig) {
-        setTransform(`scale3d(1.55, 1.55, 1.55)`);
-      } else {
-        setTransform(`scale3d(1, 1, 1)`);
+      } else if (props.hoverBehavior === 'float') {
+        setTransform(`translateY(-2rem)`);
       }
+    }, []);
 
-      setShowBig(!showBig);
-    }
-  }, [props.clickToZoom, showBig, setShowBig]);
+    const handleClick = useCallback(() => {
+      if (props.clickToZoom) {
+        if (!showBig) {
+          setTransform(`scale3d(1.55, 1.55, 1.55)`);
+        } else {
+          setTransform(`scale3d(1, 1, 1)`);
+        }
 
-  const resetStyles = useCallback((e: MouseEvent<HTMLDivElement>) => {
-    setTransform('');
-    setShowBig(false);
-    setGlowBackgroundImage('');
-  }, []);
+        setShowBig(!showBig);
+      }
+    }, [props.clickToZoom, showBig, setShowBig]);
 
-  const drawKeyframe = keyframes`
+    const resetStyles = useCallback((e: MouseEvent<HTMLDivElement>) => {
+      setTransform('');
+      setShowBig(false);
+      setGlowBackgroundImage('');
+    }, []);
+
+    const drawKeyframe = keyframes`
     from {transform: translateY(50px);}
     to {transform: translateY(0)}
   `;
-  const drawAnimation = `${drawKeyframe} 1 ${
-    CARD_TRANSITION_DURATION * 0.75
-  }ms ease`;
+    const drawAnimation = `${drawKeyframe} 1 ${
+      CARD_TRANSITION_DURATION * 0.75
+    }ms ease`;
 
-  return (
-    <Draggable>
-      <Box height={`${height}px`} width={`${width}px`}>
+    return (
+      <Box height={`${height}px`} width={`${width}px`} ref={ref}>
         <Box
           borderRadius={13}
           cursor='pointer'
@@ -106,6 +112,8 @@ export const Card = (props: CardProps) => {
           )}
         </Box>
       </Box>
-    </Draggable>
-  );
-};
+    );
+  }
+);
+
+Card.displayName = 'Card';

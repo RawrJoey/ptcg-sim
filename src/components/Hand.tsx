@@ -1,6 +1,5 @@
 import { HStack } from '@chakra-ui/react';
-import Draggable from 'react-draggable';
-import { Card } from './Card/Card';
+import { DraggableCard } from './Card/DraggableCard';
 
 interface HandProps {
   // TODO: Make these real cards
@@ -11,7 +10,7 @@ export const Hand = (props: HandProps) => {
   return (
     <HStack maxWidth={'100%'} spacing={0} justifyContent='center'>
       {props.cards.map((card, key) => (
-        <Card
+        <DraggableCard
           key={key}
           hoverBehavior='float'
           size='md'
