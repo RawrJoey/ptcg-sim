@@ -1,6 +1,7 @@
 import { Grid, GridItem } from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
 import { CardInterface } from '../Card/CardInterface';
+import { getCardDimensions } from '../Card/helpers';
 import { DeckOnBoard } from '../Deck/DeckOnBoard';
 import { Hand } from '../Hand';
 import { Area } from './Area';
@@ -58,7 +59,7 @@ export const Board = () => {
           drawCard={() => drawCard({ id: handCards.length, name: 'colress' })}
         />
       </GridItem>
-      <GridItem area='hand'>
+      <GridItem area='hand' height={getCardDimensions('md').height}>
         <Hand cards={handCards} handleMoveCard={handleMoveCard} />
       </GridItem>
       <GridItem area='discard'>
