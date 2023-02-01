@@ -76,10 +76,11 @@ export const Card = forwardRef(
     }ms ease`;
 
     const dynamicWidth = props.isDragging ? 0 : width;
+    const dynamicHeight = props.isDragging ? 0 : width;
 
     return (
       <Box
-        height={`${height}px`}
+        height={`${dynamicHeight}px`}
         width={`${dynamicWidth}px`}
         ref={ref}
         borderRadius={13}
