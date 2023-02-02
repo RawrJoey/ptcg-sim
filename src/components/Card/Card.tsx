@@ -3,17 +3,22 @@ import { Box, keyframes } from '@chakra-ui/react';
 import {
   ForwardedRef,
   forwardRef,
+  memo,
   MouseEvent,
   useCallback,
+  useMemo,
   useState,
 } from 'react';
 import { CardProps } from './CardProps';
 import { getCardDimensions } from './helpers';
 
-export const Card = forwardRef(
-  (props: CardProps, ref: ForwardedRef<HTMLDivElement>) => {
+export const Card = memo(
+  forwardRef((props: CardProps, ref: ForwardedRef<HTMLDivElement>) => {
     const THRESHOLD = 15;
-    const { height, width } = getCardDimensions(props.size);
+    const { height, width } = useMemo(
+      () => getCardDimensions(props.size),
+      [props.size]
+    );
 
     const [transform, setTransform] = useState('');
     const [glowBackgroundImage, setGlowBackgroundImage] = useState('');
@@ -119,7 +124,7 @@ export const Card = forwardRef(
         )}
       </Box>
     );
-  }
+  })
 );
 
 Card.displayName = 'Card';
