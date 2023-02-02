@@ -10,7 +10,7 @@ import { DiscardPile } from './DiscardPile';
 export const Board = () => {
   const [handCards, setHandCards] = useState<CardInterface[]>([
     {
-      id: 1,
+      id: 0,
       name: 'colress',
     },
   ]);
@@ -35,7 +35,7 @@ export const Board = () => {
     }
 
     if (source === 'hand') {
-      setHandCards(handCards.filter(({ id }) => id !== card.id));
+      // setHandCards(handCards.filter(({ id }) => id !== card.id));
       if (destination === 'discard') {
         // Push to discard
       }
@@ -60,10 +60,14 @@ export const Board = () => {
         />
       </GridItem>
       <GridItem area='hand' height={getCardDimensions('md').height}>
-        <Hand cards={handCards} handleMoveCard={handleMoveCard} />
+        <Hand cards={handCards} />
       </GridItem>
       <GridItem area='discard'>
-        <DiscardPile />
+        <DiscardPile
+          handleMoveCard={handleMoveCard}
+          handCards={handCards}
+          setHandCards={setHandCards}
+        />
       </GridItem>
     </Grid>
   );
