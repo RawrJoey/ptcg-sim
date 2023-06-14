@@ -80,6 +80,7 @@ export const Board = () => {
           <DeckOnBoard
             drawCard={() => drawCard({ id: Math.random(), name: 'colress', imageUrl: 'https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png' })}
           />
+          <button onClick={onOpen}>Open deck</button>
         </GridItem>
         <GridItem area='hand' height={getCardDimensions('md').height}>
           <Hand cards={handCards} />
