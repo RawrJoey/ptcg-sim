@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { discardCard } from '@/features/deck/deckSlice';
+import { moveCard } from '@/features/deck/deckSlice';
 import { Box, useDisclosure } from '@chakra-ui/react';
 import { Card } from '../Card/Card';
 import { CardInterface } from '../Card/CardInterface';
@@ -13,12 +13,8 @@ export const DiscardPile = () => {
   const dispatch = useAppDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const onDrop = (card: CardInterface) => {
-    dispatch(discardCard(card));
-  };
-
   return (
-    <DropZone zone='discard' onDrop={onDrop}>
+    <DropZone zone='discard'>
       {topCardInDiscard && (
         <Box onClick={onOpen}>
           <CardModalView cardOrigin='discard' isOpen={isOpen} onOpen={onOpen} onClose={onClose} cards={discardCards} />

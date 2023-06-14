@@ -1,4 +1,5 @@
 import { CardInterface } from '@/components/Card/CardInterface';
+import { CardZone } from '@/components/Card/DraggableCard';
 import { shuffle } from '@/helpers/deck/shuffle';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
@@ -14,6 +15,12 @@ const initialState: DeckState = {
   deckCards: [],
 };
 
+interface MoveCardPayload {
+  card: CardInterface,
+  origin: CardZone,
+  destination: CardZone
+}
+
 export const deckSlice = createSlice({
   name: 'deck',
   initialState,
@@ -26,19 +33,32 @@ export const deckSlice = createSlice({
       state.deckCards = state.deckCards.slice(0, state.deckCards.length - 7);
       state.handCards = openSeven;
     },
+    moveCard: (state, action: PayloadAction<MoveCardPayload>) => {
+      if (action.payload.origin === 'hand') {
+        state.handCards = state.handCards.filter((card) => card.id !== action.payload.card.id);
+      } else if (action.payload.origin === 'deck') {
+        state.deckCards = state.deckCards.filter((card) => card.id !== action.payload.card.id);
+      } else if (action.payload.origin === 'discard') {
+        state.discardCards = state.discardCards.filter((card) => card.id !== action.payload.card.id);
+      }
+
+      if (action.payload.destination === 'hand') {
+        state.handCards.push(action.payload.card);
+      } else if (action.payload.destination === 'deck') {
+        state.deckCards.push(action.payload.card);
+      } else if (action.payload.destination === 'discard') {
+        state.discardCards.push(action.payload.card);
+      }
+    },
     drawCard: (state) => {
       const card = state.deckCards[state.deckCards.length - 1];
       state.deckCards.pop();
       state.handCards.push(card);
-    },
-    discardCard: (state, action: PayloadAction<CardInterface>) => {
-      state.handCards = state.handCards.filter((card) => card.id !== action.payload.id);
-      state.discardCards.push(action.payload)
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { loadDeck, setupGame, drawCard, discardCard } = deckSlice.actions
+export const { loadDeck, setupGame, moveCard, drawCard } = deckSlice.actions
 
 export default deckSlice.reducer;

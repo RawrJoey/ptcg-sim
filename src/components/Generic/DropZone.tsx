@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/app/hooks';
-import { discardCard } from '@/features/deck/deckSlice';
+import { moveCard } from '@/features/deck/deckSlice';
 import type { CSSProperties, FC, PropsWithChildren } from 'react';
 import { useDrop } from 'react-dnd';
 import { CardInterface } from '../Card/CardInterface';
@@ -7,7 +7,6 @@ import { CardZone, DraggableCardType } from '../Card/DraggableCard';
 
 interface DropZoneProps  extends PropsWithChildren {
   zone: CardZone,
-  onDrop: (card: CardInterface) => void,
 }
 
 export const DropZone = (props: DropZoneProps) => {
@@ -22,7 +21,7 @@ export const DropZone = (props: DropZoneProps) => {
         }
         return true;
       },
-      drop: (draggingCard: DraggableCardType) => props.onDrop(draggingCard.card),
+      drop: (draggingCard: DraggableCardType) => dispatch(moveCard({ card: draggingCard.card, origin: draggingCard.origin, destination: props.zone })),
       collect: monitor => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
