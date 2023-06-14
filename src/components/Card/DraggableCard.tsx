@@ -1,21 +1,30 @@
 import { useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 import { Card } from './Card';
+import { CardInterface } from './CardInterface';
 import { CardProps } from './CardProps';
 
-export type CardOrigin = 'hand' | 'discard' | 'deck';
+export type CardZone = 'hand' | 'discard' | 'deck';
 
 interface DraggableCardProps extends CardProps {
   onDrag?: () => void;
   onFailedRelease?: () => void;
-  cardOrigin: CardOrigin
+  cardOrigin: CardZone;
+}
+
+export interface DraggableCardType {
+  origin: CardZone,
+  card: CardInterface
 }
 
 export const DraggableCard = (props: DraggableCardProps) => {
   const [{ isDragging }, drag] = useDrag(
     () => ({
-      type: props.cardOrigin,
-      item: props.card,
+      type: 'card',
+      item: {
+        origin: props.cardOrigin,
+        card: props.card
+      },
       collect: monitor => ({
         isDragging: monitor.isDragging(),
         handlerId: monitor.getHandlerId(),

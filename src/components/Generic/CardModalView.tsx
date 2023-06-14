@@ -6,7 +6,7 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { CardInterface } from '../Card/CardInterface';
-import { CardOrigin, DraggableCard } from '../Card/DraggableCard';
+import { CardZone, DraggableCard } from '../Card/DraggableCard';
 
 export interface SpecificCardModalViewProps {
   isOpen: boolean;
@@ -16,7 +16,7 @@ export interface SpecificCardModalViewProps {
 }
 
 export interface CardModalViewProps extends SpecificCardModalViewProps {
-  cardOrigin: CardOrigin
+  cardOrigin: CardZone
 }
 
 export const CardModalView = (props: CardModalViewProps) => {

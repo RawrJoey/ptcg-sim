@@ -3,11 +3,10 @@ import { discardCard } from '@/features/deck/deckSlice';
 import type { CSSProperties, FC, PropsWithChildren } from 'react';
 import { useDrop } from 'react-dnd';
 import { CardInterface } from '../Card/CardInterface';
-
-import { CardOrigin } from "../Card/DraggableCard"
+import { CardZone, DraggableCardType } from '../Card/DraggableCard';
 
 interface DropZoneProps  extends PropsWithChildren {
-  acceptedOrigins: CardOrigin[],
+  zone: CardZone,
   onDrop: (card: CardInterface) => void,
 }
 
@@ -16,10 +15,14 @@ export const DropZone = (props: DropZoneProps) => {
 
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
-      accept: ['hand', 'deck'],
-      drop: card => {
-        dispatch(discardCard(card as CardInterface));
+      accept: 'card',
+      canDrop(item, monitor) {
+        if ((monitor.getItem() as DraggableCardType).origin === props.zone) {
+          return false;
+        }
+        return true;
       },
+      drop: (draggingCard: DraggableCardType) => props.onDrop(draggingCard.card),
       collect: monitor => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
