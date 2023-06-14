@@ -1,4 +1,5 @@
 import { CardInterface } from '@/components/Card/CardInterface';
+import { shuffle } from '@/helpers/deck/shuffle';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface DeckState {
@@ -18,7 +19,7 @@ export const deckSlice = createSlice({
   initialState,
   reducers: {
     loadDeck: (state, action) => {
-      state.deckCards = action.payload;
+      state.deckCards = shuffle(action.payload);
     },
     setupGame: (state) => {
       const openSeven = state.deckCards.slice(state.deckCards.length - 7, state.deckCards.length);
