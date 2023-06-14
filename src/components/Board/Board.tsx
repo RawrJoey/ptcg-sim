@@ -12,13 +12,7 @@ import { Area } from './Area';
 import { DiscardPile } from './DiscardPile';
 
 export const Board = () => {
-  const [handCards, setHandCards] = useState<CardInterface[]>([
-    {
-      id: 0,
-      name: 'colress',
-      imageUrl: 'https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png'
-    },
-  ]);
+  const [handCards, setHandCards] = useState<CardInterface[]>([]);
   const [discardCards, setDiscardCards] = useState<CardInterface[]>([]);
   const [deckCards, setDeckCards] = useState<CardInterface[]>([]);
 
@@ -55,7 +49,6 @@ export const Board = () => {
   useEffect(() => {
     if (!isCodeToSetMapLoading) {
       const deck = parseDeckList(SAMPLE_LIST, codeToSetMap);
-      console.log(deck)
       setDeckCards(deck);
     }
   }, [isCodeToSetMapLoading]);
@@ -92,6 +85,7 @@ export const Board = () => {
             handCards={handCards}
             setHandCards={setHandCards}
           />
+          <Text>Discard: {discardCards.length}</Text>
         </GridItem>
       </Grid>
     </>
