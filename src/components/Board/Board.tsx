@@ -14,6 +14,7 @@ export const Board = () => {
       name: 'colress',
     },
   ]);
+  const [discardCards, setDiscardCards] = useState<CardInterface[]>([]);
 
   const drawCard = useCallback(
     (card: CardInterface) => {
@@ -35,9 +36,10 @@ export const Board = () => {
     }
 
     if (source === 'hand') {
-      // setHandCards(handCards.filter(({ id }) => id !== card.id));
+      setHandCards(handCards.filter(({ id }) => id !== card.id));
+
       if (destination === 'discard') {
-        // Push to discard
+        setDiscardCards([...discardCards, card])
       }
     }
   };
@@ -56,7 +58,7 @@ export const Board = () => {
     >
       <GridItem area='deck'>
         <DeckOnBoard
-          drawCard={() => drawCard({ id: handCards.length, name: 'colress' })}
+          drawCard={() => drawCard({ id: Math.random(), name: 'colress' })}
         />
       </GridItem>
       <GridItem area='hand' height={getCardDimensions('md').height}>

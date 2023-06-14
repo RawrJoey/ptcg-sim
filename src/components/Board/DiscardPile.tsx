@@ -30,9 +30,9 @@ export const DiscardPile = (props: DiscardPileProps) => {
       accept: 'card',
       drop: card => {
         props.handleMoveCard(card as CardInterface, 'hand', 'discard');
-        props.setHandCards(
-          props.handCards.filter(({ id }) => id !== (card as CardInterface).id)
-        );
+        // props.setHandCards(
+        //   props.handCards.filter(({ id }) => id !== (card as CardInterface).id)
+        // );
       },
       collect: monitor => ({
         isOver: monitor.isOver(),

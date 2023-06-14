@@ -90,7 +90,7 @@ export const Card = memo(
         ref={ref}
         borderRadius={13}
         cursor='pointer'
-        boxShadow={transform ? '0 5px 20px 5px #00000044;' : 'none'}
+        // boxShadow={transform ? '0 5px 20px 5px #00000044;' : 'none'}
         _before={{
           content: '" "',
           position: 'absolute',

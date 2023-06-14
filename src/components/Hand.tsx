@@ -9,10 +9,10 @@ interface HandProps {
 export const Hand = (props: HandProps) => {
   return (
     <HStack maxWidth={'100%'} spacing={0} justifyContent='center'>
-      {props.cards.map((card, key) => (
+      {props.cards.map((card) => (
         <DraggableCard
           card={card}
-          key={key}
+          key={card.id}
           hoverBehavior='float'
           size='md'
           entranceBehavior='draw'
