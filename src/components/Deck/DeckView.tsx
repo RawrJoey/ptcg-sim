@@ -7,9 +7,11 @@ import {
 } from '@chakra-ui/react';
 import { Card } from '../Card/Card';
 import { CardInterface } from '../Card/CardInterface';
+import { DraggableCard } from '../Card/DraggableCard';
 
 interface DeckViewProps {
   isOpen: boolean;
+  onOpen: () => void;
   onClose: () => void
   deck: CardInterface[];
 }
@@ -20,7 +22,7 @@ export const DeckView = (props: DeckViewProps) => {
       <ModalOverlay />
       <ModalContent>
         <HStack maxWidth={'100%'} spacing={0} flexWrap={'wrap'}>
-          {props.deck.map((card) => <Card card={card} size='md' hoverBehavior='float' />)}
+          {props.deck.map((card) => <DraggableCard card={card} size='md' hoverBehavior='float' onDrag={props.onClose} onFailedRelease={props.onOpen} />)}
         </HStack>
       </ModalContent>
     </Modal>

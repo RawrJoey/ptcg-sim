@@ -29,7 +29,7 @@ export const Board = () => {
 
   return (
     <>
-      <DeckView isOpen={isOpen} onClose={onClose} deck={deckCards} />
+      <DeckView isOpen={isOpen} onClose={onClose} onOpen={onOpen} deck={deckCards} />
       <Grid
         templateAreas={`
       "lost-zone . . . deck"
