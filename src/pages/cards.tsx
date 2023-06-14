@@ -1,8 +1,6 @@
 import { Board } from '@/components/Board/Board';
-import { Hand } from '@/components/Hand';
-import { CARD_TRANSITION_DURATION } from '@/styles/constants';
+import { Login } from '@/components/Login';
 import { Button, Stack } from '@chakra-ui/react';
-import { useState } from 'react';
 
 export default function Cards() {
   return (
@@ -12,6 +10,7 @@ export default function Cards() {
       align='center'
       maxWidth={'100%'}
     >
+      <Login />
       <Board />
     </Stack>
   );
