@@ -1,9 +1,10 @@
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { loadDeck, setupGame } from '@/features/deck/deckSlice';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
 import { parseDeckList } from '@/helpers/deck/parse';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
 import { Grid, GridItem, Text, useDisclosure } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
-import { CardInterface } from '../Card/CardInterface';
 import { getCardDimensions } from '../Card/helpers';
 import { DeckOnBoard } from '../Deck/DeckOnBoard';
 import { DeckView } from '../Deck/DeckView';
@@ -12,44 +13,15 @@ import { Area } from './Area';
 import { DiscardPile } from './DiscardPile';
 
 export const Board = () => {
-  const [handCards, setHandCards] = useState<CardInterface[]>([]);
-  const [discardCards, setDiscardCards] = useState<CardInterface[]>([]);
-  const [deckCards, setDeckCards] = useState<CardInterface[]>([]);
-
-  const drawCard = useCallback(
-    (card: CardInterface) => {
-      setHandCards([...handCards, card]);
-    },
-    [handCards, setHandCards]
-  );
-
-  const handleMoveCard = (
-    card: CardInterface,
-    source: Area,
-    destination: Area
-  ) => {
-    if (source === 'deck') {
-      // Pop from deck
-      if (destination === 'hand') {
-        drawCard(card);
-      }
-    }
-
-    if (source === 'hand') {
-      setHandCards(handCards.filter(({ id }) => id !== card.id));
-
-      if (destination === 'discard') {
-        setDiscardCards([...discardCards, card])
-      }
-    }
-  };
+  const { handCards, deckCards, discardCards } = useAppSelector((state) => state.deck);
+  const dispatch = useAppDispatch();
 
   const { data: codeToSetMap, isLoading: isCodeToSetMapLoading } = useCodeToSetMap();
 
   useEffect(() => {
     if (!isCodeToSetMapLoading) {
-      const deck = parseDeckList(SAMPLE_LIST, codeToSetMap);
-      setDeckCards(deck);
+      dispatch(loadDeck(parseDeckList(SAMPLE_LIST, codeToSetMap)));
+      dispatch(setupGame());
     }
   }, [isCodeToSetMapLoading]);
 
@@ -70,9 +42,7 @@ export const Board = () => {
         width='100%'
       >
         <GridItem area='deck'>
-          <DeckOnBoard
-            drawCard={() => drawCard({ id: Math.random(), name: 'colress', imageUrl: 'https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png' })}
-          />
+          <DeckOnBoard />
           <Text>Deck: {deckCards.length}</Text>
           <button onClick={onOpen}>Open deck</button>
         </GridItem>
@@ -80,11 +50,7 @@ export const Board = () => {
           <Hand cards={handCards} />
         </GridItem>
         <GridItem area='discard'>
-          <DiscardPile
-            handleMoveCard={handleMoveCard}
-            handCards={handCards}
-            setHandCards={setHandCards}
-          />
+          <DiscardPile />
           <Text>Discard: {discardCards.length}</Text>
         </GridItem>
       </Grid>

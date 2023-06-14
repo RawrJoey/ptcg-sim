@@ -1,13 +1,13 @@
+import { useAppDispatch } from '@/app/hooks';
+import { drawCard } from '@/features/deck/deckSlice';
 import { Box } from '@chakra-ui/react';
 import { BlankCard } from '../Card/BlankCard';
 
-interface DeckOnBoardProps {
-  drawCard: () => void;
-}
+export const DeckOnBoard = () => {
+  const dispatch = useAppDispatch();
 
-export const DeckOnBoard = (props: DeckOnBoardProps) => {
   return (
-    <Box cursor='pointer' onClick={props.drawCard}>
+    <Box cursor='pointer' onClick={() => dispatch(drawCard())}>
       <BlankCard />
     </Box>
   );

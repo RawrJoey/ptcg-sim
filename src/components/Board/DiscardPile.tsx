@@ -1,3 +1,5 @@
+import { useAppDispatch } from '@/app/hooks';
+import { discardCard } from '@/features/deck/deckSlice';
 import type { CSSProperties, FC } from 'react';
 import { useDrop } from 'react-dnd';
 import { CardInterface } from '../Card/CardInterface';
@@ -14,32 +16,21 @@ const style: CSSProperties = {
   float: 'left',
 };
 
-interface DiscardPileProps {
-  handleMoveCard: (
-    card: CardInterface,
-    source: Area,
-    destination: Area
-  ) => void;
-  handCards: CardInterface[];
-  setHandCards: (handCards: CardInterface[]) => void;
-}
+export const DiscardPile = () => {
+  const dispatch = useAppDispatch();
 
-export const DiscardPile = (props: DiscardPileProps) => {
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
       accept: 'card',
       drop: card => {
-        props.handleMoveCard(card as CardInterface, 'hand', 'discard');
-        // props.setHandCards(
-        //   props.handCards.filter(({ id }) => id !== (card as CardInterface).id)
-        // );
+        dispatch(discardCard(card as CardInterface));
       },
       collect: monitor => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
       }),
     }),
-    [props.handCards]
+    []
   );
 
   const isActive = canDrop && isOver;
