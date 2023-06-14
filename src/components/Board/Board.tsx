@@ -1,7 +1,7 @@
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
 import { parseDeckList } from '@/helpers/deck/parse';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
-import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
+import { Grid, GridItem, Text, useDisclosure } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
 import { CardInterface } from '../Card/CardInterface';
 import { getCardDimensions } from '../Card/helpers';
@@ -80,6 +80,7 @@ export const Board = () => {
           <DeckOnBoard
             drawCard={() => drawCard({ id: Math.random(), name: 'colress', imageUrl: 'https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png' })}
           />
+          <Text>Deck: {deckCards.length}</Text>
           <button onClick={onOpen}>Open deck</button>
         </GridItem>
         <GridItem area='hand' height={getCardDimensions('md').height}>
