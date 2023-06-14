@@ -97,7 +97,7 @@ export const Card = memo(
           width: `${dynamicWidth}px`,
           height: `${height}px`,
           backgroundImage:
-            'url(https://images.pokemontcg.io/swsh12pt5gg/GG59_hires.png)',
+            `url(${props.card.imageUrl})`,
           backgroundSize: 'cover',
         }}
         onMouseMove={handleHover}
