@@ -16,6 +16,7 @@ export const Hand = (props: HandProps) => {
           hoverBehavior='float'
           size='md'
           entranceBehavior='draw'
+          cardOrigin='hand'
         />
       ))}
     </HStack>

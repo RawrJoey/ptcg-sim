@@ -21,7 +21,7 @@ export const DiscardPile = () => {
 
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
-      accept: 'card',
+      accept: ['hand', 'deck'],
       drop: card => {
         dispatch(discardCard(card as CardInterface));
       },
