@@ -18,6 +18,13 @@ export const useCodeToSetMap = () => {
             SVI: 'sv1',
           };
         }
+
+        if (set.id === 'sv2') {
+          return {
+            ...acc,
+            PAL: 'sv2',
+          };
+        }
   
         // TODO: stupid fix for trainer gallery please actually change this
         if (acc[set.ptcgoCode]) {
