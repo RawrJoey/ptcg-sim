@@ -1,15 +1,8 @@
-import { Image } from '@chakra-ui/react';
-import { getCardDimensions } from './helpers';
+import { v4 as uuidv4 } from 'uuid';
+import { Card } from './Card';
+import { CardObject } from './CardInterface';
 
 export const BlankCard = () => {
-  const { height, width } = getCardDimensions();
-
-  return (
-    <Image
-      height={height}
-      width={width}
-      aria-label='blank card'
-      src='https://images.pokemontcg.io/0.png'
-    />
-  );
+  const card = { images: { small: 'https://images.pokemontcg.io/0.png', large: 'https://images.pokemontcg.io/0.png' }, uuid: uuidv4() } as unknown as CardObject;
+  return <Card size='sm' card={card} hoverBehavior='float' />
 };

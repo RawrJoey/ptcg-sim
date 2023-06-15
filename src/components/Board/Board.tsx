@@ -4,7 +4,7 @@ import { loadDeckList } from '@/features/deck/helpers';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
 import { parseDeckList } from '@/helpers/deck/parse';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
-import { Grid, GridItem, Text, useDisclosure } from '@chakra-ui/react';
+import { Button, Grid, GridItem, Text, useDisclosure } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
 import { getCardDimensions } from '../Card/helpers';
 import { DeckOnBoard } from '../Deck/DeckOnBoard';
@@ -62,16 +62,16 @@ export const Board = () => {
           <Stadium />
         </GridItem>
         <GridItem area='deck'>
-          <DeckOnBoard />
           <Text>Deck: {deckCards.length}</Text>
-          <button onClick={onOpen}>Open deck</button>
+          <DeckOnBoard />
+          <Button mt='10' onClick={onOpen}>Search deck</Button>
         </GridItem>
         <GridItem area='hand' height={getCardDimensions('md').height}>
           <Hand cards={handCards} />
         </GridItem>
         <GridItem area='discard'>
-          <DiscardPile />
           <Text>Discard: {discardCards.length}</Text>
+          <DiscardPile />
         </GridItem>
       </Grid>
     </>
