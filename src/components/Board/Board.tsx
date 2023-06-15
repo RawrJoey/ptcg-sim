@@ -41,7 +41,7 @@ export const Board = () => {
       <DeckView isOpen={isOpen} onClose={onClose} onOpen={onOpen} cards={deckCards} />
       <Grid
         templateAreas={`
-      "lost-zone . active . deck"
+      "lost-zone stadium active . deck"
       "prizes . . . discard"
       ". bench bench bench ."
       "hand hand hand hand hand"

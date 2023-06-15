@@ -10,7 +10,8 @@ interface DeckState {
   discardCards: CardObject[],
   deckCards: CardObject[],
   activePokemon: CardObject | null,
-  benchedPokemon: CardObject[]
+  benchedPokemon: CardObject[],
+  stadium: CardObject | null
 };
 
 const initialState: DeckState = {
@@ -18,7 +19,8 @@ const initialState: DeckState = {
   discardCards: [],
   deckCards: [],
   activePokemon: null,
-  benchedPokemon: []
+  benchedPokemon: [],
+  stadium: null
 };
 
 interface MoveCardPayload {

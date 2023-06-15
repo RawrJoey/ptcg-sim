@@ -15,7 +15,6 @@ export const DropZone = (props: DropZoneProps) => {
   const active = useAppSelector((state) => state.deck.activePokemon);
   const benched = useAppSelector((state) => state.deck.benchedPokemon);
 
-
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
       accept: 'card',
@@ -31,6 +30,10 @@ export const DropZone = (props: DropZoneProps) => {
 
         if (props.zone === 'benched') {
           if (!canDropIntoPokemonZone || benched.length >= 5) return false;
+        }
+
+        if (props.zone === 'stadium') {
+          if (!card.subtypes.includes(Subtype.Stadium)) return false;
         }
         
         if (origin !== props.zone) {
