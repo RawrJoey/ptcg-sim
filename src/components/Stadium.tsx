@@ -6,6 +6,6 @@ export const Stadium = () => {
   const stadium = useAppSelector((state) => state.deck.stadium);
 
   return <DropZone zone="stadium">
-    {stadium && <DraggableCard cardOrigin="active" card={stadium} size='md' hoverBehavior='float' />}
+    {stadium && <DraggableCard cardOrigin="stadium" card={stadium} size='md' hoverBehavior='float' />}
   </DropZone>
 }
