@@ -28,10 +28,10 @@ export const parseDeckList = (rawList: string, codeToSetMap: Record<string, stri
     const set = codeToSetMap?.[setCode] ?? setCode;
 
     if (shouldRemainUnique) {
-      deck.push({ name: cardName, id: Math.random(), imageUrl, set, number: setNum, count: parseInt(count) })
+      deck.push({ name: cardName, id: Math.random(), imageUrl, set: fixSet({ set, number: setNum }), number: setNum, count: parseInt(count) })
     } else {
       for (let countIdx = 0; countIdx < parseInt(count); countIdx++) {
-        deck.push({ name: cardName, id: Math.random(), imageUrl, set, number: setNum })
+        deck.push({ name: cardName, id: Math.random(), imageUrl, set: fixSet({ set, number: setNum }), number: setNum })
       }
     }
   }
@@ -39,18 +39,11 @@ export const parseDeckList = (rawList: string, codeToSetMap: Record<string, stri
   return deck;
 }
 
-export const getCardImageUrl = (
-  card: {
-    number: string;
-    set: string;
-  },
-  codeToSetMap: Record<string, string> | undefined,
-  options?: { highRes: boolean }
-) => {
-  let set = codeToSetMap?.[card.set];
-  if (!set) {
-    return '';
-  }
+export const fixSet = (card: {
+  number: string;
+  set: string;
+}) => {
+  let set = card.set;
 
   if (card.number.includes('SWSH')) {
     set = 'swshp';
@@ -73,6 +66,24 @@ export const getCardImageUrl = (
   if (set[set.length - 1] === 'c') {
     set = set.slice(0, set.length - 1);
   }
+
+  return set;
+}
+
+export const getCardImageUrl = (
+  card: {
+    number: string;
+    set: string;
+  },
+  codeToSetMap: Record<string, string> | undefined,
+  options?: { highRes: boolean }
+) => {
+  let set = codeToSetMap?.[card.set];
+  if (!set) {
+    return '';
+  }
+
+  set = fixSet(card);
 
   return `https://images.pokemontcg.io/${set}/${card?.number}${
     options?.highRes ? '_hires' : ''

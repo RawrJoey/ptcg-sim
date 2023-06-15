@@ -23,6 +23,8 @@ export const loadDeckList = async (list: string, codeToSetMap: Record<string, st
      for (let idx = 0; idx < (card.count ?? 0); idx++) {
        deck.push({...foundCard, uuid: uuidv4()});
      }
+   } else {
+    console.error('Did not find', card);
    }
  }
 
