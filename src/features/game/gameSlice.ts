@@ -27,7 +27,8 @@ const initialDeckState: DeckState = {
 interface MoveCardPayload {
   card: CardObject,
   origin: CardZone,
-  destination: CardZone
+  destination: CardZone,
+  destinationMetadata?: CardObject;
 }
 
 export type GamePhaseType = 'initialize' | 'initial-draw' | 'mulligan' | 'choose-active' | 'lay-prizes' | 'your-turn' | 'opponent-turn' | 'game-end';
