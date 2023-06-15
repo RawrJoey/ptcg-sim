@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { moveCard } from '@/features/deck/gameSlice';
+import { moveCard } from '@/features/game/gameSlice';
 import type { CSSProperties, FC, PropsWithChildren } from 'react';
 import { useDrop } from 'react-dnd';
 import { CardInterface } from '../Card/CardInterface';

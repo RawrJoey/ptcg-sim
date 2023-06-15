@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { loadDeck, setupGame } from '@/features/deck/gameSlice';
-import { loadDeckList } from '@/features/deck/helpers';
+import { loadDeck, setupGame } from '@/features/game/gameSlice';
+import { loadDeckList } from '@/features/game/helpers';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
 import { parseDeckList } from '@/helpers/deck/parse';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';

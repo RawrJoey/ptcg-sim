@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { moveCard } from '@/features/deck/gameSlice';
+import { moveCard } from '@/features/game/gameSlice';
 import { Box, useDisclosure } from '@chakra-ui/react';
 import { Card } from '../Card/Card';
 import { CardInterface } from '../Card/CardInterface';
