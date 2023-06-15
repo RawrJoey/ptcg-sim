@@ -60,6 +60,8 @@ export const deckSlice = createSlice({
         state.activePokemon = null;
       } else if (action.payload.origin === 'benched') {
         state.benchedPokemon = state.benchedPokemon.filter((card) => card.uuid !== action.payload.card.uuid);
+      } else if (action.payload.origin === 'stadium') {
+        state.stadium = null;
       }
 
       if (action.payload.destination === 'hand') {
@@ -72,6 +74,8 @@ export const deckSlice = createSlice({
         state.activePokemon = action.payload.card;
       } else if (action.payload.destination === 'benched') {
         state.benchedPokemon.push(action.payload.card)
+      } else if (action.payload.destination === 'stadium') {
+        state.stadium = action.payload.card;
       }
     },
     drawCard: (state) => {
