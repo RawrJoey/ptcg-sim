@@ -24,5 +24,6 @@ export const useHelperController = () => {
   return {
     text: bubbleInterface?.text,
     actionText: bubbleInterface?.actionText,
+    isDisabled: gameState.phase.status === 'pending-user-input'
   }
 }

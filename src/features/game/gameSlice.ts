@@ -30,7 +30,7 @@ interface MoveCardPayload {
   destination: CardZone
 }
 
-export type GamePhaseType = 'initialize' | 'initial-draw' | 'mulligan' | 'choose-active' | 'your-turn' | 'opponent-turn' | 'game-end';
+export type GamePhaseType = 'initialize' | 'initial-draw' | 'mulligan' | 'choose-active' | 'lay-prizes' | 'your-turn' | 'opponent-turn' | 'game-end';
 export type GamePhaseStatus = 'ok' | 'pending-user-input' | 'pending-confirm';
 
 export interface GamePhase {
@@ -95,6 +95,11 @@ export const gameSlice = createSlice({
       state.myDeck.prizes = prizes;
     },
     moveCard: (state, action: PayloadAction<MoveCardPayload>) => {
+      // At start of game, switch phase status to confirm when user chooses active
+      if (action.payload.destination === 'active' && state.phase.type === 'choose-active') {
+        state.phase.status = 'pending-confirm';
+      }
+
       // Special logic for promoting active
       if (action.payload.origin === 'benched' && action.payload.destination === 'active' && state.myDeck.activePokemon) {
         state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== action.payload.card.uuid);
