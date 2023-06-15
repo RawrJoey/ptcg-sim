@@ -8,8 +8,6 @@ import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 interface DropZoneProps  extends PropsWithChildren {
   zone: CardZone;
-  // If drop target is another card
-  cardMetadata?: CardObject;
 }
 
 export const DropZone = (props: DropZoneProps) => {
@@ -25,16 +23,16 @@ export const DropZone = (props: DropZoneProps) => {
 
         const card = (monitor.getItem() as DraggableCardType).card;
         const canDropIntoPokemonZone = card.supertype === Supertype.Pokemon && card.subtypes.includes(Subtype.Basic);
-        if (props.zone === 'active') {
-          if (origin === 'benched') return true;
+        if (props.zone.area === 'active') {
+          if (origin.area === 'benched') return true;
           if (!canDropIntoPokemonZone || active) return false;
         };
 
-        if (props.zone === 'benched') {
+        if (props.zone.area === 'benched') {
           if (!canDropIntoPokemonZone || benched.length >= 5) return false;
         }
 
-        if (props.zone === 'stadium') {
+        if (props.zone.area === 'stadium') {
           if (!card.subtypes.includes(Subtype.Stadium)) return false;
         }
         
@@ -44,7 +42,7 @@ export const DropZone = (props: DropZoneProps) => {
 
         return false;
       },
-      drop: (draggingCard: DraggableCardType) => dispatch(moveCard({ card: draggingCard.card, origin: draggingCard.origin, destination: props.zone, destinationMetadata: props.cardMetadata })),
+      drop: (draggingCard: DraggableCardType) => dispatch(moveCard({ card: draggingCard.card, origin: draggingCard.origin, destination: props.zone })),
       collect: monitor => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),

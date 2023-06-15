@@ -10,7 +10,7 @@ interface HandProps {
 
 export const Hand = (props: HandProps) => {
   return (
-    <DropZone zone='hand'>
+    <DropZone zone={{ area: 'hand' }}>
       <HStack maxWidth={'100%'} spacing={0} justifyContent='center'>
         {props.cards.map((card) => (
           <DraggableCard
@@ -19,7 +19,7 @@ export const Hand = (props: HandProps) => {
             hoverBehavior='float'
             size='md'
             entranceBehavior='draw'
-            cardOrigin='hand'
+            cardOrigin={{ area: 'hand' }}
           />
         ))}
       </HStack>

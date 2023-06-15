@@ -28,7 +28,6 @@ interface MoveCardPayload {
   card: CardObject,
   origin: CardZone,
   destination: CardZone,
-  destinationMetadata?: CardObject;
 }
 
 export type GamePhaseType = 'initialize' | 'initial-draw' | 'mulligan' | 'choose-active' | 'lay-prizes' | 'your-turn' | 'opponent-turn' | 'game-end';
@@ -97,12 +96,12 @@ export const gameSlice = createSlice({
     },
     moveCard: (state, action: PayloadAction<MoveCardPayload>) => {
       // At start of game, switch phase status to confirm when user chooses active
-      if (action.payload.destination === 'active' && state.phase.type === 'choose-active') {
+      if (action.payload.destination.area === 'active' && state.phase.type === 'choose-active') {
         state.phase.status = 'pending-confirm';
       }
 
       // Special logic for promoting active
-      if (action.payload.origin === 'benched' && action.payload.destination === 'active' && state.myDeck.activePokemon) {
+      if (action.payload.origin.area === 'benched' && action.payload.destination.area === 'active' && state.myDeck.activePokemon) {
         state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== action.payload.card.uuid);
         state.myDeck.benchedPokemon.push(state.myDeck.activePokemon);
         state.myDeck.activePokemon = action.payload.card;
@@ -110,38 +109,38 @@ export const gameSlice = createSlice({
       }
       
       // Special logic for bumping stadium
-      if (action.payload.origin === 'hand' && action.payload.destination === 'stadium' && state.myDeck.stadium) {
+      if (action.payload.origin.area === 'hand' && action.payload.destination.area === 'stadium' && state.myDeck.stadium) {
         state.myDeck.handCards = state.myDeck.handCards.filter((card) => card.uuid !== action.payload.card.uuid);
         state.myDeck.handCards.push(state.myDeck.stadium);
         state.myDeck.stadium = action.payload.card;
         return;
       }
 
-      if (action.payload.origin === 'hand') {
+      if (action.payload.origin.area === 'hand') {
         state.myDeck.handCards = state.myDeck.handCards.filter((card) => card.uuid !== action.payload.card.uuid);
-      } else if (action.payload.origin === 'deck') {
+      } else if (action.payload.origin.area === 'deck') {
         state.myDeck.deckCards = state.myDeck.deckCards.filter((card) => card.uuid !== action.payload.card.uuid);
-      } else if (action.payload.origin === 'discard') {
+      } else if (action.payload.origin.area === 'discard') {
         state.myDeck.discardCards = state.myDeck.discardCards.filter((card) => card.uuid !== action.payload.card.uuid);
-      } else if (action.payload.origin === 'active') {
+      } else if (action.payload.origin.area === 'active') {
         state.myDeck.activePokemon = null;
-      } else if (action.payload.origin === 'benched') {
+      } else if (action.payload.origin.area === 'benched') {
         state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== action.payload.card.uuid);
-      } else if (action.payload.origin === 'stadium') {
+      } else if (action.payload.origin.area === 'stadium') {
         state.myDeck.stadium = null;
       }
 
-      if (action.payload.destination === 'hand') {
+      if (action.payload.destination.area === 'hand') {
         state.myDeck.handCards.push(action.payload.card);
-      } else if (action.payload.destination === 'deck') {
+      } else if (action.payload.destination.area === 'deck') {
         state.myDeck.deckCards.push(action.payload.card);
-      } else if (action.payload.destination === 'discard') {
+      } else if (action.payload.destination.area === 'discard') {
         state.myDeck.discardCards.push(action.payload.card);
-      } else if (action.payload.destination === 'active') {
+      } else if (action.payload.destination.area === 'active') {
         state.myDeck.activePokemon = action.payload.card;
-      } else if (action.payload.destination === 'benched') {
+      } else if (action.payload.destination.area === 'benched') {
         state.myDeck.benchedPokemon.push(action.payload.card)
-      } else if (action.payload.destination === 'stadium') {
+      } else if (action.payload.destination.area === 'stadium') {
         state.myDeck.stadium = action.payload.card;
       }
     },

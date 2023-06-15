@@ -7,7 +7,7 @@ import { Pokemon } from "./Pokemon";
 export const BenchedPokemon = () => {
   const benched = useAppSelector((state) => state.game.myDeck.benchedPokemon);
 
-  return <DropZone zone="benched">
+  return <DropZone zone={{ area: 'benched' }}>
     <HStack>
       {benched.map(card => <Pokemon card={card} isActive={false} />)}
     </HStack>

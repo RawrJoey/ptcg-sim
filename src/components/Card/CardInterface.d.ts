@@ -11,5 +11,7 @@ export interface CardInterface {
 
 export interface CardObject extends PokemonTCG.Card {
    uuid: string;
-   attachments?: CardObject[];
+   toolsAttached?: CardObject[];
+   energyAttached?: CardObject[];
+   evolvedPokemonAttached?: CardObject[];
 }

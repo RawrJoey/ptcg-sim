@@ -5,7 +5,12 @@ import { Card } from './Card';
 import { CardInterface, CardObject } from './CardInterface';
 import { CardProps } from './CardProps';
 
-export type CardZone = 'hand' | 'discard' | 'deck' | 'active' | 'benched' | 'stadium' | 'pokemon';
+export type CardZoneType = 'hand' | 'discard' | 'deck' | 'active' | 'benched' | 'stadium' | 'pokemon';
+
+export interface CardZone {
+  area: CardZoneType;
+  metadata?: CardObject;
+}
 
 interface DraggableCardProps extends CardProps {
   onDrag?: () => void;

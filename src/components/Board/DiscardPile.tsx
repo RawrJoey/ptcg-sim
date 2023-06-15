@@ -14,10 +14,10 @@ export const DiscardPile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <DropZone zone='discard'>
+    <DropZone zone={{ area: 'discard' }}>
       {topCardInDiscard && (
         <Box onClick={onOpen}>
-          <CardModalView cardOrigin='discard' isOpen={isOpen} onOpen={onOpen} onClose={onClose} cards={discardCards} />
+          <CardModalView cardOrigin={{ area: 'discard' }} isOpen={isOpen} onOpen={onOpen} onClose={onClose} cards={discardCards} />
           <Card card={topCardInDiscard} size='sm' hoverBehavior='float' />
         </Box>
       )}
