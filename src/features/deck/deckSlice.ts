@@ -11,7 +11,8 @@ interface DeckState {
   deckCards: CardObject[],
   activePokemon: CardObject | null,
   benchedPokemon: CardObject[],
-  stadium: CardObject | null
+  stadium: CardObject | null,
+  prizes: CardObject[]
 };
 
 const initialState: DeckState = {
@@ -20,7 +21,8 @@ const initialState: DeckState = {
   deckCards: [],
   activePokemon: null,
   benchedPokemon: [],
-  stadium: null
+  stadium: null,
+  prizes: []
 };
 
 interface MoveCardPayload {
@@ -40,6 +42,11 @@ export const deckSlice = createSlice({
       const openSeven = state.deckCards.slice(state.deckCards.length - 7, state.deckCards.length);
       state.deckCards = state.deckCards.slice(0, state.deckCards.length - 7);
       state.handCards = openSeven;
+    },
+    layPrizes: (state) => {
+      const prizes = state.deckCards.slice(state.deckCards.length - 6, state.deckCards.length);
+      state.deckCards = state.deckCards.slice(0, state.deckCards.length - 6);
+      state.prizes = prizes;
     },
     moveCard: (state, action: PayloadAction<MoveCardPayload>) => {
       // Special logic for promoting active
