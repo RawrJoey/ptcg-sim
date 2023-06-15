@@ -15,20 +15,29 @@ export const useGameController = () => {
   const dispatch = useDispatch();
 
   const phaseHandler = useCallback(async (phase: GamePhase) => {
-    if (phase === 'initialize') {
+    if (phase.type === 'initialize') {
       const loadedDeckList = await loadDeckList(SAMPLE_LIST, codeToSetMap);
       dispatch(loadDeck(loadedDeckList));
-      dispatch(setGamePhase('initial-draw'));
+      dispatch(setGamePhase({
+        type: 'initial-draw',
+        status: 'ok'
+      }));
     }
 
-    if (phase === 'initial-draw') {
+    if (phase.type === 'initial-draw') {
       dispatch(drawOpenSeven());
 
       const shouldMulligan = !gameState.myDeck.handCards.some((card: CardObject) => card.supertype === Supertype.Pokemon && card.subtypes.includes(Subtype.Basic));
       if (shouldMulligan) {
-        dispatch(setGamePhase('mulligan'));
+        dispatch(setGamePhase({
+          type: 'mulligan',
+          status: 'waiting-for-user'
+        }));
       } else {
-        dispatch(setGamePhase('choose-active'));
+        dispatch(setGamePhase({
+          type: 'choose-active',
+          status: 'waiting-for-user'
+        }));
       }
     }
 

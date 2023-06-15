@@ -1,7 +1,4 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { loadDeck, drawOpenSeven } from '@/features/game/gameSlice';
-import { loadDeckList } from '@/features/game/helpers';
-import { useGameController } from '@/features/game/useGameController';
 import { Button, Grid, GridItem, Text, useDisclosure } from '@chakra-ui/react';
 import { getCardDimensions } from '../Card/helpers';
 import { DeckOnBoard } from '../Deck/DeckOnBoard';
@@ -14,8 +11,6 @@ import { DiscardPile } from './DiscardPile';
 
 export const Board = () => {
   const { handCards, deckCards, discardCards } = useAppSelector((state) => state.game.myDeck);
-  useGameController();
-
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   return (
