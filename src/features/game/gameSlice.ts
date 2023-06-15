@@ -49,10 +49,13 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
+    setGamePhase: (state, action: PayloadAction<GamePhase>) => {
+      state.phase = action.payload;
+    },
     loadDeck: (state, action: PayloadAction<CardObject[]>) => {
       state.myDeck.deckCards = shuffle(action.payload);
     },
-    setupGame: (state) => {
+    drawOpenSeven: (state) => {
       const openSeven = state.myDeck.deckCards.slice(state.myDeck.deckCards.length - 7, state.myDeck.deckCards.length);
       state.myDeck.deckCards = state.myDeck.deckCards.slice(0, state.myDeck.deckCards.length - 7);
       state.myDeck.handCards = openSeven;
@@ -116,6 +119,6 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { loadDeck, setupGame, moveCard, drawCard } = gameSlice.actions
+export const { setGamePhase, loadDeck, drawOpenSeven, moveCard, drawCard } = gameSlice.actions
 
 export default gameSlice.reducer;

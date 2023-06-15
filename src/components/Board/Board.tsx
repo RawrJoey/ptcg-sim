@@ -1,11 +1,8 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { loadDeck, setupGame } from '@/features/game/gameSlice';
+import { loadDeck, drawOpenSeven } from '@/features/game/gameSlice';
 import { loadDeckList } from '@/features/game/helpers';
-import { SAMPLE_LIST } from '@/helpers/deck/mocks';
-import { parseDeckList } from '@/helpers/deck/parse';
-import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
+import { useGameController } from '@/features/game/useGameController';
 import { Button, Grid, GridItem, Text, useDisclosure } from '@chakra-ui/react';
-import { useCallback, useEffect, useState } from 'react';
 import { getCardDimensions } from '../Card/helpers';
 import { DeckOnBoard } from '../Deck/DeckOnBoard';
 import { DeckView } from '../Deck/DeckView';
@@ -13,27 +10,11 @@ import { Hand } from '../Hand';
 import { ActivePokemon } from '../Pokemon/ActivePokemon';
 import { BenchedPokemon } from '../Pokemon/BenchedPokemon';
 import { Stadium } from '../Stadium';
-import { Area } from './Area';
 import { DiscardPile } from './DiscardPile';
 
 export const Board = () => {
   const { handCards, deckCards, discardCards } = useAppSelector((state) => state.game.myDeck);
-  const dispatch = useAppDispatch();
-
-  const { data: codeToSetMap, isLoading: isCodeToSetMapLoading } = useCodeToSetMap();
-
-  const onApplicationLoad = async() => {
-    if (!isCodeToSetMapLoading) {
-      const loadedDeckList = await loadDeckList(SAMPLE_LIST, codeToSetMap);
-
-      dispatch(loadDeck(loadedDeckList));
-      dispatch(setupGame());
-    }
-  }
-
-  useEffect(() => {
-    onApplicationLoad();
-  }, [isCodeToSetMapLoading]);
+  useGameController();
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
