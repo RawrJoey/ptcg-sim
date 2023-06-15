@@ -14,7 +14,7 @@ export const Login = () => {
 
   const handleLogOutClick = async () => {
     await supabaseClient.auth.signOut();
-  }
+  }  
 
   if (user) return <HStack>
     <Text>Hi, {user.user_metadata.full_name}!</Text>

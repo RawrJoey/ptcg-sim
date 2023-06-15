@@ -1,12 +1,14 @@
 import { CardInterface } from '@/components/Card/CardInterface';
 import { CardZone } from '@/components/Card/DraggableCard';
+import { parseDeckList } from '@/helpers/deck/parse';
 import { shuffle } from '@/helpers/deck/shuffle';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
 interface DeckState {
-  handCards: CardInterface[],
-  discardCards: CardInterface[],
-  deckCards: CardInterface[]
+  handCards: PokemonTCG.Card[],
+  discardCards: PokemonTCG.Card[],
+  deckCards: PokemonTCG.Card[],
 };
 
 const initialState: DeckState = {
@@ -16,7 +18,7 @@ const initialState: DeckState = {
 };
 
 interface MoveCardPayload {
-  card: CardInterface,
+  card: PokemonTCG.Card,
   origin: CardZone,
   destination: CardZone
 }
@@ -25,7 +27,7 @@ export const deckSlice = createSlice({
   name: 'deck',
   initialState,
   reducers: {
-    loadDeck: (state, action) => {
+    loadDeck: (state, action: PayloadAction<PokemonTCG.Card[]>) => {
       state.deckCards = shuffle(action.payload);
     },
     setupGame: (state) => {

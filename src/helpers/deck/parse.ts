@@ -1,7 +1,7 @@
 import { CardInterface } from "@/components/Card/CardInterface";
 import { HGSS_ENERGY_MAP } from "./consts";
 
-export const parseDeckList = (rawList: string, codeToSetMap: Record<string, string> | undefined): CardInterface[] => {
+export const parseDeckList = (rawList: string, codeToSetMap: Record<string, string> | undefined, shouldRemainUnique?: boolean): CardInterface[] => {
   const lines = rawList.trim().split(/\r?\n/).filter(line => line.length > 0);
 
   const deck: CardInterface[] = [];
@@ -22,13 +22,17 @@ export const parseDeckList = (rawList: string, codeToSetMap: Record<string, stri
       setNum = rest[rest.length - 1];
       setCode = rest[rest.length - 2];
       cardName = rest.slice(0, rest.length - 2).join(' ');
-  
-      console.log(cardName, setNum, setCode)
-
     }
     const imageUrl = getCardImageUrl({ number: setNum, set: setCode }, codeToSetMap, { highRes: true });
-    for (let countIdx = 0; countIdx < parseInt(count); countIdx++) {
-      deck.push({ name: cardName, id: Math.random(), imageUrl })
+
+    const set = codeToSetMap?.[setCode] ?? setCode;
+
+    if (shouldRemainUnique) {
+      deck.push({ name: cardName, id: Math.random(), imageUrl, set, number: setNum, count: parseInt(count) })
+    } else {
+      for (let countIdx = 0; countIdx < parseInt(count); countIdx++) {
+        deck.push({ name: cardName, id: Math.random(), imageUrl, set, number: setNum })
+      }
     }
   }
 

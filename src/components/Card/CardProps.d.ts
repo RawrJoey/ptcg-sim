@@ -1,7 +1,8 @@
+import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { CardInterface } from './CardInterface';
 
 export interface CardProps {
-  card: CardInterface;
+  card: PokemonTCG.Card;
   size: CardSize;
   hoverBehavior: 'bevel' | 'float';
   entranceBehavior?: 'draw';

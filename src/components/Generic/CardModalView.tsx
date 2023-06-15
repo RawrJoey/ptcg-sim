@@ -5,6 +5,7 @@ import {
   Grid,
   HStack,
 } from '@chakra-ui/react';
+import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { CardInterface } from '../Card/CardInterface';
 import { CardZone, DraggableCard } from '../Card/DraggableCard';
 
@@ -12,7 +13,7 @@ export interface SpecificCardModalViewProps {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void
-  cards: CardInterface[];
+  cards: PokemonTCG.Card[];
 }
 
 export interface CardModalViewProps extends SpecificCardModalViewProps {

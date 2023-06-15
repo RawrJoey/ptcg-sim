@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { loadDeck, setupGame } from '@/features/deck/deckSlice';
+import { loadDeckList } from '@/features/deck/helpers';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
 import { parseDeckList } from '@/helpers/deck/parse';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
@@ -18,11 +19,17 @@ export const Board = () => {
 
   const { data: codeToSetMap, isLoading: isCodeToSetMapLoading } = useCodeToSetMap();
 
-  useEffect(() => {
+  const onApplicationLoad = async() => {
     if (!isCodeToSetMapLoading) {
-      dispatch(loadDeck(parseDeckList(SAMPLE_LIST, codeToSetMap)));
+      const loadedDeckList = await loadDeckList(SAMPLE_LIST, codeToSetMap);
+
+      dispatch(loadDeck(loadedDeckList));
       dispatch(setupGame());
     }
+  }
+
+  useEffect(() => {
+    onApplicationLoad();
   }, [isCodeToSetMapLoading]);
 
   const { isOpen, onClose, onOpen } = useDisclosure();

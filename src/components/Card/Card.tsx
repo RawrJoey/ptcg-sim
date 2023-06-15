@@ -97,7 +97,7 @@ export const Card = memo(
           width: `${dynamicWidth}px`,
           height: `${height}px`,
           backgroundImage:
-            `url(${props.card.imageUrl})`,
+            `url(${props.card.images.large})`,
           backgroundSize: 'cover',
         }}
         onMouseMove={handleHover}
