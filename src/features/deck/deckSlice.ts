@@ -9,12 +9,16 @@ interface DeckState {
   handCards: CardObject[],
   discardCards: CardObject[],
   deckCards: CardObject[],
+  activePokemon: CardObject | null,
+  benchedPokemon: CardObject[]
 };
 
 const initialState: DeckState = {
   handCards: [],
   discardCards: [],
   deckCards: [],
+  activePokemon: null,
+  benchedPokemon: []
 };
 
 interface MoveCardPayload {
@@ -42,6 +46,10 @@ export const deckSlice = createSlice({
         state.deckCards = state.deckCards.filter((card) => card.uuid !== action.payload.card.uuid);
       } else if (action.payload.origin === 'discard') {
         state.discardCards = state.discardCards.filter((card) => card.uuid !== action.payload.card.uuid);
+      } else if (action.payload.origin === 'active') {
+        state.activePokemon = null;
+      } else if (action.payload.origin === 'benched') {
+        state.benchedPokemon = state.benchedPokemon.filter((card) => card.uuid !== action.payload.card.uuid);
       }
 
       if (action.payload.destination === 'hand') {
@@ -50,6 +58,10 @@ export const deckSlice = createSlice({
         state.deckCards.push(action.payload.card);
       } else if (action.payload.destination === 'discard') {
         state.discardCards.push(action.payload.card);
+      } else if (action.payload.destination === 'active') {
+        state.activePokemon = action.payload.card;
+      } else if (action.payload.destination === 'benched') {
+        state.benchedPokemon.push(action.payload.card)
       }
     },
     drawCard: (state) => {
