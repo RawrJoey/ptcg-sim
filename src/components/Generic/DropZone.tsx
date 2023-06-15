@@ -6,7 +6,8 @@ import { CardInterface } from '../Card/CardInterface';
 import { CardZone, DraggableCardType } from '../Card/DraggableCard';
 
 interface DropZoneProps  extends PropsWithChildren {
-  zone: CardZone,
+  zone: CardZone;
+  canDrop?: boolean;
 }
 
 export const DropZone = (props: DropZoneProps) => {
@@ -16,10 +17,13 @@ export const DropZone = (props: DropZoneProps) => {
     () => ({
       accept: 'card',
       canDrop(item, monitor) {
-        if ((monitor.getItem() as DraggableCardType).origin === props.zone) {
-          return false;
+        if ((monitor.getItem() as DraggableCardType).origin !== props.zone) {
+          if (props.canDrop !== undefined) return props.canDrop;
+
+          return true;
         }
-        return true;
+
+        return false;
       },
       drop: (draggingCard: DraggableCardType) => dispatch(moveCard({ card: draggingCard.card, origin: draggingCard.origin, destination: props.zone })),
       collect: monitor => ({
