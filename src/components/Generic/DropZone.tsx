@@ -1,25 +1,38 @@
-import { useAppDispatch } from '@/app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { moveCard } from '@/features/deck/deckSlice';
 import type { CSSProperties, FC, PropsWithChildren } from 'react';
 import { useDrop } from 'react-dnd';
 import { CardInterface } from '../Card/CardInterface';
 import { CardZone, DraggableCardType } from '../Card/DraggableCard';
+import { Subtype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 interface DropZoneProps  extends PropsWithChildren {
   zone: CardZone;
-  canDrop?: boolean;
 }
 
 export const DropZone = (props: DropZoneProps) => {
   const dispatch = useAppDispatch();
+  const active = useAppSelector((state) => state.deck.activePokemon);
+  const benched = useAppSelector((state) => state.deck.benchedPokemon);
+
 
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
       accept: 'card',
       canDrop(item, monitor) {
-        if ((monitor.getItem() as DraggableCardType).origin !== props.zone) {
-          if (props.canDrop !== undefined) return props.canDrop;
+        const origin = (monitor.getItem() as DraggableCardType).origin;
 
+        const canDropIntoPokemonZone = (monitor.getItem() as DraggableCardType).card.subtypes.includes(Subtype.Basic);
+        if (props.zone === 'active') {
+          if (origin === 'benched') return true;
+          if (!canDropIntoPokemonZone || active) return false;
+        };
+
+        if (props.zone === 'benched') {
+          if (!canDropIntoPokemonZone || benched.length >= 5) return false;
+        }
+        
+        if (origin !== props.zone) {
           return true;
         }
 
@@ -31,7 +44,7 @@ export const DropZone = (props: DropZoneProps) => {
         canDrop: monitor.canDrop(),
       }),
     }),
-    []
+    [active, props.zone, benched]
   );
 
   const isActive = canDrop && isOver;

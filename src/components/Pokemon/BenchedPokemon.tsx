@@ -6,7 +6,7 @@ import { DropZone } from "../Generic/DropZone"
 export const BenchedPokemon = () => {
   const benched = useAppSelector((state) => state.deck.benchedPokemon);
 
-  return <DropZone zone="benched" canDrop={benched.length < 5}>
+  return <DropZone zone="benched">
     <HStack>
       {benched.map(card => <DraggableCard cardOrigin="benched" card={card} size='md' hoverBehavior='float' />)}
     </HStack>

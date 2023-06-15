@@ -40,6 +40,14 @@ export const deckSlice = createSlice({
       state.handCards = openSeven;
     },
     moveCard: (state, action: PayloadAction<MoveCardPayload>) => {
+      // Special logic for promoting active
+      if (action.payload.origin === 'benched' && action.payload.destination === 'active' && state.activePokemon) {
+        state.benchedPokemon = state.benchedPokemon.filter((card) => card.uuid !== action.payload.card.uuid);
+        state.benchedPokemon.push(state.activePokemon);
+        state.activePokemon = action.payload.card;
+        return;
+      }
+
       if (action.payload.origin === 'hand') {
         state.handCards = state.handCards.filter((card) => card.uuid !== action.payload.card.uuid);
       } else if (action.payload.origin === 'deck') {
