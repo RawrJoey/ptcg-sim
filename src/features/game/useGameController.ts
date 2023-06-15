@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
-import { checkForBasic, drawOpenSeven, GamePhase, loadDeck, mulliganHandAway, setGamePhase } from './gameSlice';
+import { checkForBasic, drawCard, drawOpenSeven, GamePhase, layPrizes, loadDeck, mulliganHandAway, setGamePhase } from './gameSlice';
 import { loadDeckList } from './helpers';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
@@ -8,7 +8,7 @@ import { CardObject } from '@/components/Card/CardInterface';
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 export const useGameController = () => {
-  const { data: codeToSetMap } = useCodeToSetMap();
+  const { data: codeToSetMap, isLoading: codeToSetMapIsLoading } = useCodeToSetMap();
 
   const gameState = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
@@ -36,11 +36,27 @@ export const useGameController = () => {
       }
     }
 
+    if (phase.type === 'choose-active') {
+      if (phase.status === 'ok') {
+        dispatch(setGamePhase({ type: 'lay-prizes', status: 'ok'}));
+      }
+    }
+
+    if (phase.type === 'lay-prizes') {
+      dispatch(layPrizes());
+      // TODO: Incorporate multiplayer logic, coin flip prior to this to decide first
+      dispatch(setGamePhase({ type: 'your-turn', status: 'ok' }));
+    }
+
+    if (phase.type === 'your-turn') {
+      dispatch(drawCard());
+    }
+
   }, [codeToSetMap]);
 
   useEffect(() => {
-    if (codeToSetMap) {
+    if (!codeToSetMapIsLoading) {
       phaseHandler(gameState.phase);
     }
-  }, [gameState.phase, codeToSetMap]);
+  }, [gameState.phase.type, gameState.phase.status, codeToSetMapIsLoading]);
 }

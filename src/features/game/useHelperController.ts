@@ -15,6 +15,12 @@ const getBubbleInterface = (phase: GamePhase) => {
       actionText: 'Get new hand'
     }
   }
+
+  if (phase.type === 'your-turn') {
+    return {
+      text: 'Your turn'
+    }
+  }
 }
 
 export const useHelperController = () => {

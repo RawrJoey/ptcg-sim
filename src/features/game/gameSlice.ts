@@ -145,14 +145,15 @@ export const gameSlice = createSlice({
       }
     },
     drawCard: (state) => {
-      const card = state.myDeck.deckCards[state.myDeck.deckCards.length - 1];
+      const card = state.myDeck.deckCards.at(state.myDeck.deckCards.length - 1);
       state.myDeck.deckCards.pop();
+      if (!card) return console.error('card is undefined')
       state.myDeck.handCards.push(card);
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setGamePhase, loadDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, checkForBasic } = gameSlice.actions
+export const { setGamePhase, loadDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, checkForBasic, layPrizes } = gameSlice.actions
 
 export default gameSlice.reducer;
