@@ -1,11 +1,12 @@
 import { useAppSelector } from "@/app/hooks"
 import { DraggableCard } from "../Card/DraggableCard";
 import { DropZone } from "../Generic/DropZone"
+import { Pokemon } from "./Pokemon";
 
 export const ActivePokemon = () => {
   const active = useAppSelector((state) => state.game.myDeck.activePokemon);
 
   return <DropZone zone="active">
-    {active && <DraggableCard cardOrigin="active" card={active} size='lg' hoverBehavior='float' />}
+    {active && <Pokemon card={active} isActive />}
   </DropZone>
 }

@@ -2,12 +2,14 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { moveCard } from '@/features/game/gameSlice';
 import type { CSSProperties, FC, PropsWithChildren } from 'react';
 import { useDrop } from 'react-dnd';
-import { CardInterface } from '../Card/CardInterface';
+import { CardInterface, CardObject } from '../Card/CardInterface';
 import { CardZone, DraggableCardType } from '../Card/DraggableCard';
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 interface DropZoneProps  extends PropsWithChildren {
   zone: CardZone;
+  // If drop target is another card
+  cardMetadata?: CardObject;
 }
 
 export const DropZone = (props: DropZoneProps) => {
@@ -42,7 +44,7 @@ export const DropZone = (props: DropZoneProps) => {
 
         return false;
       },
-      drop: (draggingCard: DraggableCardType) => dispatch(moveCard({ card: draggingCard.card, origin: draggingCard.origin, destination: props.zone })),
+      drop: (draggingCard: DraggableCardType) => dispatch(moveCard({ card: draggingCard.card, origin: draggingCard.origin, destination: props.zone, destinationMetadata: props.cardMetadata })),
       collect: monitor => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
