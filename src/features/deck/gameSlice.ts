@@ -29,7 +29,7 @@ interface MoveCardPayload {
   destination: CardZone
 }
 
-export type GamePhase = 'initial-draw' | 'mulligan' | 'choose-active' | 'your-turn' | 'opponent-turn' | 'game-end';
+export type GamePhase = 'initialize' | 'initial-draw' | 'mulligan' | 'choose-active' | 'your-turn' | 'opponent-turn' | 'game-end';
 
 export type TurnPhase = 'draw' | 'main' | 'attack' | 'apply-damage' | 'take-prize' | 'end';
 
@@ -40,7 +40,7 @@ interface GameState {
 };
 
 const initialState: GameState = {
-  phase: 'initial-draw',
+  phase: 'initialize',
   currentTurnPhase: null,
   myDeck: initialDeckState
 };
