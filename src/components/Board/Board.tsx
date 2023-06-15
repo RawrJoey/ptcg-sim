@@ -11,6 +11,7 @@ import { DeckOnBoard } from '../Deck/DeckOnBoard';
 import { DeckView } from '../Deck/DeckView';
 import { Hand } from '../Hand';
 import { ActivePokemon } from '../Pokemon/ActivePokemon';
+import { BenchedPokemon } from '../Pokemon/BenchedPokemon';
 import { Area } from './Area';
 import { DiscardPile } from './DiscardPile';
 
@@ -47,10 +48,14 @@ export const Board = () => {
       `}
         gridTemplateRows={'1fr 1fr 1fr 1fr'}
         gridTemplateColumns={'1fr 1fr 1fr 1fr 1fr'}
+        rowGap={4}
         width='100%'
       >
         <GridItem area='active'>
           <ActivePokemon />
+        </GridItem>
+        <GridItem area='bench'>
+          <BenchedPokemon />
         </GridItem>
         <GridItem area='deck'>
           <DeckOnBoard />
