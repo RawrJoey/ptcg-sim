@@ -1,7 +1,6 @@
 import { useCallback, useEffect } from 'react';
-import { useAppSelector } from "@/app/hooks"
-import { useDispatch } from "react-redux";
-import { drawOpenSeven, GamePhase, loadDeck, setGamePhase } from './gameSlice';
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
+import { checkForBasic, drawOpenSeven, GamePhase, loadDeck, mulliganHandAway, setGamePhase } from './gameSlice';
 import { loadDeckList } from './helpers';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
@@ -12,7 +11,7 @@ export const useGameController = () => {
   const { data: codeToSetMap } = useCodeToSetMap();
 
   const gameState = useAppSelector((state) => state.game);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const phaseHandler = useCallback(async (phase: GamePhase) => {
     if (phase.type === 'initialize') {
@@ -26,18 +25,14 @@ export const useGameController = () => {
 
     if (phase.type === 'initial-draw') {
       dispatch(drawOpenSeven());
+      dispatch(checkForBasic());
+    }
 
-      const shouldMulligan = !gameState.myDeck.handCards.some((card: CardObject) => card.supertype === Supertype.Pokemon && card.subtypes.includes(Subtype.Basic));
-      if (shouldMulligan) {
-        dispatch(setGamePhase({
-          type: 'mulligan',
-          status: 'waiting-for-user'
-        }));
-      } else {
-        dispatch(setGamePhase({
-          type: 'choose-active',
-          status: 'waiting-for-user'
-        }));
+    if (phase.type === 'mulligan') {
+      if (phase.status === 'ok') {
+        dispatch(mulliganHandAway());
+        dispatch(drawOpenSeven());
+        dispatch(checkForBasic());
       }
     }
 

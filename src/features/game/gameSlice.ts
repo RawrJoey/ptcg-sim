@@ -2,6 +2,7 @@ import { CardObject } from '@/components/Card/CardInterface';
 import { CardZone } from '@/components/Card/DraggableCard';
 import { shuffle } from '@/helpers/deck/shuffle';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 interface DeckState {
   handCards: CardObject[],
@@ -30,7 +31,7 @@ interface MoveCardPayload {
 }
 
 export type GamePhaseType = 'initialize' | 'initial-draw' | 'mulligan' | 'choose-active' | 'your-turn' | 'opponent-turn' | 'game-end';
-export type GamePhaseStatus = 'ok' | 'waiting-for-user';
+export type GamePhaseStatus = 'ok' | 'pending-user-input' | 'pending-confirm';
 
 export interface GamePhase {
   type: GamePhaseType,
@@ -64,10 +65,29 @@ export const gameSlice = createSlice({
     loadDeck: (state, action: PayloadAction<CardObject[]>) => {
       state.myDeck.deckCards = shuffle(action.payload);
     },
+    mulliganHandAway: (state) => {
+      state.myDeck.deckCards.concat(state.myDeck.handCards);
+      state.myDeck.handCards = [];
+      state.myDeck.deckCards = shuffle(state.myDeck.deckCards);
+    },
     drawOpenSeven: (state) => {
       const openSeven = state.myDeck.deckCards.slice(state.myDeck.deckCards.length - 7, state.myDeck.deckCards.length);
       state.myDeck.deckCards = state.myDeck.deckCards.slice(0, state.myDeck.deckCards.length - 7);
       state.myDeck.handCards = openSeven;
+    },
+    checkForBasic: (state) => {
+      const shouldMulligan = !state.myDeck.handCards.some((card: CardObject) => card.supertype === Supertype.Pokemon && card.subtypes.includes(Subtype.Basic));
+      if (shouldMulligan) {
+        state.phase = {
+          type: 'mulligan',
+          status: 'pending-confirm'
+        }
+      } else {
+        state.phase = {
+          type: 'choose-active',
+          status: 'pending-user-input'
+        }
+      }
     },
     layPrizes: (state) => {
       const prizes = state.myDeck.deckCards.slice(state.myDeck.deckCards.length - 6, state.myDeck.deckCards.length);
@@ -128,6 +148,6 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setGamePhase, loadDeck, drawOpenSeven, moveCard, drawCard } = gameSlice.actions
+export const { setGamePhase, loadDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, checkForBasic } = gameSlice.actions
 
 export default gameSlice.reducer;
