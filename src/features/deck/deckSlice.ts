@@ -1,4 +1,4 @@
-import { CardInterface } from '@/components/Card/CardInterface';
+import { CardInterface, CardObject } from '@/components/Card/CardInterface';
 import { CardZone } from '@/components/Card/DraggableCard';
 import { parseDeckList } from '@/helpers/deck/parse';
 import { shuffle } from '@/helpers/deck/shuffle';
@@ -6,9 +6,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
 interface DeckState {
-  handCards: PokemonTCG.Card[],
-  discardCards: PokemonTCG.Card[],
-  deckCards: PokemonTCG.Card[],
+  handCards: CardObject[],
+  discardCards: CardObject[],
+  deckCards: CardObject[],
 };
 
 const initialState: DeckState = {
@@ -18,7 +18,7 @@ const initialState: DeckState = {
 };
 
 interface MoveCardPayload {
-  card: PokemonTCG.Card,
+  card: CardObject,
   origin: CardZone,
   destination: CardZone
 }
@@ -27,7 +27,7 @@ export const deckSlice = createSlice({
   name: 'deck',
   initialState,
   reducers: {
-    loadDeck: (state, action: PayloadAction<PokemonTCG.Card[]>) => {
+    loadDeck: (state, action: PayloadAction<CardObject[]>) => {
       state.deckCards = shuffle(action.payload);
     },
     setupGame: (state) => {
@@ -37,11 +37,11 @@ export const deckSlice = createSlice({
     },
     moveCard: (state, action: PayloadAction<MoveCardPayload>) => {
       if (action.payload.origin === 'hand') {
-        state.handCards = state.handCards.filter((card) => card.id !== action.payload.card.id);
+        state.handCards = state.handCards.filter((card) => card.uuid !== action.payload.card.uuid);
       } else if (action.payload.origin === 'deck') {
-        state.deckCards = state.deckCards.filter((card) => card.id !== action.payload.card.id);
+        state.deckCards = state.deckCards.filter((card) => card.uuid !== action.payload.card.uuid);
       } else if (action.payload.origin === 'discard') {
-        state.discardCards = state.discardCards.filter((card) => card.id !== action.payload.card.id);
+        state.discardCards = state.discardCards.filter((card) => card.uuid !== action.payload.card.uuid);
       }
 
       if (action.payload.destination === 'hand') {

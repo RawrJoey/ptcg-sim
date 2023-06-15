@@ -1,7 +1,8 @@
+import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 import { Card } from './Card';
-import { CardInterface } from './CardInterface';
+import { CardInterface, CardObject } from './CardInterface';
 import { CardProps } from './CardProps';
 
 export type CardZone = 'hand' | 'discard' | 'deck';
@@ -14,7 +15,7 @@ interface DraggableCardProps extends CardProps {
 
 export interface DraggableCardType {
   origin: CardZone,
-  card: CardInterface
+  card: CardObject
 }
 
 export const DraggableCard = (props: DraggableCardProps) => {

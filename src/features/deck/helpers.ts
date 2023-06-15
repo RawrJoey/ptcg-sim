@@ -1,7 +1,9 @@
+import { CardObject } from "@/components/Card/CardInterface";
 import { parseDeckList } from "@/helpers/deck/parse";
 import { PokemonTCG } from "pokemon-tcg-sdk-typescript";
+import { v4 as uuidv4 } from 'uuid';
 
-export const loadDeckList = async (list: string, codeToSetMap: Record<string, string>): Promise<PokemonTCG.Card[]> => {
+export const loadDeckList = async (list: string, codeToSetMap: Record<string, string>): Promise<CardObject[]> => {
   const uniqueCards = parseDeckList(list, codeToSetMap, true);
   const query = uniqueCards.reduce((acc, curr) => {
     const queryStr = `(set.id:${curr.set} number:${curr.number})`;
@@ -19,7 +21,7 @@ export const loadDeckList = async (list: string, codeToSetMap: Record<string, st
 
    if (foundCard) {
      for (let idx = 0; idx < (card.count ?? 0); idx++) {
-       deck.push(foundCard);
+       deck.push({...foundCard, uuid: uuidv4()});
      }
    }
  }

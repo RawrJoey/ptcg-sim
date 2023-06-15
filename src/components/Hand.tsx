@@ -1,11 +1,11 @@
 import { HStack } from '@chakra-ui/react';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
-import { CardInterface } from './Card/CardInterface';
+import { CardInterface, CardObject } from './Card/CardInterface';
 import { DraggableCard } from './Card/DraggableCard';
 import { DropZone } from './Generic/DropZone';
 
 interface HandProps {
-  cards: PokemonTCG.Card[];
+  cards: CardObject[];
 }
 
 export const Hand = (props: HandProps) => {
@@ -15,7 +15,7 @@ export const Hand = (props: HandProps) => {
         {props.cards.map((card) => (
           <DraggableCard
             card={card}
-            key={card.id}
+            key={card.uuid}
             hoverBehavior='float'
             size='md'
             entranceBehavior='draw'
