@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/app/hooks';
-import { drawCard } from '@/features/deck/deckSlice';
+import { drawCard } from '@/features/deck/gameSlice';
 import { Box } from '@chakra-ui/react';
 import { BlankCard } from '../Card/BlankCard';
 

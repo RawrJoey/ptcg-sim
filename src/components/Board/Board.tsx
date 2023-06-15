@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { loadDeck, setupGame } from '@/features/deck/deckSlice';
+import { loadDeck, setupGame } from '@/features/deck/gameSlice';
 import { loadDeckList } from '@/features/deck/helpers';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
 import { parseDeckList } from '@/helpers/deck/parse';
@@ -17,7 +17,7 @@ import { Area } from './Area';
 import { DiscardPile } from './DiscardPile';
 
 export const Board = () => {
-  const { handCards, deckCards, discardCards } = useAppSelector((state) => state.deck);
+  const { handCards, deckCards, discardCards } = useAppSelector((state) => state.game.myDeck);
   const dispatch = useAppDispatch();
 
   const { data: codeToSetMap, isLoading: isCodeToSetMapLoading } = useCodeToSetMap();

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { moveCard } from '@/features/deck/deckSlice';
+import { moveCard } from '@/features/deck/gameSlice';
 import type { CSSProperties, FC, PropsWithChildren } from 'react';
 import { useDrop } from 'react-dnd';
 import { CardInterface } from '../Card/CardInterface';
@@ -12,8 +12,8 @@ interface DropZoneProps  extends PropsWithChildren {
 
 export const DropZone = (props: DropZoneProps) => {
   const dispatch = useAppDispatch();
-  const active = useAppSelector((state) => state.deck.activePokemon);
-  const benched = useAppSelector((state) => state.deck.benchedPokemon);
+  const active = useAppSelector((state) => state.game.myDeck.activePokemon);
+  const benched = useAppSelector((state) => state.game.myDeck.benchedPokemon);
 
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({

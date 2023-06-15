@@ -1,9 +1,9 @@
-import deckSlice from '@/features/deck/deckSlice';
+import gameSlice from '@/features/deck/gameSlice';
 import { configureStore } from '@reduxjs/toolkit'
 
 const store = configureStore({
   reducer: {
-    deck: deckSlice
+    game: gameSlice
   },
 });
 

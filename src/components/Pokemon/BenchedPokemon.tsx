@@ -4,7 +4,7 @@ import { DraggableCard } from "../Card/DraggableCard";
 import { DropZone } from "../Generic/DropZone"
 
 export const BenchedPokemon = () => {
-  const benched = useAppSelector((state) => state.deck.benchedPokemon);
+  const benched = useAppSelector((state) => state.game.myDeck.benchedPokemon);
 
   return <DropZone zone="benched">
     <HStack>

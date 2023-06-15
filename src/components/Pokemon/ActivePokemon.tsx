@@ -3,7 +3,7 @@ import { DraggableCard } from "../Card/DraggableCard";
 import { DropZone } from "../Generic/DropZone"
 
 export const ActivePokemon = () => {
-  const active = useAppSelector((state) => state.deck.activePokemon);
+  const active = useAppSelector((state) => state.game.myDeck.activePokemon);
 
   return <DropZone zone="active">
     {active && <DraggableCard cardOrigin="active" card={active} size='lg' hoverBehavior='float' />}
