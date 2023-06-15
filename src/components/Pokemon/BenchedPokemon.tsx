@@ -8,7 +8,7 @@ export const BenchedPokemon = () => {
 
   return <DropZone zone="benched">
     <HStack>
-      {benched.map(card => <DraggableCard cardOrigin="benched" card={card} size='md' hoverBehavior='float' />)}
+      {benched.map(card => <DraggableCard key={card.uuid} cardOrigin="benched" card={card} size='md' hoverBehavior='float' />)}
     </HStack>
   </DropZone>
 }

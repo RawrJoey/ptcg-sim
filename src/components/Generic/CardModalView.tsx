@@ -26,7 +26,7 @@ export const CardModalView = (props: CardModalViewProps) => {
       <ModalOverlay />
       <ModalContent>
         <HStack maxWidth={'100%'} spacing={0} flexWrap={'wrap'}>
-          {props.cards.map((card) => <DraggableCard card={card} size='md' hoverBehavior='float' onDrag={props.onClose} onFailedRelease={props.onOpen} cardOrigin={props.cardOrigin} />)}
+          {props.cards.map((card) => <DraggableCard key={card.uuid} card={card} size='md' hoverBehavior='float' onDrag={props.onClose} onFailedRelease={props.onOpen} cardOrigin={props.cardOrigin} />)}
         </HStack>
       </ModalContent>
     </Modal>
