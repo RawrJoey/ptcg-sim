@@ -10,6 +10,7 @@ import { getCardDimensions } from '../Card/helpers';
 import { DeckOnBoard } from '../Deck/DeckOnBoard';
 import { DeckView } from '../Deck/DeckView';
 import { Hand } from '../Hand';
+import { ActivePokemon } from '../Pokemon/ActivePokemon';
 import { Area } from './Area';
 import { DiscardPile } from './DiscardPile';
 
@@ -39,15 +40,18 @@ export const Board = () => {
       <DeckView isOpen={isOpen} onClose={onClose} onOpen={onOpen} cards={deckCards} />
       <Grid
         templateAreas={`
-      "lost-zone . . . deck"
-      "prizes . active . discard"
+      "lost-zone . active . deck"
+      "prizes . . . discard"
       ". bench bench bench ."
       "hand hand hand hand hand"
       `}
-        gridTemplateRows={'1fr 1fr 1fr'}
-        gridTemplateColumns={'1fr 5fr 1fr'}
+        gridTemplateRows={'1fr 1fr 1fr 1fr'}
+        gridTemplateColumns={'1fr 1fr 1fr 1fr 1fr'}
         width='100%'
       >
+        <GridItem area='active'>
+          <ActivePokemon />
+        </GridItem>
         <GridItem area='deck'>
           <DeckOnBoard />
           <Text>Deck: {deckCards.length}</Text>
