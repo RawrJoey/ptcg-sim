@@ -28,7 +28,7 @@ export const useChallenges = (userId: string | undefined) => {
   });
 
   return {
-    data: data?.filter((challenge) => challenge.challengee === userId),
+    data: data?.filter((challenge) => challenge.challenger === userId || challenge.challengee === userId),
     ...rest
   }
 }

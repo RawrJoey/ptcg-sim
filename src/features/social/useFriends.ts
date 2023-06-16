@@ -6,7 +6,7 @@ export interface FriendType {
   id: string;
   name: string;
   onlineStatus: boolean;
-  isChallenging: boolean;
+  challengeId: number | undefined;
 }
 
 const fetchFriends = async (supabaseClient: SupabaseClient, currentUser: string | undefined) => {
@@ -52,7 +52,7 @@ export const useFriends = () => {
     data: friendList?.map((friend) => ({
       ...friend,
       onlineStatus: false,
-      isChallenging: !!activeChallenges?.some((challenge) => challenge.challenger === friend.id)
+      challengeId: activeChallenges?.find((challenge) => challenge.challenger === friend.id)?.id
     })),
     isLoading: friendIdsIsLoading || friendListIsLoading
   }

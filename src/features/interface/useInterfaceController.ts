@@ -17,4 +17,10 @@ export const useInterfaceController = () => {
       dispatch(setGamePhase({ type: 'initialize', status: 'ok' }));  
     }
   }, [activeGame]);
+
+  useEffect(() => {
+    if (!user?.id) {
+      dispatch((changeScreen('lobby')));
+    }
+  }, [user?.id]);
 }

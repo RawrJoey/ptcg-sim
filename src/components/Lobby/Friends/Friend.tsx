@@ -1,4 +1,4 @@
-import { sendChallenge } from "@/features/social/challenges/mutators";
+import { acceptChallenge, sendChallenge } from "@/features/social/challenges/mutators";
 import { useActiveChallenges } from "@/features/social/challenges/useActiveChallenges";
 import { FriendType } from "@/features/social/useFriends"
 import { Avatar, AvatarBadge, Button, HStack, Text } from "@chakra-ui/react";
@@ -26,15 +26,15 @@ export const Friend = (props: FriendProps) => {
         <AvatarBadge borderColor='papayawhip' bg={props.friend.onlineStatus ? 'green.500' : 'tomato'} boxSize='1.25em' />
       </Avatar> */}
       <Text>{props.friend.name}</Text>
-      {!props.friend.isChallenging && (
+      {!props.friend.challengeId && (
         <Button isDisabled={alreadyChallenged} onClick={() => {
           setTempDisable(true);
           sendChallenge(supabase, user.id, props.friend.id);
         }}>{alreadyChallenged ? 'Waiting...' : 'Challenge'}</Button>
       )
       }
-      {props.friend.isChallenging && (
-        <Button colorScheme='red'>
+      {props.friend.challengeId && (
+        <Button colorScheme='red' onClick={() => props.friend.challengeId && acceptChallenge(supabase, props.friend.challengeId)}>
           Accept challenge
         </Button>
       )}

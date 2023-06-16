@@ -11,7 +11,9 @@ export const sendChallenge = async (supabaseClient: SupabaseClient, currentUserI
 };
 
 export const acceptChallenge = async (supabaseClient: SupabaseClient, challengeId: number) => {
-  await supabaseClient.from('Challenges')
+  const { data, error } = await supabaseClient.from('Challenges')
     .update({ gameIsRunning: true, active: false })
     .eq('id', challengeId);
+
+  if (error) console.error(error)
 }
