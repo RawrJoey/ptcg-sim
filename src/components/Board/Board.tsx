@@ -12,6 +12,7 @@ import { Prizes } from './Prizes';
 
 export const Board = () => {
   const { handCards, deckCards, discardCards } = useAppSelector((state) => state.game.myDeck);
+  const gamePhase = useAppSelector((state) => state.game.phase.type);
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   return (
@@ -42,7 +43,7 @@ export const Board = () => {
         <GridItem area='deck'>
           <Text>Deck: {deckCards.length}</Text>
           <DeckOnBoard />
-          <Button mt='10' onClick={onOpen}>Search deck</Button>
+          <Button mt='10' onClick={onOpen} isDisabled={gamePhase !== 'your-turn'}>Search deck</Button>
         </GridItem>
         <GridItem area='prizes'>
           <Prizes />
