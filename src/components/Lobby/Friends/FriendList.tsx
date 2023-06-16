@@ -1,5 +1,6 @@
 import { useFriends } from "@/features/social/useFriends"
 import { Heading, Stack, Text } from "@chakra-ui/react";
+import { Friend } from "./Friend";
 
 export const FriendList = () => {
   const { data: friends } = useFriends();
@@ -8,7 +9,7 @@ export const FriendList = () => {
     <Stack>
       <Heading>Friends</Heading>
       {friends?.map((friend) => (
-        <Text>{friend.name}</Text>
+        <Friend friend={friend} />
       ))}
     </Stack>
   )

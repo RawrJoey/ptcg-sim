@@ -1,6 +1,6 @@
 import { Board } from '@/components/Board/Board';
 import { HelperBubble } from '@/components/Game/HelperBubble';
-import { FriendList } from '@/components/Lobby/FriendList';
+import { FriendList } from '@/components/Lobby/Friends/FriendList';
 import { Login } from '@/components/Login';
 import { useChannelReceiver } from '@/features/game/broadcast/useChannelReceiver';
 import { useChannelSender } from '@/features/game/broadcast/useChannelSender';

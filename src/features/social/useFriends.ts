@@ -1,6 +1,11 @@
 import { SupabaseClient, useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 import { useQuery } from "@tanstack/react-query";
 
+export interface FriendType {
+  name: string;
+  onlineStatus: boolean;
+}
+
 const fetchFriends = async (supabaseClient: SupabaseClient, currentUser: string | undefined) => {
   if (!currentUser) return [];
 
@@ -38,7 +43,11 @@ export const useFriends = () => {
   });
 
   return {
-    data: friendList,
+    // TODO: Update online status
+    data: friendList?.map((friend) => ({
+      ...friend,
+      onlineStatus: false
+    })),
     isLoading: friendIdsIsLoading || friendListIsLoading
   }
 }
