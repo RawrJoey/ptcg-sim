@@ -16,13 +16,13 @@ export const Pokemon = (props: PokemonProps) => {
   return (
     <DropZone zone={pokemonZone}>
       <HStack spacing='-200'>
-        {props.card.energyAttached.map((energy, idx) => (
+        {props.card.toolsAttached.concat(props.card.energyAttached).map((attached, idx) => (
           <Box>
-            <DraggableCard cardOrigin={pokemonZone} card={energy} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
+            <DraggableCard cardOrigin={pokemonZone} card={attached} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
           </Box>
         ))}
         <Box>
-          <DraggableCard cardOrigin={activeBenchedZone} card={props.card} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
+          <DraggableCard cardOrigin={activeBenchedZone} card={props.card.evolvedPokemonAttached.length > 0 ? props.card.evolvedPokemonAttached[props.card.evolvedPokemonAttached.length - 1] : props.card} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
         </Box>
       </HStack>
     </DropZone>
