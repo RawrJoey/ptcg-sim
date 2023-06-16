@@ -23,14 +23,14 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'initial-draw') {
-      dispatch(drawOpenSeven());
+      dispatch(drawOpenSeven({ payload: undefined }));
       dispatch(checkForBasic());
     }
 
     if (phase.type === 'mulligan') {
       if (phase.status === 'ok') {
         dispatch(mulliganHandAway());
-        dispatch(drawOpenSeven());
+        dispatch(drawOpenSeven({ payload: undefined }));
         dispatch(checkForBasic());
       }
     }

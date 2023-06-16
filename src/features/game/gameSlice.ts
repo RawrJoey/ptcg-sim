@@ -60,12 +60,12 @@ export const gameSlice = createSlice({
 
       state.myDeck.deckCards = shuffle(state.myDeck.deckCards);
     },
-    drawOpenSeven: (state) => {
+    drawOpenSeven: (state, action: PayloadAction<GamePayload<undefined>>) => {
       state.gameplayActions.push({ type: 'game/drawOpenSeven' });
 
-      const openSeven = state.myDeck.deckCards.slice(state.myDeck.deckCards.length - 7, state.myDeck.deckCards.length);
-      state.myDeck.deckCards = state.myDeck.deckCards.slice(0, state.myDeck.deckCards.length - 7);
-      state.myDeck.handCards = openSeven;
+      const openSeven = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice((action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 7, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length);
+      (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice(0, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 7);
+      (action.payload.isOpponent ? state.opponentDeck : state.myDeck).handCards = openSeven;
     },
     checkForBasic: (state) => {
       state.gameplayActions.push({ type: 'game/checkForBasic' });
