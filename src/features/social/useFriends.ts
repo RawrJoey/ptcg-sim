@@ -1,9 +1,12 @@
 import { SupabaseClient, useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 import { useQuery } from "@tanstack/react-query";
+import { useChallenges } from "./challenges/useChallenges";
 
 export interface FriendType {
+  id: string;
   name: string;
   onlineStatus: boolean;
+  isChallenging: boolean;
 }
 
 const fetchFriends = async (supabaseClient: SupabaseClient, currentUser: string | undefined) => {
@@ -22,7 +25,7 @@ const fetchProfiles = async (supabaseClient: SupabaseClient, userIdList: string[
 
   const { data, error } = await supabaseClient
     .from('Profiles')
-    .select('name')
+    .select('id,name')
     .filter('id', 'in', `(${userIdList.reduce((acc, curr) => acc === '' ? `"${curr}"` : `"${acc}","${curr}"`, '')})`)
   
   return data ?? [];
@@ -42,11 +45,14 @@ export const useFriends = () => {
     queryFn: () => fetchProfiles(supabase, friendIds)
   });
 
+  const { data: challenges } = useChallenges(user?.id);
+
   return {
     // TODO: Update online status
     data: friendList?.map((friend) => ({
       ...friend,
-      onlineStatus: false
+      onlineStatus: false,
+      isChallenging: !!challenges?.some((userId) => userId === friend.id)
     })),
     isLoading: friendIdsIsLoading || friendListIsLoading
   }
