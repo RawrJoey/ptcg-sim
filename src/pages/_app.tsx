@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const [supabaseClient] = useState(() => createPagesBrowserClient({ options: {
     realtime: {
       params: {
-        eventsPerSecond: 10
+        eventsPerSecond: 2
       }
     }
   }}))

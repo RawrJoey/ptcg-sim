@@ -1,9 +1,10 @@
 import { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
-import { checkForBasic, drawCard, drawOpenSeven, GamePhase, layPrizes, loadDeck, mulliganHandAway, setGamePhase } from './gameSlice';
+import { checkForBasic, drawCard, drawOpenSeven, layPrizes, loadDeck, mulliganHandAway, setGamePhase } from './gameSlice';
 import { loadDeckList } from './helpers';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
+import { GamePhase } from './types/Game';
 
 export const useGameController = () => {
   const { data: codeToSetMap, isLoading: codeToSetMapIsLoading } = useCodeToSetMap();

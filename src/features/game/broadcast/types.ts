@@ -1,0 +1,1 @@
+export const GAMEPLAY_ACTION_EVENT = 'gameplay-action';

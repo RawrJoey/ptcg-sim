@@ -4,7 +4,6 @@ import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 export const Login = () => {
   const user = useUser();
   const supabaseClient = useSupabaseClient();
-  console.log(user)
 
   const handleLogInClick = async () => {
     const { data, error } = await supabaseClient.auth.signInWithOAuth({

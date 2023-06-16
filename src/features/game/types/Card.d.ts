@@ -5,6 +5,4 @@ export interface MoveCardPayload {
   origin: CardZone,
   // The destination zone
   destination: CardZone,
-  // Function that displays a toast on card move completion
-  toast: (message: string) => {}
 }

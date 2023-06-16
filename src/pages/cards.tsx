@@ -1,11 +1,15 @@
 import { Board } from '@/components/Board/Board';
 import { HelperBubble } from '@/components/Game/HelperBubble';
 import { Login } from '@/components/Login';
+import { useChannelReceiver } from '@/features/game/broadcast/useChannelReceiver';
+import { useChannelSender } from '@/features/game/broadcast/useChannelSender';
 import { useGameController } from '@/features/game/useGameController';
 import { Button, Stack } from '@chakra-ui/react';
 
 export default function Cards() {
   useGameController();
+  useChannelReceiver();
+  useChannelSender();
 
   return (
     <Stack

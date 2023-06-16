@@ -216,7 +216,6 @@ export const gameSlice = createSlice({
       // At the end, if we came from deck - shuffle deck
       if (action.payload.origin.area === 'deck') {
         state.myDeck.deckCards = shuffle(state.myDeck.deckCards);
-        action.payload.toast('Shuffled deck!');
       }
     },
     drawCard: (state) => {
