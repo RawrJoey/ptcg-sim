@@ -15,7 +15,7 @@ export const Pokemon = (props: PokemonProps) => {
 
   return (
     <DropZone zone={pokemonZone}>
-      <HStack>
+      <HStack spacing='-200'>
         {props.card.energyAttached.map((energy, idx) => (
           <Box>
             <DraggableCard cardOrigin={pokemonZone} card={energy} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
