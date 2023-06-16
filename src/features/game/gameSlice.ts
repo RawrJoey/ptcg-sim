@@ -4,16 +4,9 @@ import { shuffle } from '@/helpers/deck/shuffle';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { getAttachmentType } from './helpers';
-
-interface DeckState {
-  handCards: CardObject[],
-  discardCards: CardObject[],
-  deckCards: CardObject[],
-  activePokemon: CardObject | null,
-  benchedPokemon: CardObject[],
-  stadium: CardObject | null,
-  prizes: CardObject[]
-};
+import { MoveCardPayload } from './types/Card';
+import type { DeckState } from './types/Deck';
+import { GamePhase, GameState, TurnPhase } from './types/Game';
 
 const initialDeckState: DeckState = {
   handCards: [],
@@ -23,29 +16,6 @@ const initialDeckState: DeckState = {
   benchedPokemon: [],
   stadium: null,
   prizes: []
-};
-
-interface MoveCardPayload {
-  card: CardObject,
-  origin: CardZone,
-  destination: CardZone,
-  toast: (message: string) => {}
-}
-
-export type GamePhaseType = 'initialize' | 'initial-draw' | 'mulligan' | 'choose-active' | 'lay-prizes' | 'your-turn' | 'opponent-turn' | 'game-end';
-export type GamePhaseStatus = 'ok' | 'pending-user-input' | 'pending-confirm';
-
-export interface GamePhase {
-  type: GamePhaseType,
-  status: GamePhaseStatus
-}
-
-export type TurnPhase = 'draw' | 'main' | 'attack' | 'apply-damage' | 'take-prize' | 'end';
-
-interface GameState {
-  phase: GamePhase,
-  currentTurnPhase: TurnPhase | null,
-  myDeck: DeckState
 };
 
 const initialState: GameState = {
