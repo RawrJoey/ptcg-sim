@@ -45,6 +45,8 @@ export const DropZone = (props: DropZoneProps) => {
           const attachmentType = getAttachmentType(card);
           if (!attachmentType) return false;
         }
+
+        if (origin.area === 'prizes') return props.zone.area === 'hand'; // Yeah yeah Blaceph GX whatever
         
         if (origin !== props.zone) {
           return true;

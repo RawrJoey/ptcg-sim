@@ -186,6 +186,8 @@ export const gameSlice = createSlice({
             state.myDeck.benchedPokemon[foundBenchedIdx].evolvedPokemonAttached = state.myDeck.benchedPokemon[foundBenchedIdx].evolvedPokemonAttached.filter((card) => card.uuid !== targetCard.uuid);
           }
         }
+      } else if (action.payload.origin.area === 'prizes') {
+        state.myDeck.prizes = state.myDeck.prizes.filter((card) => card.uuid !== targetCard.uuid);
       }
 
       if (action.payload.destination.area === 'hand') {
