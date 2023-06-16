@@ -26,10 +26,18 @@ export const Friend = (props: FriendProps) => {
         <AvatarBadge borderColor='papayawhip' bg={props.friend.onlineStatus ? 'green.500' : 'tomato'} boxSize='1.25em' />
       </Avatar> */}
       <Text>{props.friend.name}</Text>
-      <Button isDisabled={alreadyChallenged} onClick={() => {
-        setTempDisable(true);
-        sendChallenge(supabase, user.id, props.friend.id);
-      }}>{alreadyChallenged ? 'Waiting...' : 'Challenge'}</Button>
+      {!props.friend.isChallenging && (
+        <Button isDisabled={alreadyChallenged} onClick={() => {
+          setTempDisable(true);
+          sendChallenge(supabase, user.id, props.friend.id);
+        }}>{alreadyChallenged ? 'Waiting...' : 'Challenge'}</Button>
+      )
+      }
+      {props.friend.isChallenging && (
+        <Button colorScheme='red'>
+          Accept challenge
+        </Button>
+      )}
     </HStack>
   )
 }

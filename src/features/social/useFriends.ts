@@ -52,7 +52,7 @@ export const useFriends = () => {
     data: friendList?.map((friend) => ({
       ...friend,
       onlineStatus: false,
-      isChallenging: !!challenges?.some((userId) => userId === friend.id)
+      isChallenging: !!challenges?.some((challenge) => challenge.challenger === friend.id)
     })),
     isLoading: friendIdsIsLoading || friendListIsLoading
   }
