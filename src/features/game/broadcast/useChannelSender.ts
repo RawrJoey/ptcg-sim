@@ -21,17 +21,16 @@ export const useChannelSender = () => {
       console.log(status)
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
-
           if (myActionsStoredLength.current < myActionsRef.current.length) {
+            console.log('sending')
             const lengthDiff = myActionsRef.current.length - myActionsStoredLength.current;
+            myActionsStoredLength.current = myActionsRef.current.length;
 
             channel.send({
               type: 'broadcast',
               event: GAMEPLAY_ACTION_EVENT,
               payload: myActionsRef.current.slice(myActionsRef.current.length - lengthDiff),
             }).catch((err) => console.log(err));
-
-            myActionsStoredLength.current = myActionsRef.current.length;
           }
         }, 500);
       }
