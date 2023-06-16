@@ -24,7 +24,8 @@ const initialState: GameState = {
     status: 'ok'
   },
   currentTurnPhase: null,
-  myDeck: initialDeckState
+  myDeck: initialDeckState,
+  gameplayActions: []
 };
 
 export const gameSlice = createSlice({
@@ -70,6 +71,8 @@ export const gameSlice = createSlice({
       state.myDeck.prizes = prizes;
     },
     moveCard: (state, action: PayloadAction<MoveCardPayload>) => {
+      state.gameplayActions.push(action.payload);
+
       let targetCard = action.payload.card;
 
       // At start of game, switch phase status to confirm when user chooses active

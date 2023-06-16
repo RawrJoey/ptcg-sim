@@ -1,3 +1,4 @@
+import { MoveCardPayload } from "./Card";
 import { DeckState } from "./Deck";
 
 export type GamePhaseType = 'initialize' | 'initial-draw' | 'mulligan' | 'choose-active' | 'lay-prizes' | 'your-turn' | 'opponent-turn' | 'game-end';
@@ -13,5 +14,6 @@ export type TurnPhase = 'draw' | 'main' | 'attack' | 'apply-damage' | 'take-priz
 export interface GameState {
   phase: GamePhase,
   currentTurnPhase: TurnPhase | null,
-  myDeck: DeckState
+  myDeck: DeckState,
+  gameplayActions: MoveCardPayload[]
 };
