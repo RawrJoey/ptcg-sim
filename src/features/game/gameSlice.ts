@@ -19,8 +19,9 @@ const initialDeckState: DeckState = {
 };
 
 const initialState: GameState = {
+  opponentId: null,
   phase: {
-    type: 'initialize',
+    type: 'not-started',
     status: 'ok'
   },
   currentTurnPhase: null,
