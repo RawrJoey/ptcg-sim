@@ -13,7 +13,6 @@ export const useGameChannelUpdater = (challengeId: number | undefined) => {
   const myActionsStoredLength = useRef(0);
 
   useEffect(() => {
-    console.log(myActions)
     myActionsRef.current = myActions;
   }, [myActions]);
 
