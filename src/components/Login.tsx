@@ -23,6 +23,6 @@ export const Login = () => {
   return <HStack>
     <Button colorScheme='purple' onClick={handleLogInClick}>Log in</Button>
     <Button onClick={() => supabaseClient.auth.signInWithPassword({ email: 'dummy@gmail.com', password: 'password' })}>Log in test account 1</Button>
-    <Button onClick={() => supabaseClient.auth.signInWithPassword({ email: 'dummy@gmail.com', password: 'password' })}>Log in test account 2</Button>
+    <Button onClick={() => supabaseClient.auth.signInWithPassword({ email: 'dummy2@gmail.com', password: 'password' })}>Log in test account 2</Button>
   </HStack>
 }

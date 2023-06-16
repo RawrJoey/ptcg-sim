@@ -1,5 +1,6 @@
 import { Board } from '@/components/Board/Board';
 import { HelperBubble } from '@/components/Game/HelperBubble';
+import { FriendList } from '@/components/Lobby/FriendList';
 import { Login } from '@/components/Login';
 import { useChannelReceiver } from '@/features/game/broadcast/useChannelReceiver';
 import { useChannelSender } from '@/features/game/broadcast/useChannelSender';
@@ -19,8 +20,9 @@ export default function Cards() {
       maxWidth={'100%'}
     >
       <Login />
-      <HelperBubble />
-      <Board />
+      <FriendList />
+      {/* <HelperBubble />
+      <Board /> */}
     </Stack>
   );
 }
