@@ -1,8 +1,8 @@
-import { createClient } from "@supabase/supabase-js";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { GAMEPLAY_ACTION_EVENT } from "./types";
 
 export const useChannelReceiver = () => {
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL ?? '', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '');
+  const supabase = useSupabaseClient();
 
   supabase
     .channel('test')
