@@ -6,6 +6,7 @@ import { CardInterface, CardObject } from '../Card/CardInterface';
 import { CardZone, DraggableCardType } from '../Card/DraggableCard';
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { getAttachmentType } from '@/features/game/helpers';
+import { useInfoToast } from '@/hooks/useInfoToast';
 
 interface DropZoneProps  extends PropsWithChildren {
   zone: CardZone;
@@ -16,6 +17,7 @@ export const DropZone = (props: DropZoneProps) => {
   const active = useAppSelector((state) => state.game.myDeck.activePokemon);
   const benched = useAppSelector((state) => state.game.myDeck.benchedPokemon);
   const gamePhase = useAppSelector((state) => state.game.phase.type);
+  const toast = useInfoToast();
 
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
@@ -60,7 +62,7 @@ export const DropZone = (props: DropZoneProps) => {
 
         return false;
       },
-      drop: (draggingCard: DraggableCardType) => dispatch(moveCard({ card: draggingCard.card, origin: draggingCard.origin, destination: props.zone })),
+      drop: (draggingCard: DraggableCardType) => dispatch(moveCard({ card: draggingCard.card, origin: draggingCard.origin, destination: props.zone, toast })),
       collect: monitor => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),

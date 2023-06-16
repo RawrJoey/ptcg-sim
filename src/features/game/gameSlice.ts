@@ -29,6 +29,7 @@ interface MoveCardPayload {
   card: CardObject,
   origin: CardZone,
   destination: CardZone,
+  toast: (message: string) => {}
 }
 
 export type GamePhaseType = 'initialize' | 'initial-draw' | 'mulligan' | 'choose-active' | 'lay-prizes' | 'your-turn' | 'opponent-turn' | 'game-end';
@@ -69,6 +70,9 @@ export const gameSlice = createSlice({
     mulliganHandAway: (state) => {
       state.myDeck.deckCards.concat(state.myDeck.handCards);
       state.myDeck.handCards = [];
+      state.myDeck.deckCards = shuffle(state.myDeck.deckCards);
+    },
+    shuffleDeck: (state) => {
       state.myDeck.deckCards = shuffle(state.myDeck.deckCards);
     },
     drawOpenSeven: (state) => {
@@ -235,6 +239,12 @@ export const gameSlice = createSlice({
           }
         }
       }
+
+      // At the end, if we came from deck - shuffle deck
+      if (action.payload.origin.area === 'deck') {
+        state.myDeck.deckCards = shuffle(state.myDeck.deckCards);
+        action.payload.toast('Shuffled deck!');
+      }
     },
     drawCard: (state) => {
       const card = state.myDeck.deckCards.at(state.myDeck.deckCards.length - 1);
@@ -246,6 +256,6 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setGamePhase, loadDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, checkForBasic, layPrizes } = gameSlice.actions
+export const { setGamePhase, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, checkForBasic, layPrizes } = gameSlice.actions
 
 export default gameSlice.reducer;

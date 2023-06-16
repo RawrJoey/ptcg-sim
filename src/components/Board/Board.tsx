@@ -13,7 +13,7 @@ import { Prizes } from './Prizes';
 export const Board = () => {
   const { handCards, deckCards, discardCards } = useAppSelector((state) => state.game.myDeck);
   const gamePhase = useAppSelector((state) => state.game.phase.type);
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
