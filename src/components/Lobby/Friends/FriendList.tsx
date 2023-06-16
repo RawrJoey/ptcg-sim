@@ -9,7 +9,7 @@ export const FriendList = () => {
     <Stack>
       <Heading>Friends</Heading>
       {friends?.map((friend) => (
-        <Friend friend={friend} />
+        <Friend key={friend.id} friend={friend} />
       ))}
     </Stack>
   )
