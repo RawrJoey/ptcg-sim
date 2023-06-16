@@ -36,7 +36,7 @@ export const loadDeckList = async (list: string, codeToSetMap: Record<string, st
 export const getAttachmentType = (attachedCard: CardObject) => {
   if (attachedCard.subtypes.includes(Subtype.PokemonTool)) return 'tool';
   if (attachedCard.supertype === Supertype.Energy) return 'energy';
-  if (attachedCard.supertype === Supertype.Pokemon) return 'evolution';
+  if (attachedCard.supertype === Supertype.Pokemon && !attachedCard.subtypes.includes(Subtype.Basic)) return 'evolution';
 
   return null;
 }

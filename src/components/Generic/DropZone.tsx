@@ -5,6 +5,7 @@ import { useDrop } from 'react-dnd';
 import { CardInterface, CardObject } from '../Card/CardInterface';
 import { CardZone, DraggableCardType } from '../Card/DraggableCard';
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
+import { getAttachmentType } from '@/features/game/helpers';
 
 interface DropZoneProps  extends PropsWithChildren {
   zone: CardZone;
@@ -40,6 +41,9 @@ export const DropZone = (props: DropZoneProps) => {
           if (origin.area === 'active') return false;
           if (origin.area === 'benched') return false;
           if (origin.metadata?.uuid === props.zone.metadata?.uuid) return false;
+
+          const attachmentType = getAttachmentType(card);
+          if (!attachmentType) return false;
         }
         
         if (origin !== props.zone) {
