@@ -166,6 +166,31 @@ export const gameSlice = createSlice({
         state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== targetCard.uuid);
       } else if (action.payload.origin.area === 'stadium') {
         state.myDeck.stadium = null;
+      } else if (action.payload.origin.area === 'pokemon') {
+        const attachmentType = getAttachmentType(targetCard);
+
+        if (attachmentType === 'energy') {
+          if (action.payload.origin.parentArea === 'active' && state.myDeck.activePokemon) {
+            state.myDeck.activePokemon.energyAttached = state.myDeck.activePokemon.energyAttached.filter((card) => card.uuid !== targetCard.uuid);
+          } else if (action.payload.origin.parentArea === 'benched') {
+            const foundBenchedIdx = state.myDeck.benchedPokemon.findIndex((card) => card.energyAttached.some((energy) => energy.uuid === targetCard.uuid));
+            state.myDeck.benchedPokemon[foundBenchedIdx].energyAttached = state.myDeck.benchedPokemon[foundBenchedIdx].energyAttached.filter((card) => card.uuid !== targetCard.uuid);
+          }
+        } else if (attachmentType === 'tool') {
+          if (action.payload.origin.parentArea === 'active' && state.myDeck.activePokemon) {
+            state.myDeck.activePokemon.toolsAttached = state.myDeck.activePokemon.toolsAttached.filter((card) => card.uuid !== targetCard.uuid);
+          } else if (action.payload.origin.parentArea === 'benched') {
+            const foundBenchedIdx = state.myDeck.benchedPokemon.findIndex((card) => card.toolsAttached.some((energy) => energy.uuid === targetCard.uuid));
+            state.myDeck.benchedPokemon[foundBenchedIdx].toolsAttached = state.myDeck.benchedPokemon[foundBenchedIdx].toolsAttached.filter((card) => card.uuid !== targetCard.uuid);
+          }
+        } else if (attachmentType === 'evolution') {
+          if (action.payload.origin.parentArea === 'active' && state.myDeck.activePokemon) {
+            state.myDeck.activePokemon.evolvedPokemonAttached = state.myDeck.activePokemon.evolvedPokemonAttached.filter((card) => card.uuid !== targetCard.uuid);
+          } else if (action.payload.origin.parentArea === 'benched') {
+            const foundBenchedIdx = state.myDeck.benchedPokemon.findIndex((card) => card.evolvedPokemonAttached.some((energy) => energy.uuid === targetCard.uuid));
+            state.myDeck.benchedPokemon[foundBenchedIdx].evolvedPokemonAttached = state.myDeck.benchedPokemon[foundBenchedIdx].evolvedPokemonAttached.filter((card) => card.uuid !== targetCard.uuid);
+          }
+        }
       }
 
       if (action.payload.destination.area === 'hand') {
@@ -198,9 +223,10 @@ export const gameSlice = createSlice({
           action.payload.destination.metadata &&
           action.payload.destination.parentArea === 'benched')
         {
+          console.log(action.payload.destination.metadata?.uuid)
           const draggedOntoPokemonIdx = state.myDeck.benchedPokemon.findIndex((card) => card.uuid === action.payload.destination.metadata?.uuid);
 
-          if (!draggedOntoPokemonIdx) return console.error('Dragged onto pokemonIdx not found. Not attaching.');
+          if (draggedOntoPokemonIdx < 0) return console.error('Dragged onto pokemonIdx not found. Not attaching.');
 
           const attachmentType = getAttachmentType(targetCard);
           if (attachmentType === 'tool') {
