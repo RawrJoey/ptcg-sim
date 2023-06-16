@@ -9,7 +9,7 @@ export const BenchedPokemon = () => {
 
   return (
     <HStack>
-      {benched.map(card => <Pokemon card={card} isActive={false} />)}
+      {benched.map(card => <Pokemon key={card.uuid} card={card} isActive={false} />)}
       <Box flexGrow={1}>
         <DropZone zone={{ area: 'benched' }} />
       </Box>
