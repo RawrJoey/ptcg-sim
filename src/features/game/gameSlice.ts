@@ -110,14 +110,6 @@ export const gameSlice = createSlice({
 
       if (action.payload.origin.area === 'benched') {
         targetCard = state.myDeck.benchedPokemon.find((card) => card.uuid === action.payload.card.uuid) ?? action.payload.card;
-
-        // Special logic for promoting active
-        if (action.payload.destination.area === 'active' && state.myDeck.activePokemon) {
-          state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== targetCard.uuid);
-          state.myDeck.benchedPokemon.push(state.myDeck.activePokemon);
-          state.myDeck.activePokemon = targetCard;
-          return;
-        }
       }
 
       // Handle returning attachments to different zones
@@ -163,7 +155,11 @@ export const gameSlice = createSlice({
       } else if (action.payload.origin.area === 'active') {
         state.myDeck.activePokemon = null;
       } else if (action.payload.origin.area === 'benched') {
-        state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== targetCard.uuid);
+        if (action.payload.destination.area === 'active' && state.myDeck.activePokemon) {
+          state.myDeck.benchedPokemon.push(state.myDeck.activePokemon)
+        } else {
+          state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== targetCard.uuid);
+        }
       } else if (action.payload.origin.area === 'stadium') {
         state.myDeck.stadium = null;
       } else if (action.payload.origin.area === 'pokemon') {
