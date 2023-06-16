@@ -22,7 +22,6 @@ export const useChannelSender = () => {
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
           if (myActionsStoredLength.current < myActionsRef.current.length) {
-            console.log('sending')
             const lengthDiff = myActionsRef.current.length - myActionsStoredLength.current;
             myActionsStoredLength.current = myActionsRef.current.length;
 

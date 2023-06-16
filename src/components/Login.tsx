@@ -16,9 +16,13 @@ export const Login = () => {
   }  
 
   if (user) return <HStack>
-    <Text>Hi, {user.user_metadata.full_name}!</Text>
+    <Text>Hi, {user.user_metadata.full_name ?? user.email}!</Text>
     <Button colorScheme='purple' onClick={handleLogOutClick} variant='outline' size='sm'>Log out</Button>
   </HStack>
 
-  return <Button colorScheme='purple' onClick={handleLogInClick}>Log in</Button>
+  return <HStack>
+    <Button colorScheme='purple' onClick={handleLogInClick}>Log in</Button>
+    <Button onClick={() => supabaseClient.auth.signInWithPassword({ email: 'dummy@gmail.com', password: 'password' })}>Log in test account 1</Button>
+    <Button onClick={() => supabaseClient.auth.signInWithPassword({ email: 'dummy@gmail.com', password: 'password' })}>Log in test account 2</Button>
+  </HStack>
 }
