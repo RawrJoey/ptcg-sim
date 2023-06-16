@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import { CardObject } from "../Card/CardInterface";
-import { DraggableCard } from "../Card/DraggableCard";
+import { CardZone, DraggableCard } from "../Card/DraggableCard";
 import { DropZone } from "../Generic/DropZone";
 
 interface PokemonProps {
@@ -10,11 +10,19 @@ interface PokemonProps {
 
 export const Pokemon = (props: PokemonProps) => {
   const area = props.isActive ? 'active' : 'benched';
+  const zone: CardZone = { area: 'pokemon', metadata: props.card, parentArea: area };
 
   return (
-    <DropZone zone={{ area: 'pokemon', metadata: props.card, parentArea: area }}>
+    <DropZone zone={zone}>
       <Box>
-        <DraggableCard cardOrigin={{ area: area, metadata: props.card }} card={props.card} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
+        <>
+          <Box>
+            <DraggableCard cardOrigin={zone} card={props.card} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
+          </Box>
+          {props.card.energyAttached.map((energy) => (
+            <DraggableCard cardOrigin={zone} card={energy} size={props.isActive ? 'md' : 'sm'} hoverBehavior='float' />
+          ))}
+        </>
       </Box>
     </DropZone>
   )
