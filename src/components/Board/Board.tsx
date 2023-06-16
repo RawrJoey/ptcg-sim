@@ -25,7 +25,7 @@ export const Board = () => {
       "prizes bench bench bench discard"
       "hand hand hand hand hand"
       `}
-        gridTemplateRows={'0.5fr 2fr 1fr 1fr'}
+        gridTemplateRows={'0.5fr 1fr 1fr 1fr'}
         gridTemplateColumns={'1fr 1fr 1fr 1fr 1fr'}
         columnGap={4}
         rowGap={4}
