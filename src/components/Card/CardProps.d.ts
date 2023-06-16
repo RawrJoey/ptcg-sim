@@ -8,6 +8,7 @@ export interface CardProps {
   entranceBehavior?: 'draw';
   clickToZoom?: boolean;
   isDragging?: boolean;
+  isHidden?: boolean;
 }
 
 export type CardSize = 'sm' | 'md' | 'lg';

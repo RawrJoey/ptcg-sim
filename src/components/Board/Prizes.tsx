@@ -6,8 +6,8 @@ export const Prizes = () => {
   const prizes = useAppSelector((state) => state.game.myDeck.prizes);
 
   return (
-    <Grid gridTemplateColumns='1fr 1fr'>
-      {prizes.map((prizeCard) => <DraggableCard cardOrigin={{ area: 'prizes' }} card={prizeCard} size='md' hoverBehavior='float' />)}
+    <Grid gridTemplateColumns='9rem 9rem' gridTemplateRows='1fr 1fr 1fr'>
+      {prizes.map((prizeCard) => <DraggableCard cardOrigin={{ area: 'prizes' }} card={prizeCard} size='md' hoverBehavior='float' isHidden />)}
     </Grid>
   )
 }

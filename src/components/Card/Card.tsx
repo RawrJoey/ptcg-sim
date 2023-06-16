@@ -9,6 +9,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { BLANK_CARD_IMAGE_URL } from './BlankCard';
 import { CardProps } from './CardProps';
 import { getCardDimensions } from './helpers';
 
@@ -97,7 +98,7 @@ export const Card = memo(
           width: `${dynamicWidth}px`,
           height: `${height}px`,
           backgroundImage:
-            `url(${props.card.images.large})`,
+            `url(${props.isHidden ? BLANK_CARD_IMAGE_URL : props.card.images.large})`,
           backgroundSize: 'cover',
         }}
         onMouseMove={handleHover}
