@@ -96,66 +96,123 @@ export const gameSlice = createSlice({
       state.myDeck.prizes = prizes;
     },
     moveCard: (state, action: PayloadAction<MoveCardPayload>) => {
+      let targetCard = action.payload.card;
+
       // At start of game, switch phase status to confirm when user chooses active
       if (action.payload.destination.area === 'active' && state.phase.type === 'choose-active') {
         state.phase.status = 'pending-confirm';
       }
 
-      // Special logic for promoting active
-      if (action.payload.origin.area === 'benched' && action.payload.destination.area === 'active' && state.myDeck.activePokemon) {
-        state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== action.payload.card.uuid);
-        state.myDeck.benchedPokemon.push(state.myDeck.activePokemon);
-        state.myDeck.activePokemon = action.payload.card;
-        return;
+      if (state.myDeck.activePokemon && action.payload.origin.area === 'active') {
+        // Fix moving attached cards
+        targetCard = state.myDeck.activePokemon;
+
+        // If put to hand, put all attached cards to hand
+        if (action.payload.destination.area === 'hand') {
+          state.myDeck.handCards.concat(targetCard.energyAttached, targetCard.toolsAttached, targetCard.evolvedPokemonAttached);
+          state.myDeck.activePokemon = {
+            ...state.myDeck.activePokemon,
+            energyAttached: [],
+            toolsAttached: [],
+            evolvedPokemonAttached: []
+          }
+        }
+
+        // If put to discard, put all attached cards to discard
+        if (action.payload.destination.area === 'discard') {
+          state.myDeck.discardCards.concat(targetCard.energyAttached, targetCard.toolsAttached, targetCard.evolvedPokemonAttached);
+          state.myDeck.activePokemon = {
+            ...state.myDeck.activePokemon,
+            energyAttached: [],
+            toolsAttached: [],
+            evolvedPokemonAttached: []
+          }
+        }
+      }
+
+      if (action.payload.origin.area === 'benched') {
+        targetCard = state.myDeck.benchedPokemon.find((card) => card.uuid === action.payload.card.uuid) ?? action.payload.card;
+
+        // Special logic for promoting active
+        if (action.payload.destination.area === 'active' && state.myDeck.activePokemon) {
+          state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== targetCard.uuid);
+          state.myDeck.benchedPokemon.push(state.myDeck.activePokemon);
+          state.myDeck.activePokemon = targetCard;
+          return;
+        }
+
+        // If put to hand, put all attached cards to hand
+        if (action.payload.destination.area === 'hand') {
+          state.myDeck.handCards.concat(targetCard.energyAttached, targetCard.toolsAttached, targetCard.evolvedPokemonAttached);
+          const targetBenchedIdx = state.myDeck.benchedPokemon.findIndex((card) => card.uuid === targetCard.uuid);
+          state.myDeck.benchedPokemon[targetBenchedIdx] = {
+            ...state.myDeck.benchedPokemon[targetBenchedIdx],
+            energyAttached: [],
+            toolsAttached: [],
+            evolvedPokemonAttached: []
+          }
+        }
+
+        // If put to discard, put all attached cards to discard
+        if (action.payload.destination.area === 'discard') {
+          state.myDeck.discardCards.concat(targetCard.energyAttached, targetCard.toolsAttached, targetCard.evolvedPokemonAttached);
+          const targetBenchedIdx = state.myDeck.benchedPokemon.findIndex((card) => card.uuid === targetCard.uuid);
+          state.myDeck.benchedPokemon[targetBenchedIdx] = {
+            ...state.myDeck.benchedPokemon[targetBenchedIdx],
+            energyAttached: [],
+            toolsAttached: [],
+            evolvedPokemonAttached: []
+          }
+        }
       }
 
       // Special logic for bumping stadium
       if (action.payload.origin.area === 'hand' && action.payload.destination.area === 'stadium' && state.myDeck.stadium) {
-        state.myDeck.handCards = state.myDeck.handCards.filter((card) => card.uuid !== action.payload.card.uuid);
+        state.myDeck.handCards = state.myDeck.handCards.filter((card) => card.uuid !== targetCard.uuid);
         state.myDeck.handCards.push(state.myDeck.stadium);
-        state.myDeck.stadium = action.payload.card;
+        state.myDeck.stadium = targetCard;
         return;
       }
 
       if (action.payload.origin.area === 'hand') {
-        state.myDeck.handCards = state.myDeck.handCards.filter((card) => card.uuid !== action.payload.card.uuid);
+        state.myDeck.handCards = state.myDeck.handCards.filter((card) => card.uuid !== targetCard.uuid);
       } else if (action.payload.origin.area === 'deck') {
-        state.myDeck.deckCards = state.myDeck.deckCards.filter((card) => card.uuid !== action.payload.card.uuid);
+        state.myDeck.deckCards = state.myDeck.deckCards.filter((card) => card.uuid !== targetCard.uuid);
       } else if (action.payload.origin.area === 'discard') {
-        state.myDeck.discardCards = state.myDeck.discardCards.filter((card) => card.uuid !== action.payload.card.uuid);
+        state.myDeck.discardCards = state.myDeck.discardCards.filter((card) => card.uuid !== targetCard.uuid);
       } else if (action.payload.origin.area === 'active') {
         state.myDeck.activePokemon = null;
       } else if (action.payload.origin.area === 'benched') {
-        state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== action.payload.card.uuid);
+        state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== targetCard.uuid);
       } else if (action.payload.origin.area === 'stadium') {
         state.myDeck.stadium = null;
       }
 
       if (action.payload.destination.area === 'hand') {
-        state.myDeck.handCards.push(action.payload.card);
+        state.myDeck.handCards.push(targetCard);
       } else if (action.payload.destination.area === 'deck') {
-        state.myDeck.deckCards.push(action.payload.card);
+        state.myDeck.deckCards.push(targetCard);
       } else if (action.payload.destination.area === 'discard') {
-        state.myDeck.discardCards.push(action.payload.card);
+        state.myDeck.discardCards.push(targetCard);
       } else if (action.payload.destination.area === 'active') {
-        state.myDeck.activePokemon = action.payload.card;
+        state.myDeck.activePokemon = targetCard;
       } else if (action.payload.destination.area === 'benched') {
-        state.myDeck.benchedPokemon.push(action.payload.card)
+        state.myDeck.benchedPokemon.push(targetCard)
       } else if (action.payload.destination.area === 'stadium') {
-        state.myDeck.stadium = action.payload.card;
+        state.myDeck.stadium = targetCard;
       } else if (action.payload.destination.area === 'pokemon') {
         if (
           action.payload.destination.metadata &&
           state.myDeck.activePokemon &&
           action.payload.destination.parentArea === 'active')
         {
-          const attachmentType = getAttachmentType(action.payload.card);
+          const attachmentType = getAttachmentType(targetCard);
           if (attachmentType === 'tool') {
-            state.myDeck.activePokemon.toolsAttached.push(action.payload.card);
+            state.myDeck.activePokemon.toolsAttached.push(targetCard);
           } else if (attachmentType === 'energy') {
-            state.myDeck.activePokemon.energyAttached.push(action.payload.card);
+            state.myDeck.activePokemon.energyAttached.push(targetCard);
           } else if (attachmentType === 'evolution') {
-            state.myDeck.activePokemon.evolvedPokemonAttached.push(action.payload.card);
+            state.myDeck.activePokemon.evolvedPokemonAttached.push(targetCard);
           }
         } else if (
           action.payload.destination.metadata &&
@@ -165,13 +222,13 @@ export const gameSlice = createSlice({
 
           if (!draggedOntoPokemonIdx) return console.error('Dragged onto pokemonIdx not found. Not attaching.');
 
-          const attachmentType = getAttachmentType(action.payload.card);
+          const attachmentType = getAttachmentType(targetCard);
           if (attachmentType === 'tool') {
-            state.myDeck.benchedPokemon[draggedOntoPokemonIdx].toolsAttached.push(action.payload.card);
+            state.myDeck.benchedPokemon[draggedOntoPokemonIdx].toolsAttached.push(targetCard);
           } else if (attachmentType === 'energy') {
-            state.myDeck.benchedPokemon[draggedOntoPokemonIdx].energyAttached.push(action.payload.card);
+            state.myDeck.benchedPokemon[draggedOntoPokemonIdx].energyAttached.push(targetCard);
           } else if (attachmentType === 'evolution') {
-            state.myDeck.benchedPokemon[draggedOntoPokemonIdx].evolvedPokemonAttached.push(action.payload.card);
+            state.myDeck.benchedPokemon[draggedOntoPokemonIdx].evolvedPokemonAttached.push(targetCard);
           }
         }
       }
