@@ -10,6 +10,8 @@ export type CardZoneType = 'hand' | 'discard' | 'deck' | 'active' | 'benched' | 
 export interface CardZone {
   area: CardZoneType;
   metadata?: CardObject;
+  // Parent area in the event of a Pokemon
+  parentArea?: CardZoneType
 }
 
 interface DraggableCardProps extends CardProps {

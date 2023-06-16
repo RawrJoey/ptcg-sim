@@ -3,6 +3,7 @@ import { CardZone } from '@/components/Card/DraggableCard';
 import { shuffle } from '@/helpers/deck/shuffle';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
+import { getAttachmentType } from './helpers';
 
 interface DeckState {
   handCards: CardObject[],
@@ -142,6 +143,37 @@ export const gameSlice = createSlice({
         state.myDeck.benchedPokemon.push(action.payload.card)
       } else if (action.payload.destination.area === 'stadium') {
         state.myDeck.stadium = action.payload.card;
+      } else if (action.payload.destination.area === 'pokemon') {
+        if (
+          action.payload.destination.metadata &&
+          state.myDeck.activePokemon &&
+          action.payload.destination.parentArea === 'active')
+        {
+          const attachmentType = getAttachmentType(action.payload.card);
+          if (attachmentType === 'tool') {
+            state.myDeck.activePokemon.toolsAttached.push(action.payload.card);
+          } else if (attachmentType === 'energy') {
+            state.myDeck.activePokemon.energyAttached.push(action.payload.card);
+          } else if (attachmentType === 'evolution') {
+            state.myDeck.activePokemon.evolvedPokemonAttached.push(action.payload.card);
+          }
+        } else if (
+          action.payload.destination.metadata &&
+          action.payload.destination.parentArea === 'benched')
+        {
+          const draggedOntoPokemonIdx = state.myDeck.benchedPokemon.findIndex((card) => card.uuid === action.payload.destination.metadata?.uuid);
+
+          if (!draggedOntoPokemonIdx) return console.error('Dragged onto pokemonIdx not found. Not attaching.');
+
+          const attachmentType = getAttachmentType(action.payload.card);
+          if (attachmentType === 'tool') {
+            state.myDeck.benchedPokemon[draggedOntoPokemonIdx].toolsAttached.push(action.payload.card);
+          } else if (attachmentType === 'energy') {
+            state.myDeck.benchedPokemon[draggedOntoPokemonIdx].energyAttached.push(action.payload.card);
+          } else if (attachmentType === 'evolution') {
+            state.myDeck.benchedPokemon[draggedOntoPokemonIdx].evolvedPokemonAttached.push(action.payload.card);
+          }
+        }
       }
     },
     drawCard: (state) => {

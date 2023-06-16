@@ -1,6 +1,7 @@
 import { CardObject } from "@/components/Card/CardInterface";
 import { parseDeckList } from "@/helpers/deck/parse";
 import { PokemonTCG } from "pokemon-tcg-sdk-typescript";
+import { Subtype, Supertype } from "pokemon-tcg-sdk-typescript/dist/sdk";
 import { v4 as uuidv4 } from 'uuid';
 
 export const loadDeckList = async (list: string, codeToSetMap: Record<string, string>): Promise<CardObject[]> => {
@@ -21,7 +22,8 @@ export const loadDeckList = async (list: string, codeToSetMap: Record<string, st
 
    if (foundCard) {
      for (let idx = 0; idx < (card.count ?? 0); idx++) {
-       deck.push({...foundCard, uuid: uuidv4()});
+        const cardObj: CardObject = {...foundCard, uuid: uuidv4(), energyAttached: [], toolsAttached: [], evolvedPokemonAttached: [] };
+        deck.push(cardObj);
      }
    } else {
     console.error('Did not find', card);
@@ -29,4 +31,12 @@ export const loadDeckList = async (list: string, codeToSetMap: Record<string, st
  }
 
  return deck;
+}
+
+export const getAttachmentType = (attachedCard: CardObject) => {
+  if (attachedCard.subtypes.includes(Subtype.PokemonTool)) return 'tool';
+  if (attachedCard.supertype === Supertype.Energy) return 'energy';
+  if (attachedCard.supertype === Supertype.Pokemon) return 'evolution';
+
+  return null;
 }

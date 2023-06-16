@@ -8,9 +8,12 @@ interface PokemonProps {
 }
 
 export const Pokemon = (props: PokemonProps) => {
+  const area = props.isActive ? 'active' : 'benched';
+  console.log(props.card)
+
   return (
-    <DropZone zone={{ area: 'active', metadata: props.card }}>
-      <DraggableCard cardOrigin={{ area: props.isActive ? 'active' : 'benched', metadata: props.card }} card={props.card} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
+    <DropZone zone={{ area: 'pokemon', metadata: props.card, parentArea: area }}>
+      <DraggableCard cardOrigin={{ area: area, metadata: props.card }} card={props.card} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
     </DropZone>
   )
 };
