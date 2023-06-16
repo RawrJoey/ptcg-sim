@@ -1,13 +1,17 @@
-import { useChannelReceiver } from "@/features/game/broadcast/useChannelReceiver";
-import { useChannelSender } from "@/features/game/broadcast/useChannelSender";
+import { useAppSelector } from "@/app/hooks";
+import { useGameChannelListener } from "@/features/game/broadcast/useGameChannelListener";
+import { useGameChannelUpdater } from "@/features/game/broadcast/useGameChannelUpdater";
 import { useGameController } from "@/features/game/useGameController";
+import { useActiveGame } from "@/features/social/challenges/useActiveGame";
 import { Board } from "../Board/Board";
 import { HelperBubble } from "./HelperBubble";
 
 export const GameController = () => {
+  const activeGame = useActiveGame();
+
   useGameController();
-  useChannelReceiver();
-  useChannelSender();
+  useGameChannelListener();
+  useGameChannelUpdater(activeGame?.id);
 
   return <>
       <HelperBubble />

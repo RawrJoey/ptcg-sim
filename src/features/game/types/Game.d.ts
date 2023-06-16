@@ -12,7 +12,6 @@ export interface GamePhase {
 export type TurnPhase = 'draw' | 'main' | 'attack' | 'apply-damage' | 'take-prize' | 'end';
 
 export interface GameState {
-  opponentId: string | null,
   phase: GamePhase,
   currentTurnPhase: TurnPhase | null,
   myDeck: DeckState,

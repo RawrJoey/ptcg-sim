@@ -2,7 +2,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect } from "react";
 import { GAMEPLAY_ACTION_EVENT } from "./types";
 
-export const useChannelReceiver = () => {
+export const useGameChannelListener = () => {
   const supabase = useSupabaseClient();
 
   useEffect(() => {

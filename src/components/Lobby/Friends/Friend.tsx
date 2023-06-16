@@ -15,8 +15,15 @@ export const Friend = (props: FriendProps) => {
 
   const supabase = useSupabaseClient();
   const user = useUser();
-  const { data: activeFriendChallenges } = useActiveChallenges(props.friend.id);
+  const { data: activeFriendChallenges, refetch } = useActiveChallenges(props.friend.id);
   const alreadyChallenged = tempDisable || activeFriendChallenges?.some((friendOfFriend) => friendOfFriend.challenger === user?.id);
+
+  const handleAcceptChallenge = async () => {
+    if (!props.friend.challengeId) return;
+
+    await acceptChallenge(supabase, props.friend.challengeId);
+    refetch();
+  }
 
   if (!user) return <Text>{'Loading...'}</Text>;
 
@@ -34,7 +41,7 @@ export const Friend = (props: FriendProps) => {
       )
       }
       {props.friend.challengeId && (
-        <Button colorScheme='red' onClick={() => props.friend.challengeId && acceptChallenge(supabase, props.friend.challengeId)}>
+        <Button colorScheme='red' onClick={handleAcceptChallenge}>
           Accept challenge
         </Button>
       )}

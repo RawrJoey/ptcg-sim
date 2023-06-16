@@ -4,9 +4,9 @@ import { useEffect, useRef, MutableRefObject } from "react";
 import { MoveCardPayload } from "../types/Card";
 import { GAMEPLAY_ACTION_EVENT } from "./types";
 
-export const useChannelSender = () => {
+export const useGameChannelUpdater = (challengeId: number | undefined) => {
   const supabase = useSupabaseClient();
-  const channel = supabase.channel('test');
+  const channel = supabase.channel(`game-${challengeId}`);
   const myActions = useAppSelector((state) => state.game.gameplayActions);
 
   const myActionsRef: MutableRefObject<MoveCardPayload[]> = useRef([])
@@ -17,8 +17,9 @@ export const useChannelSender = () => {
   }, [myActions]);
 
   useEffect(() => {
+    if (!challengeId) return;
+
     channel.subscribe((status) => {
-      console.log(status)
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
           if (myActionsStoredLength.current < myActionsRef.current.length) {
