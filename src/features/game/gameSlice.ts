@@ -108,7 +108,7 @@ export const gameSlice = createSlice({
         state.myDeck.activePokemon = action.payload.card;
         return;
       }
-      
+
       // Special logic for bumping stadium
       if (action.payload.origin.area === 'hand' && action.payload.destination.area === 'stadium' && state.myDeck.stadium) {
         state.myDeck.handCards = state.myDeck.handCards.filter((card) => card.uuid !== action.payload.card.uuid);

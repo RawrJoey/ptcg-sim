@@ -4,8 +4,6 @@ import { checkForBasic, drawCard, drawOpenSeven, GamePhase, layPrizes, loadDeck,
 import { loadDeckList } from './helpers';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
-import { CardObject } from '@/components/Card/CardInterface';
-import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 export const useGameController = () => {
   const { data: codeToSetMap, isLoading: codeToSetMapIsLoading } = useCodeToSetMap();
