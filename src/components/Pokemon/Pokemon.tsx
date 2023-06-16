@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
 import { CardObject } from "../Card/CardInterface";
 import { CardZone, DraggableCard } from "../Card/DraggableCard";
 import { DropZone } from "../Generic/DropZone";
@@ -15,16 +15,16 @@ export const Pokemon = (props: PokemonProps) => {
 
   return (
     <DropZone zone={pokemonZone}>
-      <Box>
-        <>
+      <HStack>
+        {props.card.energyAttached.map((energy, idx) => (
           <Box>
-            <DraggableCard cardOrigin={activeBenchedZone} card={props.card} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
+            <DraggableCard cardOrigin={pokemonZone} card={energy} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
           </Box>
-          {props.card.energyAttached.map((energy) => (
-            <DraggableCard cardOrigin={pokemonZone} card={energy} size={props.isActive ? 'md' : 'sm'} hoverBehavior='float' />
-          ))}
-        </>
-      </Box>
+        ))}
+        <Box>
+          <DraggableCard cardOrigin={activeBenchedZone} card={props.card} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
+        </Box>
+      </HStack>
     </DropZone>
   )
 };
