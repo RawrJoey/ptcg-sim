@@ -15,7 +15,13 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
   // Create a new supabase browser client on every first render.
-  const [supabaseClient] = useState(() => createPagesBrowserClient())
+  const [supabaseClient] = useState(() => createPagesBrowserClient({ options: {
+    realtime: {
+      params: {
+        eventsPerSecond: 10
+      }
+    }
+  }}))
   const isMobile = useIsMobile();
 
   return (
