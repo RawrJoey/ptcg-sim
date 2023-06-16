@@ -15,5 +15,6 @@ export interface GameState {
   phase: GamePhase,
   currentTurnPhase: TurnPhase | null,
   myDeck: DeckState,
+  opponentDeck: DeckState,
   gameplayActions: MoveCardPayload[]
 };

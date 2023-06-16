@@ -8,18 +8,30 @@ import { ActivePokemon } from '../Pokemon/ActivePokemon';
 import { BenchedPokemon } from '../Pokemon/BenchedPokemon';
 import { Stadium } from '../Stadium';
 import { DiscardPile } from './DiscardPile';
+import { OpponentContext } from './OpponentContext';
 import { Prizes } from './Prizes';
 
-export const Board = () => {
-  const { handCards, deckCards, discardCards } = useAppSelector((state) => state.game.myDeck);
+interface BoardProps {
+  isOpponent?: boolean;
+}
+
+export const Board = (props: BoardProps) => {
+  const { deckCards } = useAppSelector((state) => state.game.myDeck);
   const gamePhase = useAppSelector((state) => state.game.phase.type);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <>
+    <OpponentContext.Provider value={!!props.isOpponent}>
       <DeckView isOpen={isOpen} onClose={onClose} onOpen={onOpen} cards={deckCards} />
       <Grid
-        templateAreas={`
+        templateAreas={props.isOpponent ?
+          `
+      "hand hand hand hand hand"
+      "prizes bench bench bench discard"
+      "prizes stadium active . deck"
+      "lost-zone stadium . . ."
+      `
+      : `
       "lost-zone stadium . . ."
       "prizes stadium active . deck"
       "prizes bench bench bench discard"
@@ -41,7 +53,6 @@ export const Board = () => {
           <Stadium />
         </GridItem>
         <GridItem area='deck'>
-          <Text>Deck: {deckCards.length}</Text>
           <DeckOnBoard />
           <Button mt='10' onClick={onOpen} isDisabled={gamePhase !== 'your-turn'}>Search deck</Button>
         </GridItem>
@@ -49,13 +60,12 @@ export const Board = () => {
           <Prizes />
         </GridItem>
         <GridItem area='hand' height={getCardDimensions('md').height}>
-          <Hand cards={handCards} />
+          <Hand />
         </GridItem>
         <GridItem area='discard'>
-          <Text>Discard: {discardCards.length}</Text>
           <DiscardPile />
         </GridItem>
       </Grid>
-    </>
+    </OpponentContext.Provider>
   );
 };

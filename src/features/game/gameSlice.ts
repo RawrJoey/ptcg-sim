@@ -25,6 +25,7 @@ const initialState: GameState = {
   },
   currentTurnPhase: null,
   myDeck: initialDeckState,
+  opponentDeck: initialDeckState,
   gameplayActions: []
 };
 

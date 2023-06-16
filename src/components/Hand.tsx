@@ -1,18 +1,15 @@
+import { useAppSelector } from '@/app/hooks';
 import { HStack } from '@chakra-ui/react';
-import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
-import { CardInterface, CardObject } from './Card/CardInterface';
 import { DraggableCard } from './Card/DraggableCard';
 import { DropZone } from './Generic/DropZone';
 
-interface HandProps {
-  cards: CardObject[];
-}
+export const Hand = () => {
+  const handCards = useAppSelector((state) => state.game.myDeck.handCards);
 
-export const Hand = (props: HandProps) => {
   return (
     <DropZone zone={{ area: 'hand' }}>
       <HStack maxWidth={'100%'} spacing={0} justifyContent='center'>
-        {props.cards.map((card) => (
+        {handCards.map((card) => (
           <DraggableCard
             card={card}
             key={card.uuid}

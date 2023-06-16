@@ -15,6 +15,7 @@ export const GameController = () => {
 
   return <>
       <HelperBubble />
+      <Board isOpponent />
       <Board />
     </>
 }

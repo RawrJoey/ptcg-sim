@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { moveCard } from '@/features/game/gameSlice';
-import { Box, useDisclosure } from '@chakra-ui/react';
+import { Box, Text, useDisclosure } from '@chakra-ui/react';
 import { Card } from '../Card/Card';
 import { CardInterface } from '../Card/CardInterface';
 import { CardModalView } from '../Generic/CardModalView';
@@ -15,6 +15,7 @@ export const DiscardPile = () => {
 
   return (
     <DropZone zone={{ area: 'discard' }}>
+      <Text>Discard: {discardCards.length}</Text>
       {topCardInDiscard && (
         <Box onClick={onOpen}>
           <CardModalView cardOrigin={{ area: 'discard' }} isOpen={isOpen} onOpen={onOpen} onClose={onClose} cards={discardCards} />
