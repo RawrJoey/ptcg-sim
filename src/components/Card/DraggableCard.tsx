@@ -5,7 +5,7 @@ import { Card } from './Card';
 import { CardInterface, CardObject } from './CardInterface';
 import { CardProps } from './CardProps';
 
-export type CardZoneType = 'hand' | 'discard' | 'deck' | 'active' | 'benched' | 'stadium' | 'pokemon';
+export type CardZoneType = 'hand' | 'discard' | 'deck' | 'active' | 'benched' | 'stadium' | 'pokemon' | 'prizes';
 
 export interface CardZone {
   area: CardZoneType;

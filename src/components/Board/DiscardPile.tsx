@@ -18,7 +18,7 @@ export const DiscardPile = () => {
       {topCardInDiscard && (
         <Box onClick={onOpen}>
           <CardModalView cardOrigin={{ area: 'discard' }} isOpen={isOpen} onOpen={onOpen} onClose={onClose} cards={discardCards} />
-          <Card card={topCardInDiscard} size='sm' hoverBehavior='float' />
+          <Card card={topCardInDiscard} size='md' hoverBehavior='float' />
         </Box>
       )}
     </DropZone>

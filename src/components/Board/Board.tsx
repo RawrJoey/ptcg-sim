@@ -8,6 +8,7 @@ import { ActivePokemon } from '../Pokemon/ActivePokemon';
 import { BenchedPokemon } from '../Pokemon/BenchedPokemon';
 import { Stadium } from '../Stadium';
 import { DiscardPile } from './DiscardPile';
+import { Prizes } from './Prizes';
 
 export const Board = () => {
   const { handCards, deckCards, discardCards } = useAppSelector((state) => state.game.myDeck);
@@ -18,12 +19,13 @@ export const Board = () => {
       <DeckView isOpen={isOpen} onClose={onClose} onOpen={onOpen} cards={deckCards} />
       <Grid
         templateAreas={`
-      "lost-zone stadium active . deck"
+      "lost-zone stadium . . ."
+      "prizes stadium active . deck"
       "prizes . . . discard"
-      ". bench bench bench ."
+      "prizes bench bench bench ."
       "hand hand hand hand hand"
       `}
-        gridTemplateRows={'1fr 1fr 1fr 1fr'}
+        gridTemplateRows={'0.5fr 1fr 1fr 1fr 1fr'}
         gridTemplateColumns={'1fr 1fr 1fr 1fr 1fr'}
         rowGap={4}
         width='100%'
@@ -41,6 +43,9 @@ export const Board = () => {
           <Text>Deck: {deckCards.length}</Text>
           <DeckOnBoard />
           <Button mt='10' onClick={onOpen}>Search deck</Button>
+        </GridItem>
+        <GridItem area='prizes'>
+          <Prizes />
         </GridItem>
         <GridItem area='hand' height={getCardDimensions('md').height}>
           <Hand cards={handCards} />
