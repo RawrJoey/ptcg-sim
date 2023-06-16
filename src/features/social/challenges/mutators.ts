@@ -5,6 +5,13 @@ export const sendChallenge = async (supabaseClient: SupabaseClient, currentUserI
     .insert({
       challenger: currentUserId,
       challengee: challengedUserId,
-      active: true
+      active: true,
+      gameIsRunning: false
     });
+};
+
+export const acceptChallenge = async (supabaseClient: SupabaseClient, challengeId: number) => {
+  await supabaseClient.from('Challenges')
+    .update({ gameIsRunning: true, active: false })
+    .eq('id', challengeId);
 }

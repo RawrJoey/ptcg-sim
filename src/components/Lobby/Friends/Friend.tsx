@@ -1,5 +1,5 @@
 import { sendChallenge } from "@/features/social/challenges/mutators";
-import { useChallenges } from "@/features/social/challenges/useChallenges";
+import { useActiveChallenges } from "@/features/social/challenges/useActiveChallenges";
 import { FriendType } from "@/features/social/useFriends"
 import { Avatar, AvatarBadge, Button, HStack, Text } from "@chakra-ui/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
@@ -15,8 +15,8 @@ export const Friend = (props: FriendProps) => {
 
   const supabase = useSupabaseClient();
   const user = useUser();
-  const { data: friendChallenges } = useChallenges(props.friend.id);
-  const alreadyChallenged = tempDisable || friendChallenges?.some((friendOfFriend) => friendOfFriend.challenger === user?.id);
+  const { data: activeFriendChallenges } = useActiveChallenges(props.friend.id);
+  const alreadyChallenged = tempDisable || activeFriendChallenges?.some((friendOfFriend) => friendOfFriend.challenger === user?.id);
 
   if (!user) return <Text>{'Loading...'}</Text>;
 

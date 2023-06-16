@@ -1,9 +1,11 @@
 import gameSlice from '@/features/game/gameSlice';
+import interfaceSlice from '@/features/interface/interfaceSlice';
 import { configureStore } from '@reduxjs/toolkit'
 
 const store = configureStore({
   reducer: {
-    game: gameSlice
+    game: gameSlice,
+    interface: interfaceSlice
   },
 });
 

@@ -3,15 +3,17 @@ import { SupabaseClient } from "@supabase/supabase-js"
 import { useQuery } from "@tanstack/react-query";
 
 interface Challenge {
+  id: number;
   challengee: string;
   challenger: string;
+  active: boolean;
+  gameIsRunning: boolean;
 }
 
 const fetchChallenges = async (supabaseClient: SupabaseClient) => {
   const { data } = await supabaseClient
     .from('Challenges')
-    .select('challengee,challenger')
-    .eq('active', true)
+    .select('id,challengee,challenger,active,gameIsRunning')
     .returns<Challenge[]>();
 
   return data ?? [];
@@ -21,11 +23,12 @@ export const useChallenges = (userId: string | undefined) => {
   const supabaseClient = useSupabaseClient();
 
   const { data, ...rest } = useQuery({
-    queryKey: ['active-challenges'],
+    queryKey: ['challenges'],
     queryFn: () => fetchChallenges(supabaseClient)
   });
 
   return {
-    data: data?.filter((challenge) => challenge.challengee === userId)
+    data: data?.filter((challenge) => challenge.challengee === userId),
+    ...rest
   }
 }
