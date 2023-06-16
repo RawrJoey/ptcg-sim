@@ -106,28 +106,6 @@ export const gameSlice = createSlice({
       if (state.myDeck.activePokemon && action.payload.origin.area === 'active') {
         // Fix moving attached cards
         targetCard = state.myDeck.activePokemon;
-
-        // If put to hand, put all attached cards to hand
-        if (action.payload.destination.area === 'hand') {
-          state.myDeck.handCards.concat(targetCard.energyAttached, targetCard.toolsAttached, targetCard.evolvedPokemonAttached);
-          state.myDeck.activePokemon = {
-            ...state.myDeck.activePokemon,
-            energyAttached: [],
-            toolsAttached: [],
-            evolvedPokemonAttached: []
-          }
-        }
-
-        // If put to discard, put all attached cards to discard
-        if (action.payload.destination.area === 'discard') {
-          state.myDeck.discardCards.concat(targetCard.energyAttached, targetCard.toolsAttached, targetCard.evolvedPokemonAttached);
-          state.myDeck.activePokemon = {
-            ...state.myDeck.activePokemon,
-            energyAttached: [],
-            toolsAttached: [],
-            evolvedPokemonAttached: []
-          }
-        }
       }
 
       if (action.payload.origin.area === 'benched') {
@@ -140,13 +118,15 @@ export const gameSlice = createSlice({
           state.myDeck.activePokemon = targetCard;
           return;
         }
+      }
 
+      // Handle returning attachments to different zones
+      if (action.payload.origin.area === 'active' || action.payload.origin.area === 'benched') {
         // If put to hand, put all attached cards to hand
         if (action.payload.destination.area === 'hand') {
-          state.myDeck.handCards.concat(targetCard.energyAttached, targetCard.toolsAttached, targetCard.evolvedPokemonAttached);
-          const targetBenchedIdx = state.myDeck.benchedPokemon.findIndex((card) => card.uuid === targetCard.uuid);
-          state.myDeck.benchedPokemon[targetBenchedIdx] = {
-            ...state.myDeck.benchedPokemon[targetBenchedIdx],
+          state.myDeck.handCards = state.myDeck.handCards.concat(targetCard.energyAttached, targetCard.toolsAttached, targetCard.evolvedPokemonAttached);
+          targetCard = {
+            ...targetCard,
             energyAttached: [],
             toolsAttached: [],
             evolvedPokemonAttached: []
@@ -155,10 +135,10 @@ export const gameSlice = createSlice({
 
         // If put to discard, put all attached cards to discard
         if (action.payload.destination.area === 'discard') {
-          state.myDeck.discardCards.concat(targetCard.energyAttached, targetCard.toolsAttached, targetCard.evolvedPokemonAttached);
-          const targetBenchedIdx = state.myDeck.benchedPokemon.findIndex((card) => card.uuid === targetCard.uuid);
-          state.myDeck.benchedPokemon[targetBenchedIdx] = {
-            ...state.myDeck.benchedPokemon[targetBenchedIdx],
+          state.myDeck.discardCards = state.myDeck.discardCards.concat(targetCard.energyAttached, targetCard.toolsAttached, targetCard.evolvedPokemonAttached);
+
+          targetCard = {
+            ...targetCard,
             energyAttached: [],
             toolsAttached: [],
             evolvedPokemonAttached: []
