@@ -44,7 +44,7 @@ export const gameSlice = createSlice({
       state.phase = action.payload;
     },
     loadDeck: (state, action: PayloadAction<GamePayload<CardObject[]>>) => {
-      state.gameplayActions.push({ type: 'game/loadDeck', payload: action.payload.payload });
+      !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/loadDeck', payload: action.payload.payload });
 
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = shuffle(action.payload.payload);
     },

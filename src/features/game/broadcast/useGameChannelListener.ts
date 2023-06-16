@@ -10,10 +10,12 @@ export const useGameChannelListener = (challengeId: number | undefined) => {
   useEffect(() => {
     supabase
       .channel(`game-${challengeId}`)
-      .on('broadcast', { event: GAMEPLAY_ACTION_EVENT }, (event) => incomingActionHandler({ type: event.event, payload: event.payload }));
-
-    supabase
-      .channel(`game-${challengeId}`)
-      .on('broadcast', { event: GAME_PHASE_EVENT }, (payload) => console.log(payload))
+      .on('broadcast', { event: GAMEPLAY_ACTION_EVENT }, (event) => {
+        console.log(event);
+        for (const action of event.payload) {
+          console.log(action)
+          incomingActionHandler({ type: action.type, payload: action })
+        }
+      });
   }, [])
 };
