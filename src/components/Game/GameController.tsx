@@ -10,7 +10,7 @@ export const GameController = () => {
   const activeGame = useActiveGame();
 
   useGameController();
-  useGameChannelListener();
+  useGameChannelListener(activeGame?.id);
   useGameChannelUpdater(activeGame?.id);
 
   return <>
