@@ -4,9 +4,9 @@ import { shuffle } from '@/helpers/deck/shuffle';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { getAttachmentType } from './helpers';
-import { MoveCardPayload } from './types/Card';
 import type { DeckState } from './types/Deck';
 import { GamePhase, GameState, TurnPhase } from './types/Game';
+import { MoveCardPayload } from './types/GameplayActions';
 
 const initialDeckState: DeckState = {
   handCards: [],
@@ -34,25 +34,37 @@ export const gameSlice = createSlice({
   initialState,
   reducers: {
     setGamePhase: (state, action: PayloadAction<GamePhase>) => {
+      state.gameplayActions.push({ type: 'game/setGamePhase', payload: action.payload });
+
       state.phase = action.payload;
     },
     loadDeck: (state, action: PayloadAction<CardObject[]>) => {
+      state.gameplayActions.push({ type: 'game/loadDeck', payload: action.payload });
+
       state.myDeck.deckCards = shuffle(action.payload);
     },
     mulliganHandAway: (state) => {
+      state.gameplayActions.push({ type: 'game/mulliganHandAway' });
+
       state.myDeck.deckCards.concat(state.myDeck.handCards);
       state.myDeck.handCards = [];
       state.myDeck.deckCards = shuffle(state.myDeck.deckCards);
     },
     shuffleDeck: (state) => {
+      state.gameplayActions.push({ type: 'game/shuffleDeck' });
+
       state.myDeck.deckCards = shuffle(state.myDeck.deckCards);
     },
     drawOpenSeven: (state) => {
+      state.gameplayActions.push({ type: 'game/drawOpenSeven' });
+
       const openSeven = state.myDeck.deckCards.slice(state.myDeck.deckCards.length - 7, state.myDeck.deckCards.length);
       state.myDeck.deckCards = state.myDeck.deckCards.slice(0, state.myDeck.deckCards.length - 7);
       state.myDeck.handCards = openSeven;
     },
     checkForBasic: (state) => {
+      state.gameplayActions.push({ type: 'game/checkForBasic' });
+
       const shouldMulligan = !state.myDeck.handCards.some((card: CardObject) => card.supertype === Supertype.Pokemon && card.subtypes.includes(Subtype.Basic));
       if (shouldMulligan) {
         state.phase = {
@@ -67,12 +79,14 @@ export const gameSlice = createSlice({
       }
     },
     layPrizes: (state) => {
+      state.gameplayActions.push({ type: 'game/layPrizes' });
+      
       const prizes = state.myDeck.deckCards.slice(state.myDeck.deckCards.length - 6, state.myDeck.deckCards.length);
       state.myDeck.deckCards = state.myDeck.deckCards.slice(0, state.myDeck.deckCards.length - 6);
       state.myDeck.prizes = prizes;
     },
     moveCard: (state, action: PayloadAction<MoveCardPayload>) => {
-      state.gameplayActions.push(action.payload);
+      state.gameplayActions.push({ type: 'game/moveCard', payload: action.payload });
 
       let targetCard = action.payload.card;
 
@@ -220,12 +234,16 @@ export const gameSlice = createSlice({
       }
     },
     drawCard: (state) => {
+      state.gameplayActions.push({ type: 'game/drawCard' });
+
       const card = state.myDeck.deckCards.at(state.myDeck.deckCards.length - 1);
       state.myDeck.deckCards.pop();
       if (!card) return console.error('card is undefined')
       state.myDeck.handCards.push(card);
     },
     takePrize: (state, action: PayloadAction<number>) => {
+      state.gameplayActions.push({ type: 'game/takePrize', payload: action.payload });
+
       state.myDeck.handCards.push(state.myDeck.prizes[action.payload]);
       state.myDeck.prizes = [
         ...state.myDeck.prizes.slice(0, action.payload),

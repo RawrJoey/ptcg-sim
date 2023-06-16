@@ -1,7 +1,7 @@
 import { useAppSelector } from "@/app/hooks";
 import { useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useEffect, useRef, MutableRefObject } from "react";
-import { MoveCardPayload } from "../types/Card";
+import { GameplayAction } from "../types/GameplayActions";
 import { GAMEPLAY_ACTION_EVENT } from "./types";
 
 export const useGameChannelUpdater = (challengeId: number | undefined) => {
@@ -9,10 +9,11 @@ export const useGameChannelUpdater = (challengeId: number | undefined) => {
   const channel = supabase.channel(`game-${challengeId}`);
   const myActions = useAppSelector((state) => state.game.gameplayActions);
 
-  const myActionsRef: MutableRefObject<MoveCardPayload[]> = useRef([])
+  const myActionsRef: MutableRefObject<GameplayAction[]> = useRef([])
   const myActionsStoredLength = useRef(0);
 
   useEffect(() => {
+    console.log(myActions)
     myActionsRef.current = myActions;
   }, [myActions]);
 

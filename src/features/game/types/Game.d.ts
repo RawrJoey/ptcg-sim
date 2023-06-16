@@ -1,5 +1,6 @@
 import { MoveCardPayload } from "./Card";
 import { DeckState } from "./Deck";
+import { GameplayAction } from "./GameplayActions";
 
 export type GamePhaseType = 'not-started' | 'initialize' | 'initial-draw' | 'mulligan' | 'choose-active' | 'lay-prizes' | 'your-turn' | 'opponent-turn' | 'game-end';
 export type GamePhaseStatus = 'ok' | 'pending-user-input' | 'pending-confirm';
@@ -16,5 +17,5 @@ export interface GameState {
   currentTurnPhase: TurnPhase | null,
   myDeck: DeckState,
   opponentDeck: DeckState,
-  gameplayActions: MoveCardPayload[]
+  gameplayActions: GameplayAction[]
 };
