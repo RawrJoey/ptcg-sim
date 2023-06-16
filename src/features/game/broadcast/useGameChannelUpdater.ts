@@ -9,7 +9,7 @@ export const useGameChannelUpdater = (challengeId: number | undefined) => {
   const channel = supabase.channel(`game-${challengeId}`);
   const myActions = useAppSelector((state) => state.game.gameplayActions);
 
-  const myActionsRef: MutableRefObject<GameplayAction[]> = useRef([])
+  const myActionsRef: MutableRefObject<GameplayAction<any>[]> = useRef([])
   const myActionsStoredLength = useRef(0);
 
   useEffect(() => {

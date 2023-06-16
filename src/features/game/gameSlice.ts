@@ -29,6 +29,11 @@ const initialState: GameState = {
   gameplayActions: []
 };
 
+export interface GamePayload<T> {
+  isOpponent?: boolean;
+  payload: T;
+}
+
 export const gameSlice = createSlice({
   name: 'game',
   initialState,
@@ -38,10 +43,10 @@ export const gameSlice = createSlice({
 
       state.phase = action.payload;
     },
-    loadDeck: (state, action: PayloadAction<CardObject[]>) => {
-      state.gameplayActions.push({ type: 'game/loadDeck', payload: action.payload });
+    loadDeck: (state, action: PayloadAction<GamePayload<CardObject[]>>) => {
+      state.gameplayActions.push({ type: 'game/loadDeck', payload: action.payload.payload });
 
-      state.myDeck.deckCards = shuffle(action.payload);
+      (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = shuffle(action.payload.payload);
     },
     mulliganHandAway: (state) => {
       state.gameplayActions.push({ type: 'game/mulliganHandAway' });

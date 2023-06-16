@@ -15,7 +15,7 @@ export const useGameController = () => {
   const phaseHandler = useCallback(async (phase: GamePhase) => {
     if (phase.type === 'initialize') {
       const loadedDeckList = await loadDeckList(SAMPLE_LIST, codeToSetMap);
-      dispatch(loadDeck(loadedDeckList));
+      dispatch(loadDeck({ payload: loadedDeckList }));
       dispatch(setGamePhase({
         type: 'initial-draw',
         status: 'ok'
