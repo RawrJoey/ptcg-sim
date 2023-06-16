@@ -1,6 +1,4 @@
-import { useAppSelector } from "@/app/hooks"
 import { useDeck } from "../Board/useDeck";
-import { DraggableCard } from "../Card/DraggableCard";
 import { DropZone } from "../Generic/DropZone"
 import { Pokemon } from "./Pokemon";
 

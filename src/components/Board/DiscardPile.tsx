@@ -1,13 +1,12 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { moveCard } from '@/features/game/gameSlice';
+import { useAppDispatch } from '@/app/hooks';
 import { Box, Text, useDisclosure } from '@chakra-ui/react';
 import { Card } from '../Card/Card';
-import { CardInterface } from '../Card/CardInterface';
 import { CardModalView } from '../Generic/CardModalView';
 import { DropZone } from '../Generic/DropZone';
+import { useDeck } from './useDeck';
 
 export const DiscardPile = () => {
-  const discardCards = useAppSelector((state) => state.game.myDeck.discardCards);
+  const discardCards = useDeck().discardCards;
   const topCardInDiscard = discardCards.at(discardCards.length - 1)
   
   const dispatch = useAppDispatch();

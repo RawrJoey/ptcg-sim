@@ -1,10 +1,11 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { useAppDispatch } from '@/app/hooks';
 import { takePrize } from '@/features/game/gameSlice';
 import { Box, Grid, HStack } from '@chakra-ui/react';
 import { DraggableCard } from '../Card/DraggableCard';
+import { useDeck } from './useDeck';
 
 export const Prizes = () => {
-  const prizes = useAppSelector(state => state.game.myDeck.prizes);
+  const prizes = useDeck().prizes;
   const dispatch = useAppDispatch();
 
   return (

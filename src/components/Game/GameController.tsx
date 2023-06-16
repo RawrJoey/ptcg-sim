@@ -1,4 +1,3 @@
-import { useAppSelector } from "@/app/hooks";
 import { useGameChannelListener } from "@/features/game/broadcast/useGameChannelListener";
 import { useGameChannelUpdater } from "@/features/game/broadcast/useGameChannelUpdater";
 import { useGameController } from "@/features/game/useGameController";
@@ -14,8 +13,8 @@ export const GameController = () => {
   useGameChannelUpdater(activeGame?.id);
 
   return <>
-      <HelperBubble />
       <Board isOpponent />
+      <HelperBubble />
       <Board />
     </>
 }

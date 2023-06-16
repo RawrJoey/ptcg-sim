@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { useAppSelector } from '@/app/hooks';
 import { Button, Grid, GridItem, Text, useDisclosure } from '@chakra-ui/react';
 import { getCardDimensions } from '../Card/helpers';
 import { DeckOnBoard } from '../Deck/DeckOnBoard';
@@ -10,13 +10,14 @@ import { Stadium } from '../Stadium';
 import { DiscardPile } from './DiscardPile';
 import { OpponentContext } from './OpponentContext';
 import { Prizes } from './Prizes';
+import { useDeck } from './useDeck';
 
 interface BoardProps {
   isOpponent?: boolean;
 }
 
 export const Board = (props: BoardProps) => {
-  const { deckCards } = useAppSelector((state) => state.game.myDeck);
+  const { deckCards } = useDeck();
   const gamePhase = useAppSelector((state) => state.game.phase.type);
   const { isOpen, onOpen, onClose } = useDisclosure();
 

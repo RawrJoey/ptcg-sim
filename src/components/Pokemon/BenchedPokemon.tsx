@@ -1,11 +1,10 @@
-import { useAppSelector } from "@/app/hooks"
 import { Box, HStack } from "@chakra-ui/react";
-import { DraggableCard } from "../Card/DraggableCard";
+import { useDeck } from "../Board/useDeck";
 import { DropZone } from "../Generic/DropZone"
 import { Pokemon } from "./Pokemon";
 
 export const BenchedPokemon = () => {
-  const benched = useAppSelector((state) => state.game.myDeck.benchedPokemon);
+  const benched = useDeck().benchedPokemon;
 
   return (
     <HStack>
