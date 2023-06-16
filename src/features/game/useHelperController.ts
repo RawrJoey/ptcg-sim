@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { GamePhase, setGamePhase } from "./gameSlice";
+import { GamePhase } from "./types/Game";
 
 const getBubbleInterface = (phase: GamePhase) => {
   if (phase.type === 'choose-active') {
