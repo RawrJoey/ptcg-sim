@@ -155,10 +155,9 @@ export const gameSlice = createSlice({
       } else if (action.payload.origin.area === 'active') {
         state.myDeck.activePokemon = null;
       } else if (action.payload.origin.area === 'benched') {
+        state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== targetCard.uuid);
         if (action.payload.destination.area === 'active' && state.myDeck.activePokemon) {
           state.myDeck.benchedPokemon.push(state.myDeck.activePokemon)
-        } else {
-          state.myDeck.benchedPokemon = state.myDeck.benchedPokemon.filter((card) => card.uuid !== targetCard.uuid);
         }
       } else if (action.payload.origin.area === 'stadium') {
         state.myDeck.stadium = null;

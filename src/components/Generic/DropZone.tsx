@@ -37,8 +37,8 @@ export const DropZone = (props: DropZoneProps) => {
         }
 
         if (props.zone.area === 'pokemon') {
-          if (origin.area === 'active' && props.zone.parentArea === 'active') return false;
-          if (origin.area === 'benched' && props.zone.parentArea === 'benched') return false;
+          if (origin.area === 'active') return false;
+          if (origin.area === 'benched') return false;
           if (origin.metadata?.uuid === props.zone.metadata?.uuid) return false;
         }
         
