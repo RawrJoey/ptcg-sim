@@ -15,6 +15,7 @@ export const DropZone = (props: DropZoneProps) => {
   const dispatch = useAppDispatch();
   const active = useAppSelector((state) => state.game.myDeck.activePokemon);
   const benched = useAppSelector((state) => state.game.myDeck.benchedPokemon);
+  const gamePhase = useAppSelector((state) => state.game.phase.type);
 
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
@@ -24,6 +25,11 @@ export const DropZone = (props: DropZoneProps) => {
 
         const card = (monitor.getItem() as DraggableCardType).card;
         const canDropIntoPokemonZone = card.supertype === Supertype.Pokemon && card.subtypes.includes(Subtype.Basic);
+
+        if (gamePhase !== 'your-turn') {
+          if (origin.area === 'prizes' || props.zone.area === 'discard') return false;
+        }
+
         if (props.zone.area === 'active') {
           if (origin.area === 'benched') return true;
           if (!canDropIntoPokemonZone || active) return false;
