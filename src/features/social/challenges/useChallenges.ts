@@ -2,7 +2,7 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { SupabaseClient } from "@supabase/supabase-js"
 import { useQuery } from "@tanstack/react-query";
 
-interface Challenge {
+export interface Challenge {
   id: number;
   challengee: string;
   challenger: string;

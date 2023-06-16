@@ -3,6 +3,7 @@ import { useInterfaceController } from "@/features/interface/useInterfaceControl
 import { Stack } from "@chakra-ui/react";
 import { GameController } from "./Game/GameController";
 import { FriendList } from "./Lobby/Friends/FriendList";
+import { Lobby } from "./Lobby/Lobby";
 import { Login } from "./Login";
 
 export const PageController = () => {
@@ -11,17 +12,7 @@ export const PageController = () => {
   useInterfaceController();
 
   if (currentScreen === 'lobby') {
-    return (
-      <Stack
-        height='100%'
-        justifyContent={'center'}
-        align='center'
-        maxWidth={'100%'}
-      >
-        <Login />
-        <FriendList />
-      </Stack>
-    )
+    return <Lobby />
   }
 
   if (currentScreen === 'in-game') {
