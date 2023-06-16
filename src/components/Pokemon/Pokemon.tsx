@@ -18,15 +18,15 @@ export const Pokemon = (props: PokemonProps) => {
       <HStack spacing={props.isActive ? '-200' : '-125'}>
         {props.card.toolsAttached.concat(props.card.energyAttached).map((attached, idx) => (
           <Box key={attached.uuid}>
-            <DraggableCard cardOrigin={pokemonZone} card={attached} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
+            <DraggableCard cardOrigin={pokemonZone} card={attached} size={props.isActive ? 'md' : 'sm'} hoverBehavior='float' />
           </Box>
         ))}
         <Box>
-          <DraggableCard cardOrigin={activeBenchedZone} card={props.card} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
+          <DraggableCard cardOrigin={activeBenchedZone} card={props.card} size={props.isActive ? 'md' : 'sm'} hoverBehavior='float' />
         </Box>
         {props.card.evolvedPokemonAttached.map((attached, idx) => (
           <Box key={attached.uuid}>
-            <DraggableCard cardOrigin={pokemonZone} card={attached} size={props.isActive ? 'lg' : 'md'} hoverBehavior='float' />
+            <DraggableCard cardOrigin={pokemonZone} card={attached} size={props.isActive ? 'md' : 'sm'} hoverBehavior='float' />
           </Box>
         ))}
       </HStack>
