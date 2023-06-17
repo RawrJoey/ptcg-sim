@@ -251,6 +251,6 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setGamePhase, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, layPrizes, takePrize } = gameSlice.actions
+export const { setGamePhase, setOpponentPhase, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, layPrizes, takePrize } = gameSlice.actions
 
 export default gameSlice.reducer;
