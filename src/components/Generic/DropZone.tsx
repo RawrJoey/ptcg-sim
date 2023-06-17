@@ -68,7 +68,7 @@ export const DropZone = (props: DropZoneProps) => {
 
         return false;
       },
-      drop: (draggingCard: DraggableCardType) => dispatch(moveCard({ card: draggingCard.card, origin: draggingCard.origin, destination: props.zone })),
+      drop: (draggingCard: DraggableCardType) => dispatch(moveCard({ payload : { card: draggingCard.card, origin: draggingCard.origin, destination: props.zone }})),
       collect: monitor => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
