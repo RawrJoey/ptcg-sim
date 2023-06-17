@@ -21,7 +21,11 @@ const initialDeckState: DeckState = {
 const initialState: GameState = {
   phase: {
     type: 'not-started',
-    status: 'ok'
+    status: 'pending',
+  },
+  opponentPhase: {
+    type: 'not-started',
+    status: 'pending'
   },
   currentTurnPhase: null,
   myDeck: initialDeckState,
@@ -42,6 +46,10 @@ export const gameSlice = createSlice({
       state.gameplayActions.push({ type: 'game/setGamePhase', payload: action.payload });
 
       state.phase = action.payload;
+    },
+    // TODO
+    setOpponentPhase: (state, action: PayloadAction<GamePhase>) => {
+      state.opponentPhase = action.payload;
     },
     loadDeck: (state, action: PayloadAction<GamePayload<CardObject[]>>) => {
       !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/loadDeck', payload: action.payload.payload });
@@ -67,22 +75,6 @@ export const gameSlice = createSlice({
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice(0, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 7);
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).handCards = openSeven;
     },
-    checkForBasic: (state) => {
-      state.gameplayActions.push({ type: 'game/checkForBasic' });
-
-      const shouldMulligan = !state.myDeck.handCards.some((card: CardObject) => card.supertype === Supertype.Pokemon && card.subtypes.includes(Subtype.Basic));
-      if (shouldMulligan) {
-        state.phase = {
-          type: 'mulligan',
-          status: 'pending-confirm'
-        }
-      } else {
-        state.phase = {
-          type: 'choose-active',
-          status: 'pending-user-input'
-        }
-      }
-    },
     layPrizes: (state, action: PayloadAction<GamePayload<undefined>>) => {
       !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/layPrizes' });
       
@@ -97,7 +89,7 @@ export const gameSlice = createSlice({
 
       // At start of game, switch phase status to confirm when user chooses active
       if (action.payload.payload.destination.area === 'active' && state.phase.type === 'choose-active') {
-        state.phase.status = 'pending-confirm';
+        state.phase.status = 'pending';
       }
 
       if ((action.payload.isOpponent ? state.opponentDeck : state.myDeck).activePokemon && action.payload.payload.origin.area === 'active') {
@@ -259,6 +251,6 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setGamePhase, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, checkForBasic, layPrizes, takePrize } = gameSlice.actions
+export const { setGamePhase, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, layPrizes, takePrize } = gameSlice.actions
 
 export default gameSlice.reducer;
