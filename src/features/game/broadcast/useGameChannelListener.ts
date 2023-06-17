@@ -15,7 +15,9 @@ export const useGameChannelListener = (challengeId: number | undefined) => {
           gameplayActionHandler({ type: action.type, payload: action.payload })
         }
       }).on('broadcast', { event: GAME_ACK_EVENT }, (event) => {
-        ackActionHandler(event.payload);
+        for (const action of event.payload) {
+          ackActionHandler({ type: action.type, payload: action.payload })
+        }
       });
   }, [])
 };
