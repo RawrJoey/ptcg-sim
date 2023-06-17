@@ -68,7 +68,7 @@ export const useGameChannelUpdater = (challengeId: number | undefined) => {
             channel.send({
               type: 'broadcast',
               event: GAMEPLAY_ACTION_EVENT,
-              payload: [{ type: 'game/setGamePhase', payload: currentPhaseRef }]
+              payload: [{ type: 'game/setGamePhase', payload: currentPhaseRef.current }]
             }).catch((err) => console.log(err));
           }
         }, 2000);

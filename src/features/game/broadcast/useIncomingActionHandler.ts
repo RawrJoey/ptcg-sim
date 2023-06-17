@@ -7,7 +7,6 @@ export const useIncomingActionHandler = () => {
   const dispatch = useAppDispatch();
 
   const gameplayActionHandler = useCallback((action: GameplayAction<any>) => {
-    console.log(action)
     if (action.type === 'game/setGamePhase') {
       dispatch(queueAckToSend(action.payload));
       dispatch(setOpponentPhase(action.payload));
