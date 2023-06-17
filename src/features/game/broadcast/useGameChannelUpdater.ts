@@ -1,7 +1,7 @@
 import { useAppSelector } from "@/app/hooks";
 import { useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useEffect, useRef, MutableRefObject } from "react";
-import { GamePhase } from "../types/Game";
+import { GamePhase, GamePhaseState } from "../types/Game";
 import { GameplayAction } from "../types/GameplayActions";
 import { GAMEPLAY_ACTION_EVENT, GAME_ACK_EVENT } from "./types";
 
@@ -10,12 +10,15 @@ export const useGameChannelUpdater = (challengeId: number | undefined) => {
   const channel = supabase.channel(`game-${challengeId}`);
   const myActions = useAppSelector((state) => state.game.gameplayActions);
   const acks = useAppSelector((state) => state.game.acks);
+  const currentPhase = useAppSelector((state) => state.game.phase);
 
   const myActionsRef: MutableRefObject<GameplayAction<any>[]> = useRef([])
   const myActionsStoredLength = useRef(0);
 
   const acksRef: MutableRefObject<GamePhase[]> = useRef([]);
   const acksLength = useRef(0);
+
+  const currentPhaseRef: MutableRefObject<GamePhaseState | undefined> = useRef();
 
   useEffect(() => {
     myActionsRef.current = myActions;
@@ -24,6 +27,10 @@ export const useGameChannelUpdater = (challengeId: number | undefined) => {
   useEffect(() => {
     acksRef.current = acks;
   }, [acks]);
+
+  useEffect(() => {
+    currentPhaseRef.current = currentPhase;
+  }, [currentPhase]);
 
   useEffect(() => {
     if (!challengeId) return;
@@ -53,6 +60,17 @@ export const useGameChannelUpdater = (challengeId: number | undefined) => {
             }).catch((err) => console.log(err));
           }
         }, 500);
+
+        // If current phase wasn't acked, try again
+        setInterval(() => {
+          if (currentPhaseRef.current?.acked === false) {
+            channel.send({
+              type: 'broadcast',
+              event: GAMEPLAY_ACTION_EVENT,
+              payload: currentPhaseRef
+            }).catch((err) => console.log(err));
+          }
+        }, 2000);
       }
     })
   }, []);
