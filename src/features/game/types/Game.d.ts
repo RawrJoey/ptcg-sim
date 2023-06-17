@@ -7,16 +7,21 @@ export type GamePhaseStatus = 'ok' | 'pending' | 'pending-input';
 
 export interface GamePhase {
   type: GamePhaseType,
-  status: GamePhaseStatus
+  status: GamePhaseStatus,
+}
+
+export interface GamePhaseState extends GamePhase {
+  acked: boolean
 }
 
 export type TurnPhase = 'draw' | 'main' | 'attack' | 'apply-damage' | 'take-prize' | 'end';
 
 export interface GameState {
-  phase: GamePhase,
-  opponentPhase: GamePhase,
+  phase: GamePhaseState,
+  opponentPhase: GamePhaseState,
   currentTurnPhase: TurnPhase | null,
   myDeck: DeckState,
   opponentDeck: DeckState,
-  gameplayActions: GameplayAction[]
+  gameplayActions: GameplayAction[],
+  acks: GamePhase[]
 };

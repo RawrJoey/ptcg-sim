@@ -22,15 +22,18 @@ const initialState: GameState = {
   phase: {
     type: 'not-started',
     status: 'pending',
+    acked: false
   },
   opponentPhase: {
     type: 'not-started',
-    status: 'pending'
+    status: 'pending',
+    acked: false
   },
   currentTurnPhase: null,
   myDeck: initialDeckState,
   opponentDeck: initialDeckState,
-  gameplayActions: []
+  gameplayActions: [],
+  acks: []
 };
 
 export interface GamePayload<T> {
@@ -45,11 +48,22 @@ export const gameSlice = createSlice({
     setGamePhase: (state, action: PayloadAction<GamePhase>) => {
       state.gameplayActions.push({ type: 'game/setGamePhase', payload: action.payload });
 
-      state.phase = action.payload;
+      state.phase = {
+        ...action.payload,
+        acked: false
+      };
     },
-    // TODO
     setOpponentPhase: (state, action: PayloadAction<GamePhase>) => {
-      state.opponentPhase = action.payload;
+      state.opponentPhase = {
+        ...action.payload,
+        acked: false
+      };
+    },
+    queueAckToSend: (state, action: PayloadAction<GamePhase>) => {
+      state.acks.push(action.payload);
+    },
+    acknowledgePhaseChangeWasReceived: (state) => {
+      state.phase.acked = true;
     },
     loadDeck: (state, action: PayloadAction<GamePayload<CardObject[]>>) => {
       !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/loadDeck', payload: action.payload.payload });
@@ -251,6 +265,6 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setGamePhase, setOpponentPhase, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, layPrizes, takePrize } = gameSlice.actions
+export const { setGamePhase, setOpponentPhase, queueAckToSend, acknowledgePhaseChangeWasReceived, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, layPrizes, takePrize } = gameSlice.actions
 
 export default gameSlice.reducer;

@@ -1,20 +1,29 @@
 import { useAppSelector } from "@/app/hooks";
 import { useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useEffect, useRef, MutableRefObject } from "react";
+import { GamePhase } from "../types/Game";
 import { GameplayAction } from "../types/GameplayActions";
-import { GAMEPLAY_ACTION_EVENT } from "./types";
+import { GAMEPLAY_ACTION_EVENT, GAME_ACK_EVENT } from "./types";
 
 export const useGameChannelUpdater = (challengeId: number | undefined) => {
   const supabase = useSupabaseClient();
   const channel = supabase.channel(`game-${challengeId}`);
   const myActions = useAppSelector((state) => state.game.gameplayActions);
+  const acks = useAppSelector((state) => state.game.acks);
 
   const myActionsRef: MutableRefObject<GameplayAction<any>[]> = useRef([])
   const myActionsStoredLength = useRef(0);
 
+  const acksRef: MutableRefObject<GamePhase[]> = useRef([]);
+  const acksLength = useRef(0);
+
   useEffect(() => {
     myActionsRef.current = myActions;
   }, [myActions]);
+
+  useEffect(() => {
+    acksRef.current = acks;
+  }, [acks]);
 
   useEffect(() => {
     if (!challengeId) return;
@@ -30,6 +39,17 @@ export const useGameChannelUpdater = (challengeId: number | undefined) => {
               type: 'broadcast',
               event: GAMEPLAY_ACTION_EVENT,
               payload: myActionsRef.current.slice(myActionsRef.current.length - lengthDiff),
+            }).catch((err) => console.log(err));
+          }
+
+          if (acksLength.current < acksRef.current.length) {
+            const lengthDiff = acksRef.current.length - acksLength.current;
+            acksLength.current = acksRef.current.length;
+
+            channel.send({
+              type: 'broadcast',
+              event: GAME_ACK_EVENT,
+              payload: acksRef.current.slice(acksRef.current.length - lengthDiff),
             }).catch((err) => console.log(err));
           }
         }, 500);

@@ -4,7 +4,7 @@ import { drawCard, drawOpenSeven, layPrizes, loadDeck, mulliganHandAway, setGame
 import { loadDeckList } from './helpers';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
-import { GamePhase } from './types/Game';
+import { GamePhaseState } from './types/Game';
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { CardObject } from '@/components/Card/CardInterface';
 
@@ -14,9 +14,13 @@ export const useGameController = () => {
   const gameState = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
 
-  const phaseHandler = useCallback(async (phase: GamePhase, opponentPhase: GamePhase) => {
+  const phaseHandler = useCallback(async (phase: GamePhaseState, opponentPhase: GamePhaseState) => {
+    const phaseOkAndAcked = phase.status === 'ok' && phase.acked;
+    const opponentPhaseOk = opponentPhase.status === 'ok';
+    const bothPhasesOkAndAcked = phaseOkAndAcked && opponentPhaseOk;
+
     if (phase.type === 'not-started') {
-      if (opponentPhase.type === 'not-started' && phase.status === 'ok' && opponentPhase.status === 'ok') {
+      if (opponentPhase.type === 'not-started' && bothPhasesOkAndAcked) {
         dispatch(setGamePhase({
           type: 'initialize',
           status: 'pending'
@@ -32,7 +36,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'initialize') {
-      if (opponentPhase.type === 'initialize' && phase.status === 'ok' && opponentPhase.status === 'ok') {
+      if (opponentPhase.type === 'initialize' && bothPhasesOkAndAcked) {
         dispatch(setGamePhase({
           type: 'initial-draw',
           status: 'pending',
@@ -50,7 +54,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'initial-draw') {
-      if (opponentPhase.type === 'initial-draw' && phase.status === 'ok' && opponentPhase.status === 'ok') {
+      if (opponentPhase.type === 'initial-draw' && bothPhasesOkAndAcked) {
         dispatch(setGamePhase({
           type: 'check-for-basic',
           status: 'pending',
@@ -101,7 +105,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'lay-prizes') {
-      if (opponentPhase.type === 'lay-prizes' && phase.status === 'ok' && opponentPhase.status === 'ok') {
+      if (opponentPhase.type === 'lay-prizes' && bothPhasesOkAndAcked) {
         // TODO: Incorporate multiplayer logic, coin flip prior to this to decide first
         dispatch(setGamePhase({ type: 'your-turn', status: 'ok' }));
       }
@@ -125,5 +129,5 @@ export const useGameController = () => {
     if (!codeToSetMapIsLoading) {
       phaseHandler(gameState.phase, gameState.opponentPhase);
     }
-  }, [gameState.phase.type, gameState.phase.status, gameState.opponentPhase.type, gameState.opponentPhase.status, codeToSetMapIsLoading]);
+  }, [gameState.phase.type, gameState.phase.status, gameState.phase.acked, gameState.opponentPhase.type, gameState.opponentPhase.status, gameState.opponentPhase.acked, codeToSetMapIsLoading]);
 }
