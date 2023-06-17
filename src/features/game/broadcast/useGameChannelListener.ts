@@ -14,9 +14,14 @@ export const useGameChannelListener = (challengeId: number | undefined) => {
         for (const action of event.payload) {
           gameplayActionHandler({ type: action.type, payload: action.payload })
         }
-      }).on('broadcast', { event: GAME_ACK_EVENT }, (event) => {
+      })
+      
+    supabase
+      .channel(`game-${challengeId}`)
+      .on('broadcast', { event: GAME_ACK_EVENT }, (event) => {
         for (const action of event.payload) {
-          ackActionHandler({ type: action.type, payload: action.payload })
+          // TODO: change this from hard coded maybe idk
+          ackActionHandler({ type: 'game/setGamePhase', payload: action })
         }
       });
   }, [])

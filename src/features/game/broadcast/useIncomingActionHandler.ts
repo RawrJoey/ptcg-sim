@@ -22,6 +22,7 @@ export const useIncomingActionHandler = () => {
   }, [dispatch]);
 
   const ackActionHandler = useCallback((action: GameplayAction<any>) => {
+    console.log(action)
     // TODO (maybe?): ack all gameplay actions?
     if (action.type === 'game/setGamePhase') {
       dispatch(acknowledgePhaseChangeWasReceived());
