@@ -83,12 +83,12 @@ export const gameSlice = createSlice({
         }
       }
     },
-    layPrizes: (state) => {
-      state.gameplayActions.push({ type: 'game/layPrizes' });
+    layPrizes: (state, action: PayloadAction<GamePayload<undefined>>) => {
+      !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/layPrizes' });
       
-      const prizes = state.myDeck.deckCards.slice(state.myDeck.deckCards.length - 6, state.myDeck.deckCards.length);
-      state.myDeck.deckCards = state.myDeck.deckCards.slice(0, state.myDeck.deckCards.length - 6);
-      state.myDeck.prizes = prizes;
+      const prizes = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice((action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 6, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length);
+      (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice(0, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 6);
+      (action.payload.isOpponent ? state.opponentDeck : state.myDeck).prizes = prizes;
     },
     moveCard: (state, action: PayloadAction<GamePayload<MoveCardPayload>>) => {
       !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/moveCard', payload: action.payload.payload });

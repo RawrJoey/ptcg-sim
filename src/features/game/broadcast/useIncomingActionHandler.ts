@@ -1,6 +1,6 @@
 import { useAppDispatch } from "@/app/hooks";
 import { useCallback } from "react";
-import { drawOpenSeven, loadDeck, moveCard } from "../gameSlice";
+import { drawOpenSeven, layPrizes, loadDeck, moveCard } from "../gameSlice";
 import { GameplayAction } from "../types/GameplayActions"
 
 export const useIncomingActionHandler = () => {
@@ -13,6 +13,8 @@ export const useIncomingActionHandler = () => {
       dispatch(drawOpenSeven({ payload: undefined, isOpponent: true }));
     } else if (action.type === 'game/moveCard') {
       dispatch(moveCard({ payload: action.payload.payload, isOpponent: true }));
+    } else if (action.type === 'game/layPrizes') {
+      dispatch(layPrizes({ payload: undefined, isOpponent: true }));
     }
   }, [dispatch, loadDeck])
 
