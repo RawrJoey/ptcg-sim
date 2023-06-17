@@ -10,7 +10,7 @@ export const DeckOnBoard = () => {
   const isYourTurn = useAppSelector((state) => state.game.phase.type === 'your-turn');
 
   return (
-    <Box cursor={isYourTurn ? 'pointer' : 'auto'} onClick={() => isYourTurn && dispatch(drawCard())}>
+    <Box cursor={isYourTurn ? 'pointer' : 'auto'} onClick={() => isYourTurn && dispatch(drawCard({ payload: undefined }))}>
       <Text>Deck: {deckCards.length}</Text>
       <BlankCard />
     </Box>

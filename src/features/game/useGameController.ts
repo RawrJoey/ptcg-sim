@@ -42,13 +42,13 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'lay-prizes') {
-      dispatch(layPrizes());
+      dispatch(layPrizes({ payload: undefined }));
       // TODO: Incorporate multiplayer logic, coin flip prior to this to decide first
       dispatch(setGamePhase({ type: 'your-turn', status: 'ok' }));
     }
 
     if (phase.type === 'your-turn') {
-      dispatch(drawCard());
+      dispatch(drawCard({ payload: undefined }));
     }
 
   }, [codeToSetMap]);

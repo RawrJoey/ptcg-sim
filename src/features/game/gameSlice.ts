@@ -238,13 +238,13 @@ export const gameSlice = createSlice({
         (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = shuffle((action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards);
       }
     },
-    drawCard: (state) => {
-      state.gameplayActions.push({ type: 'game/drawCard' });
+    drawCard: (state, action: PayloadAction<GamePayload<undefined>>) => {
+      !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/drawCard' });
 
-      const card = state.myDeck.deckCards.at(state.myDeck.deckCards.length - 1);
-      state.myDeck.deckCards.pop();
-      if (!card) return console.error('card is undefined')
-      state.myDeck.handCards.push(card);
+      const card = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.at((action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 1);
+      (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.pop();
+      if (!card) return;
+      (action.payload.isOpponent ? state.opponentDeck : state.myDeck).handCards.push(card);
     },
     takePrize: (state, action: PayloadAction<number>) => {
       state.gameplayActions.push({ type: 'game/takePrize', payload: action.payload });

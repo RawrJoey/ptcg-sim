@@ -14,7 +14,7 @@ export const useIncomingActionHandler = () => {
     } else if (action.type === 'game/moveCard') {
       dispatch(moveCard({ payload: action.payload.payload, isOpponent: true }));
     } else if (action.type === 'game/layPrizes') {
-      dispatch(layPrizes({ payload: undefined, isOpponent: true }));
+      dispatch(layPrizes({ payload: action.payload.payload, isOpponent: true }));
     }
   }, [dispatch, loadDeck])
 
