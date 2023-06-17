@@ -8,7 +8,7 @@ export const useIncomingActionHandler = () => {
 
   const incomingActionHandler = useCallback((action: GameplayAction<any>) => {
     if (action.type === 'game/setGamePhase') {
-      dispatch(setOpponentPhase(action.payload.payload));
+      dispatch(setOpponentPhase(action.payload));
     } else if (action.type === 'game/loadDeck') {
       dispatch(loadDeck({ payload: action.payload.payload, isOpponent: true }));
     } else if (action.type === 'game/drawOpenSeven') {

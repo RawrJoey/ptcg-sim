@@ -125,5 +125,5 @@ export const useGameController = () => {
     if (!codeToSetMapIsLoading) {
       phaseHandler(gameState.phase, gameState.opponentPhase);
     }
-  }, [gameState.phase.type, gameState.phase.status, gameState.phase, gameState.opponentPhase, codeToSetMapIsLoading]);
+  }, [gameState.phase.type, gameState.phase.status, gameState.opponentPhase.type, gameState.opponentPhase.status, codeToSetMapIsLoading]);
 }
