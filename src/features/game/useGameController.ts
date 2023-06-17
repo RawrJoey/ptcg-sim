@@ -22,6 +22,13 @@ export const useGameController = () => {
           status: 'pending'
         }));
       }
+
+      if (phase.status === 'pending') {
+        dispatch(setGamePhase({
+          type: 'not-started',
+          status: 'ok'
+        }));
+      }
     }
 
     if (phase.type === 'initialize') {
