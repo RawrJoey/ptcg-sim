@@ -17,7 +17,6 @@ export const useIncomingActionHandler = () => {
         dispatch(queueAckToSend(action.payload));
       }
       dispatch(setOpponentPhase(action.payload));
-      // phaseHandler(gameState.phase, gameState.opponentPhase, gameState.myDeck.handCards, dispatch, codeToSetMap);
     } else if (action.type === 'game/loadDeck') {
       dispatch(loadDeck({ payload: action.payload, isOpponent: true }));
     } else if (action.type === 'game/drawOpenSeven') {
