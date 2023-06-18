@@ -10,7 +10,7 @@ export const useIncomingActionHandler = () => {
   const dispatch = useAppDispatch();
   const { data: codeToSetMap } = useCodeToSetMap(); 
 
-  const gameplayActionHandler = useCallback((action: GameplayAction<any>) => {
+  const gameplayActionHandler = (action: GameplayAction<any>) => {
     console.log('gameplay', action)
     if (action.type === 'game/setGamePhase') {
       if (action.payload.status === 'ok') {
@@ -29,7 +29,7 @@ export const useIncomingActionHandler = () => {
     } else if (action.type === 'game/queueAckToSend') {
       dispatch(acknowledgePhaseChangeWasReceived());
     }
-  }, [dispatch]);
+  };
 
   return { gameplayActionHandler };
 }
