@@ -42,11 +42,13 @@ export   const phaseHandler = (phase: GamePhaseState, opponentPhase: GamePhaseSt
     }
 
     if (phase.status === 'pending') {
-      dispatch(loadDeck({ payload: [] }));
-      dispatch(setGamePhase({
-        type: 'initialize',
-        status: 'ok',
-      }));
+      loadDeckList(SAMPLE_LIST, codeToSetMap).then((loadedDeckList) => {
+        dispatch(loadDeck({ payload: loadedDeckList }));
+        dispatch(setGamePhase({
+          type: 'initialize',
+          status: 'ok',
+        }));
+      });
     }
   }
 
