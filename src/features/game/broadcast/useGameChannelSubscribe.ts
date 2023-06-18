@@ -49,7 +49,7 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
 
             myActionsStoredLength.current += 1;
           }
-        }, 100);
+        }, 500);
 
         // If current phase wasn't acked, try again
         setInterval(() => {
