@@ -95,7 +95,7 @@ export const gameSlice = createSlice({
         const openSeven = state.myDeck.deckCards.slice(state.myDeck.deckCards.length - 7, state.myDeck.deckCards.length);
         state.gameplayActions.push({ type: 'game/drawOpenSeven', payload: openSeven });
 
-        state.myDeck.deckCards = state.myDeck.handCards.slice(0, state.myDeck.deckCards.length - 7);
+        state.myDeck.deckCards = state.myDeck.deckCards.slice(0, state.myDeck.deckCards.length - 7);
         state.myDeck.handCards = openSeven;
       }
     },
