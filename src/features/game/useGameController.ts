@@ -14,7 +14,7 @@ export const useGameController = () => {
   const gameState = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
 
-  const phaseHandler = useCallback(async (phase: GamePhaseState, opponentPhase: GamePhaseState) => {
+  const phaseHandler = useCallback((phase: GamePhaseState, opponentPhase: GamePhaseState) => {
     const phaseOkAndAcked = phase.status === 'ok' && phase.acked;
     const opponentPhaseOk = opponentPhase.status === 'ok';
     const bothPhasesOkAndAcked = phaseOkAndAcked && opponentPhaseOk;
@@ -44,12 +44,13 @@ export const useGameController = () => {
       }
 
       if (phase.status === 'pending') {
-        const loadedDeckList = await loadDeckList(SAMPLE_LIST, codeToSetMap);
-        dispatch(loadDeck({ payload: loadedDeckList }));
-        dispatch(setGamePhase({
-          type: 'initialize',
-          status: 'ok',
-        }));
+        loadDeckList(SAMPLE_LIST, codeToSetMap).then((loadedDeckList) => {
+          dispatch(loadDeck({ payload: loadedDeckList }));
+          dispatch(setGamePhase({
+            type: 'initialize',
+            status: 'ok',
+          }));
+        });
       }
     }
 
