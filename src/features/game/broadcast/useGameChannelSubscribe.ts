@@ -39,12 +39,13 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
           if (myActionsStoredLength.current < myActionsRef.current.length) {
-            console.log('sending',  myActionsRef.current[myActionsStoredLength.current - 1]);
+            const lengthDiff = myActionsRef.current.length - myActionsStoredLength.current;
+            console.log('sending',  myActionsRef.current.slice(myActionsRef.current.length - lengthDiff));
 
             channel.send({
               type: 'broadcast',
               event: GAMEPLAY_ACTION_EVENT,
-              payload: [myActionsRef.current[myActionsStoredLength.current - 1]],
+              payload: [myActionsRef.current[myActionsRef.current.length - lengthDiff]],
             }).catch((err) => console.log(err));
 
             myActionsStoredLength.current += 1;
