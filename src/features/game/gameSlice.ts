@@ -60,7 +60,10 @@ export const gameSlice = createSlice({
       state.gameplayActions.push({ type: 'game/queueAckToSend', payload: action.payload });
     },
     acknowledgePhaseChangeWasReceived: (state) => {
-      state.phase.acked = true;
+      state.phase = {
+        ...state.phase,
+        acked: true
+      };
     },
     loadDeck: (state, action: PayloadAction<GamePayload<CardObject[]>>) => {
       !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/loadDeck', payload: action.payload.payload });
