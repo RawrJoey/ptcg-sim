@@ -74,36 +74,22 @@ export const gameSlice = createSlice({
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = shuffle(action.payload.payload);
     },
     setWhoIsFlipping: (state, action: PayloadAction<GamePayload<boolean>>) => {
-      if (action.payload.isOpponent) {
-        if (action.payload.payload) {
-          state.phase = {
-            ...state.phase,
-            type: 'flip-coin',
-            status: 'pending'
-          }
-        } else {
-          state.phase = {
-            ...state.phase,
-            type: 'flip-coin',
-            status: 'pending-input'
-          }
+      if (action.payload.payload) {
+        state.phase = {
+          ...state.phase,
+          type: 'flip-coin',
+          status: 'pending-input'
         }
       } else {
-        state.gameplayActions.push({ type: 'game/setWhoIsFlipping', payload: { youAreFlipping: !action.payload.payload } });
-
-        if (action.payload.payload) {
-          state.phase = {
-            ...state.phase,
-            type: 'flip-coin',
-            status: 'pending-input'
-          }
-        } else {
-          state.phase = {
-            ...state.phase,
-            type: 'flip-coin',
-            status: 'pending'
-          }
+        state.phase = {
+          ...state.phase,
+          type: 'flip-coin',
+          status: 'pending'
         }
+      }
+
+      if (!action.payload.isOpponent) {
+        state.gameplayActions.push({ type: 'game/setWhoIsFlipping', payload: { youAreFlipping: !action.payload.payload } });
       }
     },
     setIsGoingFirst: (state, action: PayloadAction<GamePayload<boolean>>) => {

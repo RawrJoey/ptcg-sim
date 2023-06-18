@@ -70,11 +70,16 @@ export const useGameController = () => {
       }
     }
 
-    // Only for the person who's choosing. Other person doesn't get this phase.
     if (phase.type === 'choose-going-first') {
-      
+      if (phaseOkAndAcked && opponentPhaseOk) {
+        dispatch(setGamePhase({
+          type: 'initial-draw',
+          status: 'ok'
+        }));
+      }
     }
 
+    // TODO: show go first message
     if (phase.type === 'go-first-message') {
 
     }

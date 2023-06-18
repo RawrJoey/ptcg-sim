@@ -14,7 +14,7 @@ interface HelperControllerReturn {
 }
 
 const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase): { text?: string, actions?: HelperAction[] } | undefined => {
-  const { confirmHelperAction, flipCoin } = usePhaseActions();
+  const { confirmHelperAction, flipCoin, chooseFirst } = usePhaseActions();
   const waitingForOpponent = opponentPhase.status === 'pending' || opponentPhase.status === 'pending-input';
 
   if (phase.type === 'not-started') {
@@ -39,9 +39,30 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase): { text?
       }
     }
 
-    if (phase.status === 'pending') {
+    if (waitingForOpponent) {
       return {
         text: 'Waiting for opponent to flip...'
+      }
+    }
+  }
+
+  if (phase.type === 'choose-going-first') {
+    if (phase.status === 'pending-input') {
+      return {
+        text: 'You won the flip. First or second?',
+        actions: [{
+          text: 'First',
+          onClick: () => chooseFirst(true)
+        }, {
+          text: 'Second',
+          onClick: () => chooseFirst(false)
+        }]
+      }
+    }
+
+    if (waitingForOpponent) {
+      return {
+        text: 'You lost the flip. Waiting for opponent to choose turn order...'
       }
     }
   }

@@ -17,11 +17,16 @@ export const usePhaseActions = () => {
 
     // Won the flip
     if ((randomNum === 0 && face === 'heads') || randomNum === 1 && face === 'tails') {
-      dispatch(setIsGoingFirst({ payload: true }));
+      dispatch(setGamePhase({ type: 'choose-going-first', status: 'pending-input' }));
     } else {
-      dispatch(setIsGoingFirst({ payload: false }));
+      dispatch(setGamePhase({ type: 'choose-going-first', status: 'pending' }));
     }
   }
 
-  return { confirmHelperAction, flipCoin };
+  const chooseFirst = (first: boolean) => {
+    dispatch(setIsGoingFirst({ payload: first }));
+    dispatch(setGamePhase({ ...gameState.phase, status: 'ok' }));
+  }
+
+  return { confirmHelperAction, flipCoin, chooseFirst };
 }
