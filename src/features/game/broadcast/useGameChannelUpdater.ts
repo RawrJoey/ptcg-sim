@@ -63,7 +63,7 @@ export const useGameChannelUpdater = (challengeId: number | undefined) => {
 
         // If current phase wasn't acked, try again
         setInterval(() => {
-          if (currentPhaseRef.current?.acked === false) {
+          if (currentPhaseRef.current?.status === 'ok' && currentPhaseRef.current?.acked === false) {
             console.log('Heartbeat failed. Trying again...');
             channel.send({
               type: 'broadcast',
