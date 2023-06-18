@@ -86,6 +86,8 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
           }
         }, 2000);
       }
+
+      return () => supabase.removeChannel(channel);
     })
   }, []);
 }
