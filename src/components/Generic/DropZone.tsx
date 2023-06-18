@@ -62,7 +62,7 @@ export const DropZone = (props: DropZoneProps) => {
 
         if (origin.area === 'prizes') return props.zone.area === 'hand'; // Yeah yeah Blaceph GX whatever
         
-        if (origin !== props.zone) {
+        if (origin.area !== props.zone.area) {
           return true;
         }
 
