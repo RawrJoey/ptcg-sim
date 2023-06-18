@@ -4,12 +4,11 @@ import { drawCard, drawOpenSeven, layPrizes, loadDeck, mulliganHandAway, setGame
 import { loadDeckList } from './helpers';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
-import { GamePhaseState } from './types/Game';
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { CardObject } from '@/components/Card/CardInterface';
 
 export const useGameController = () => {
-  const { data: codeToSetMap, isLoading: codeToSetMapIsLoading } = useCodeToSetMap();
+  const { data: codeToSetMap } = useCodeToSetMap();
 
   const { phase, opponentPhase, myDeck } = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
@@ -130,8 +129,6 @@ export const useGameController = () => {
   };
 
   useEffect(() => {
-    if (!codeToSetMapIsLoading) {
-      phaseHandler();
-    }
-  }, [phase.type, phase.status, phase.acked, opponentPhase.type, opponentPhase.status, codeToSetMapIsLoading]);
+    phaseHandler();
+  }, [phase.type, phase.status, phase.acked, opponentPhase.type, opponentPhase.status]);
 }
