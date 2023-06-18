@@ -16,8 +16,8 @@ export const useGameController = () => {
 
   const phaseHandler = useCallback(async (phase: GamePhaseState, opponentPhase: GamePhaseState) => {
     const phaseOkAndAcked = phase.status === 'ok' && phase.acked;
-    const opponentPhaseOkAndAcked = opponentPhase.status === 'ok';
-    const bothPhasesOkAndAcked = phaseOkAndAcked && opponentPhaseOkAndAcked;
+    const opponentPhaseOk = opponentPhase.status === 'ok';
+    const bothPhasesOkAndAcked = phaseOkAndAcked && opponentPhaseOk;
 
     if (phase.type === 'not-started') {
       if (opponentPhase.type === 'not-started' && bothPhasesOkAndAcked) {
