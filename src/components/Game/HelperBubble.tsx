@@ -1,17 +1,19 @@
 import { useHelperController } from "@/features/game/useHelperController"
-import { usePhaseActions } from "@/features/game/usePhaseActions";
 import { Button, Stack, Text } from "@chakra-ui/react"
 
 export const HelperBubble = () => {
-  const { text, actionText, isDisabled } = useHelperController();
-  const { confirmHelperAction } = usePhaseActions();
+  const { text, actions, isDisabled } = useHelperController();
 
-  if (!text && !actionText) return null;
+  if (!text && !actions) return null;
 
   return (
     <Stack>
       {text && <Text>{text}</Text>}
-      {actionText && <Button isDisabled={isDisabled} onClick={confirmHelperAction}>{actionText}</Button>}
+      <>
+        {actions?.map((action) => {
+          <Button isDisabled={isDisabled} onClick={action.onClick}>{action.text}</Button>
+        })}
+      </>
     </Stack>
   )
 }

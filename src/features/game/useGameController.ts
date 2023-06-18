@@ -1,6 +1,6 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
-import { drawCard, drawOpenSeven, layPrizes, loadDeck, mulliganHandAway, setGamePhase } from './gameSlice';
+import { drawCard, drawOpenSeven, layPrizes, loadDeck, mulliganHandAway, setGamePhase, setWhoIsFlipping } from './gameSlice';
 import { loadDeckList } from './helpers';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
@@ -13,6 +13,7 @@ export const useGameController = () => {
 
   const { phase, opponentPhase, myDeck } = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
+  const choseWhoFlip = useRef(false);
 
   const phaseHandler = () => {
     console.log('PHASE')
@@ -41,7 +42,7 @@ export const useGameController = () => {
     if (phase.type === 'initialize') {
       if (opponentPhase.type === 'initialize' && bothPhasesOkAndAcked) {
         dispatch(setGamePhase({
-          type: 'initial-draw',
+          type: 'flip-coin',
           status: 'pending',
         }));
       }
@@ -55,6 +56,27 @@ export const useGameController = () => {
           }));
         });
       }
+    }
+
+    if (phase.type === 'flip-coin') {
+      if (phase.status === 'pending') {
+        // The first person who acks their opponents gets to decide who flips
+        if (opponentPhase.type === 'flip-coin' && !choseWhoFlip.current) {
+          const randomNum = Math.floor(Math.random() * 2);
+          const iAmFlipping = randomNum === 1
+          dispatch(setWhoIsFlipping({ payload: iAmFlipping }));
+          choseWhoFlip.current = true;
+        }
+      }
+    }
+
+    // Only for the person who's choosing. Other person doesn't get this phase.
+    if (phase.type === 'choose-going-first') {
+      
+    }
+
+    if (phase.type === 'go-first-message') {
+
     }
 
     if (phase.type === 'initial-draw') {
@@ -124,7 +146,9 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'your-turn') {
-      dispatch(drawCard({ payload: undefined }));
+      if (phase.status === 'ok') {
+        dispatch(drawCard({ payload: undefined }));
+      }
     }
   };
 

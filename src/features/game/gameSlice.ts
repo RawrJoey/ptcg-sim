@@ -33,7 +33,8 @@ const initialState: GameState = {
   myDeck: initialDeckState,
   opponentDeck: initialDeckState,
   gameplayActions: [],
-  acks: []
+  acks: [],
+  isGoingFirst: undefined
 };
 
 export interface GamePayload<T> {
@@ -71,6 +72,47 @@ export const gameSlice = createSlice({
       !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/loadDeck', payload: action.payload.payload });
 
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = shuffle(action.payload.payload);
+    },
+    setWhoIsFlipping: (state, action: PayloadAction<GamePayload<boolean>>) => {
+      if (action.payload.isOpponent) {
+        if (action.payload.payload) {
+          state.phase = {
+            ...state.phase,
+            type: 'flip-coin',
+            status: 'pending'
+          }
+        } else {
+          state.phase = {
+            ...state.phase,
+            type: 'flip-coin',
+            status: 'pending-input'
+          }
+        }
+      } else {
+        state.gameplayActions.push({ type: 'game/setWhoIsFlipping', payload: { youAreFlipping: !action.payload.payload } });
+
+        if (action.payload.payload) {
+          state.phase = {
+            ...state.phase,
+            type: 'flip-coin',
+            status: 'pending-input'
+          }
+        } else {
+          state.phase = {
+            ...state.phase,
+            type: 'flip-coin',
+            status: 'pending'
+          }
+        }
+      }
+    },
+    setIsGoingFirst: (state, action: PayloadAction<GamePayload<boolean>>) => {
+      if (action.payload.isOpponent) {
+        state.isGoingFirst = !action.payload.payload;
+      } else {
+        state.gameplayActions.push({ type: 'game/setIsGoingFirst', payload: action.payload });
+        state.isGoingFirst = action.payload.payload;
+      }
     },
     mulliganHandAway: (state) => {
       state.gameplayActions.push({ type: 'game/mulliganHandAway' });
@@ -275,6 +317,6 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setGamePhase, setOpponentPhase, queueAckToSend, acknowledgePhaseChangeWasReceived, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, layPrizes, takePrize } = gameSlice.actions
+export const { setGamePhase, setOpponentPhase, queueAckToSend, acknowledgePhaseChangeWasReceived, setWhoIsFlipping, setIsGoingFirst, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, layPrizes, takePrize } = gameSlice.actions
 
 export default gameSlice.reducer;

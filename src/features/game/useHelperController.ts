@@ -1,13 +1,47 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { GamePhase } from "./types/Game";
+import { usePhaseActions } from "./usePhaseActions";
 
-const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase) => {
+export interface HelperAction {
+  text: string;
+  onClick: () => void;
+}
+
+interface HelperControllerReturn {
+  text?: string;
+  actions?: HelperAction[];
+  isDisabled: boolean;
+}
+
+const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase): { text?: string, actions?: HelperAction[] } | undefined => {
+  const { confirmHelperAction, flipCoin } = usePhaseActions();
   const waitingForOpponent = opponentPhase.status === 'pending' || opponentPhase.status === 'pending-input';
 
   if (phase.type === 'not-started') {
     if (waitingForOpponent) {
       return {
         text: 'Waiting for opponent to load game...'
+      }
+    }
+  }
+
+  if (phase.type === 'flip-coin') {
+    if (phase.status === 'pending-input') {
+      return {
+        text: 'Heads or tails?',
+        actions: [{
+          text: 'Heads',
+          onClick: () => flipCoin('heads')
+        }, {
+          text: 'Tails',
+          onClick: () => flipCoin('tails')
+        }]
+      }
+    }
+
+    if (phase.status === 'pending') {
+      return {
+        text: 'Waiting for opponent to flip...'
       }
     }
   }
@@ -31,14 +65,20 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase) => {
   if (phase.type === 'choose-active') {
     return {
       text: 'Choose your starting Pokemon',
-      actionText: 'Done'
+      actions: [{
+        text: 'Done',
+        onClick: confirmHelperAction
+      }]
     }
   }
 
   if (phase.type === 'mulligan') {
     return {
       text: 'You have a mulligan',
-      actionText: 'Get new hand'
+      actions: [{
+        text: 'Get a new hand',
+        onClick: confirmHelperAction
+      }]
     }
   }
 
@@ -61,9 +101,11 @@ export const useHelperController = () => {
   const gameState = useAppSelector((state) => state.game);
   const bubbleInterface = getBubbleInterface(gameState.phase, gameState.opponentPhase);
 
-  return {
+  const ret: HelperControllerReturn = {
     text: bubbleInterface?.text,
-    actionText: bubbleInterface?.actionText,
+    actions: bubbleInterface?.actions,
     isDisabled: gameState.phase.status === 'pending-input'
   }
+
+  return ret;
 }
