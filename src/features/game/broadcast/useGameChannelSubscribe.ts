@@ -50,7 +50,7 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
               payload: myActionsRef.current.slice(myActionsRef.current.length - lengthDiff),
             }).catch((err) => console.log(err));
           }
-        }, 500);
+        }, 100);
 
         // If current phase wasn't acked, try again
         setInterval(() => {
