@@ -7,7 +7,7 @@ export const useIncomingActionHandler = () => {
   const dispatch = useAppDispatch();
 
   const gameplayActionHandler = useCallback((action: GameplayAction<any>) => {
-    console.log(action)
+    console.log('gameplay', action)
     if (action.type === 'game/setGamePhase') {
       if (action.payload.status === 'ok') {
         dispatch(queueAckToSend(action.payload));
@@ -25,6 +25,7 @@ export const useIncomingActionHandler = () => {
   }, [dispatch]);
 
   const ackActionHandler = useCallback((action: GameplayAction<any>) => {
+    console.log('ack', action)
     // TODO (maybe?): ack all gameplay actions?
     if (action.type === 'game/setGamePhase') {
       dispatch(acknowledgePhaseChangeWasReceived());
