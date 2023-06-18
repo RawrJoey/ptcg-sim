@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { GamePhase } from "./types/Game";
 
 const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase) => {
-  const waitingForOpponent = phase.status === 'ok' && opponentPhase.status === 'pending';
+  const waitingForOpponent = opponentPhase.status === 'pending' || opponentPhase.status === 'pending-input';
 
   if (phase.type === 'not-started') {
     if (waitingForOpponent) {
@@ -51,7 +51,7 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase) => {
   if (waitingForOpponent) {
     if (opponentPhase.type === 'choose-active') {
       return {
-        text: 'Waiting for opponent to choose active...'
+        text: 'Waiting for opponent to choose starting Pokemon...'
       }
     }
   }
