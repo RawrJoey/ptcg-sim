@@ -29,12 +29,6 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase) => {
   }
 
   if (phase.type === 'choose-active') {
-    if (waitingForOpponent) {
-      return {
-        text: 'Waiting for opponent to choose active...'
-      }
-    }
-
     return {
       text: 'Choose your starting Pokemon',
       actionText: 'Done'
@@ -51,6 +45,14 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase) => {
   if (phase.type === 'your-turn') {
     return {
       text: 'Your turn'
+    }
+  }
+
+  if (waitingForOpponent) {
+    if (opponentPhase.type === 'choose-active') {
+      return {
+        text: 'Waiting for opponent to choose active...'
+      }
     }
   }
 }
