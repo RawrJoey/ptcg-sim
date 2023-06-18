@@ -7,7 +7,7 @@ import { GAMEPLAY_ACTION_EVENT, GAME_ACK_EVENT } from "./types";
 import { useIncomingActionHandler } from "./useIncomingActionHandler";
 
 export const useGameChannelSubscribe = (challengeId: number | undefined) => {
-  const { gameplayActionHandler, ackActionHandler } = useIncomingActionHandler();
+  const { gameplayActionHandler } = useIncomingActionHandler();
 
   const supabase = useSupabaseClient();
   const channel = supabase.channel(`game-${challengeId}`);
@@ -41,11 +41,6 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
     channel.on('broadcast', { event: GAMEPLAY_ACTION_EVENT }, (event) => {
       for (const action of event.payload) {
         gameplayActionHandler({ type: action.type, payload: action.payload })
-      }
-    }).on('broadcast', { event: GAME_ACK_EVENT }, (event) => {
-      for (const action of event.payload) {
-        // TODO: change this from hard coded maybe idk
-        ackActionHandler({ type: 'game/setGamePhase', payload: action })
       }
     }).subscribe((status) => {
       if (status === 'SUBSCRIBED') {

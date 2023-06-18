@@ -57,7 +57,7 @@ export const gameSlice = createSlice({
       state.opponentPhase = action.payload;
     },
     queueAckToSend: (state, action: PayloadAction<GamePhase>) => {
-      state.acks.push(action.payload);
+      state.gameplayActions.push({ type: 'game/queueAckToSend', payload: action.payload });
     },
     acknowledgePhaseChangeWasReceived: (state) => {
       state.phase.acked = true;

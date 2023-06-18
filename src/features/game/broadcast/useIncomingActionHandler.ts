@@ -21,16 +21,10 @@ export const useIncomingActionHandler = () => {
       dispatch(moveCard({ payload: action.payload, isOpponent: true }));
     } else if (action.type === 'game/layPrizes') {
       dispatch(layPrizes({ payload: action.payload, isOpponent: true }));
-    }
-  }, [dispatch]);
-
-  const ackActionHandler = useCallback((action: GameplayAction<any>) => {
-    console.log('ack', action)
-    // TODO (maybe?): ack all gameplay actions?
-    if (action.type === 'game/setGamePhase') {
+    } else if (action.type === 'game/queueAckToSend') {
       dispatch(acknowledgePhaseChangeWasReceived());
     }
   }, [dispatch]);
 
-  return { gameplayActionHandler, ackActionHandler };
+  return { gameplayActionHandler };
 }
