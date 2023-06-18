@@ -73,7 +73,7 @@ export const gameSlice = createSlice({
     mulliganHandAway: (state) => {
       state.gameplayActions.push({ type: 'game/mulliganHandAway' });
 
-      state.myDeck.deckCards.concat(state.myDeck.handCards);
+      state.myDeck.deckCards = state.myDeck.deckCards.concat(state.myDeck.handCards);
       state.myDeck.handCards = [];
       state.myDeck.deckCards = shuffle(state.myDeck.deckCards);
     },
