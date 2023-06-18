@@ -32,7 +32,9 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
     if (!challengeId) return;
 
     channel.on('broadcast', { event: GAMEPLAY_ACTION_EVENT }, (event) => {
-      gameplayActionHandler(event.payload);
+      for (const action of event.payload) {
+        gameplayActionHandler({ type: action.type, payload: action.payload })
+      }
     }).subscribe((status) => {
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
@@ -42,7 +44,7 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
             channel.send({
               type: 'broadcast',
               event: GAMEPLAY_ACTION_EVENT,
-              payload: myActionsRef.current[myActionsStoredLength.current - 1],
+              payload: [myActionsRef.current[myActionsStoredLength.current - 1]],
             }).catch((err) => console.log(err));
 
             myActionsStoredLength.current += 1;
@@ -57,7 +59,7 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
             channel.send({
               type: 'broadcast',
               event: GAMEPLAY_ACTION_EVENT,
-              payload: { type: 'game/setGamePhase', payload: currentPhaseRef.current }
+              payload: [{ type: 'game/setGamePhase', payload: currentPhaseRef.current }]
             }).catch((err) => console.log(err));
           }
         }, 2000);
