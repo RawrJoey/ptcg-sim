@@ -8,6 +8,8 @@ import type { DeckState } from './types/Deck';
 import { GamePhase, GamePhaseState, GameState, TurnPhase } from './types/Game';
 import { MoveCardPayload } from './types/GameplayActions';
 
+import { produce } from 'immer';
+
 const initialDeckState: DeckState = {
   handCards: [],
   discardCards: [],
@@ -45,100 +47,59 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    setGamePhase: (state, action: PayloadAction<GamePhase>) => {
-      state = {
-        ...state,
-        gameplayActions: [
-          ...state.gameplayActions,
-          { type: 'game/setGamePhase', payload: action.payload }
-        ],
-        phase: {
-          ...action.payload,
-          acked: false
-        }
-      }
-    },
-    setOpponentPhase: (state, action: PayloadAction<GamePhaseState>) => {
-      state = {
-        ...state,
-        opponentPhase: action.payload
-      }
-    },
-    queueAckToSend: (state, action: PayloadAction<GamePhase>) => {
-      state = {
-        ...state,
-        gameplayActions: [
-          ...state.gameplayActions,
-          { type: 'game/queueAckToSend', payload: action.payload }
-        ]
+    setGamePhase: produce((state, action: PayloadAction<GamePhase>) => {
+      state.gameplayActions.push({ type: 'game/setGamePhase', payload: action.payload });
+
+      state.phase = {
+        ...action.payload,
+        acked: false
       };
-    },
-    acknowledgePhaseChangeWasReceived: (state) => {
-      state = {
-        ...state,
-        phase: {
-          ...state.phase,
-          acked: true
-        }
+    }),
+    setOpponentPhase: produce((state, action: PayloadAction<GamePhaseState>) => {
+      state.opponentPhase = action.payload;
+    }),
+    queueAckToSend: produce((state, action: PayloadAction<GamePhase>) => {
+      state.gameplayActions.push({ type: 'game/queueAckToSend', payload: action.payload });
+    }),
+    acknowledgePhaseChangeWasReceived: produce((state) => {
+      state.phase = {
+        ...state.phase,
+        acked: true
       };
-    },
-    loadDeck: (state, action: PayloadAction<GamePayload<CardObject[]>>) => {
-      if (!action.payload.isOpponent) {
-        state.gameplayActions = [
-          ...state.gameplayActions,
-          { type: 'game/loadDeck', payload: action.payload.payload }
-        ]
-      }
+    }),
+    loadDeck: produce((state, action: PayloadAction<GamePayload<CardObject[]>>) => {
+      !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/loadDeck', payload: action.payload.payload });
 
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = shuffle(action.payload.payload);
-    },
-    mulliganHandAway: (state) => {
-      state.gameplayActions = [
-        ...state.gameplayActions,
-        { type: 'game/mulliganHandAway' }
-      ];
+    }),
+    mulliganHandAway: produce((state) => {
+      state.gameplayActions.push({ type: 'game/mulliganHandAway' });
 
       state.myDeck.deckCards.concat(state.myDeck.handCards);
       state.myDeck.handCards = [];
       state.myDeck.deckCards = shuffle(state.myDeck.deckCards);
-    },
-    shuffleDeck: (state) => {
-      state.gameplayActions = [
-        ...state.gameplayActions,
-        { type: 'game/shuffleDeck' }
-      ]
+    }),
+    shuffleDeck: produce((state) => {
+      state.gameplayActions.push({ type: 'game/shuffleDeck' });
 
       state.myDeck.deckCards = shuffle(state.myDeck.deckCards);
-    },
-    drawOpenSeven: (state, action: PayloadAction<GamePayload<undefined>>) => {
-      state.gameplayActions = [
-        ...state.gameplayActions,
-        { type: 'game/drawOpenSeven' }
-      ]
+    }),
+    drawOpenSeven: produce((state, action: PayloadAction<GamePayload<undefined>>) => {
+      state.gameplayActions.push({ type: 'game/drawOpenSeven' });
 
       const openSeven = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice((action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 7, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length);
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice(0, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 7);
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).handCards = openSeven;
-    },
-    layPrizes: (state, action: PayloadAction<GamePayload<undefined>>) => {
-      if (!action.payload.isOpponent) {
-        state.gameplayActions = [
-          ...state.gameplayActions,
-          { type: 'game/layPrizes' }
-        ]
-      }
+    }),
+    layPrizes: produce((state, action: PayloadAction<GamePayload<undefined>>) => {
+      !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/layPrizes' });
       
       const prizes = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice((action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 6, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length);
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice(0, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 6);
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).prizes = prizes;
-    },
-    moveCard: (state, action: PayloadAction<GamePayload<MoveCardPayload>>) => {
-      if (!action.payload.isOpponent) {
-        state.gameplayActions = [
-          ...state.gameplayActions,
-          { type: 'game/moveCard', payload: action.payload.payload }
-        ]
-      }
+    }),
+    moveCard: produce((state, action: PayloadAction<GamePayload<MoveCardPayload>>) => {
+      !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/moveCard', payload: action.payload.payload });
 
       let targetCard = action.payload.payload.card;
 
@@ -284,36 +245,24 @@ export const gameSlice = createSlice({
       if (action.payload.payload.origin.area === 'deck') {
         (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = shuffle((action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards);
       }
-    },
-    drawCard: (state, action: PayloadAction<GamePayload<undefined>>) => {
-      if (!action.payload.isOpponent) {
-        state.gameplayActions = [
-          ...state.gameplayActions,
-          { type: 'game/drawCard'}
-        ]
-      }
+    }),
+    drawCard: produce((state, action: PayloadAction<GamePayload<undefined>>) => {
+      !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/drawCard' });
 
       const card = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.at((action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 1);
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.pop();
       if (!card) return;
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).handCards.push(card);
-    },
-    takePrize: (state, action: PayloadAction<number>) => {
-      state.gameplayActions = [
-        ...state.gameplayActions,
-        { type: 'game/takePrize', payload: action.payload }
-      ]
+    }),
+    takePrize: produce((state, action: PayloadAction<number>) => {
+      state.gameplayActions.push({ type: 'game/takePrize', payload: action.payload });
 
-      state.myDeck.handCards = [
-       ... state.myDeck.handCards,
-       state.myDeck.prizes[action.payload]
-      ]
-
+      state.myDeck.handCards.push(state.myDeck.prizes[action.payload]);
       state.myDeck.prizes = [
         ...state.myDeck.prizes.slice(0, action.payload),
         ...state.myDeck.prizes.slice(action.payload + 1)
       ]
-    }
+    })
   },
 })
 
