@@ -46,29 +46,40 @@ export const gameSlice = createSlice({
   initialState,
   reducers: {
     setGamePhase: (state, action: PayloadAction<GamePhase>) => {
-      state.gameplayActions = [
-        ...state.gameplayActions,
-        { type: 'game/setGamePhase', payload: action.payload }
-      ];
-
-      state.phase = {
-        ...action.payload,
-        acked: false
-      };
+      state = {
+        ...state,
+        gameplayActions: [
+          ...state.gameplayActions,
+          { type: 'game/setGamePhase', payload: action.payload }
+        ],
+        phase: {
+          ...action.payload,
+          acked: false
+        }
+      }
     },
     setOpponentPhase: (state, action: PayloadAction<GamePhaseState>) => {
-      state.opponentPhase = action.payload;
+      state = {
+        ...state,
+        opponentPhase: action.payload
+      }
     },
     queueAckToSend: (state, action: PayloadAction<GamePhase>) => {
-      state.gameplayActions = [
-        ...state.gameplayActions,
-        { type: 'game/queueAckToSend', payload: action.payload }
-      ];
+      state = {
+        ...state,
+        gameplayActions: [
+          ...state.gameplayActions,
+          { type: 'game/queueAckToSend', payload: action.payload }
+        ]
+      };
     },
     acknowledgePhaseChangeWasReceived: (state) => {
-      state.phase = {
-        ...state.phase,
-        acked: true
+      state = {
+        ...state,
+        phase: {
+          ...state.phase,
+          acked: true
+        }
       };
     },
     loadDeck: (state, action: PayloadAction<GamePayload<CardObject[]>>) => {
