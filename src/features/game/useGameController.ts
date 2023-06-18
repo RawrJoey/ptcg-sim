@@ -15,6 +15,9 @@ export const useGameController = () => {
   const dispatch = useAppDispatch();
 
   const phaseHandler = () => {
+    console.log('PHASE')
+    console.log(phase)
+    console.log(opponentPhase)
     const phaseOkAndAcked = phase.status === 'ok' && phase.acked;
     const opponentPhaseOk = opponentPhase.status === 'ok';
     const bothPhasesOkAndAcked = phaseOkAndAcked && opponentPhaseOk;
