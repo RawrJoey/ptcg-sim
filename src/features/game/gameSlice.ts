@@ -5,7 +5,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { getAttachmentType } from './helpers';
 import type { DeckState } from './types/Deck';
-import { GamePhase, GameState, TurnPhase } from './types/Game';
+import { GamePhase, GamePhaseState, GameState, TurnPhase } from './types/Game';
 import { MoveCardPayload } from './types/GameplayActions';
 
 const initialDeckState: DeckState = {
@@ -53,11 +53,8 @@ export const gameSlice = createSlice({
         acked: false
       };
     },
-    setOpponentPhase: (state, action: PayloadAction<GamePhase>) => {
-      state.opponentPhase = {
-        ...action.payload,
-        acked: false
-      };
+    setOpponentPhase: (state, action: PayloadAction<GamePhaseState>) => {
+      state.opponentPhase = action.payload;
     },
     queueAckToSend: (state, action: PayloadAction<GamePhase>) => {
       state.acks.push(action.payload);
