@@ -4,8 +4,11 @@ import { useEffect, useRef, MutableRefObject } from "react";
 import { GamePhase, GamePhaseState } from "../types/Game";
 import { GameplayAction } from "../types/GameplayActions";
 import { GAMEPLAY_ACTION_EVENT, GAME_ACK_EVENT } from "./types";
+import { useIncomingActionHandler } from "./useIncomingActionHandler";
 
-export const useGameChannelUpdater = (challengeId: number | undefined) => {
+export const useGameChannelSubscribe = (challengeId: number | undefined) => {
+  const { gameplayActionHandler, ackActionHandler } = useIncomingActionHandler();
+
   const supabase = useSupabaseClient();
   const channel = supabase.channel(`game-${challengeId}`);
   const myActions = useAppSelector((state) => state.game.gameplayActions);
@@ -35,7 +38,16 @@ export const useGameChannelUpdater = (challengeId: number | undefined) => {
   useEffect(() => {
     if (!challengeId) return;
 
-    channel.subscribe((status) => {
+    channel.on('broadcast', { event: GAMEPLAY_ACTION_EVENT }, (event) => {
+      for (const action of event.payload) {
+        gameplayActionHandler({ type: action.type, payload: action.payload })
+      }
+    }).on('broadcast', { event: GAME_ACK_EVENT }, (event) => {
+      for (const action of event.payload) {
+        // TODO: change this from hard coded maybe idk
+        ackActionHandler({ type: 'game/setGamePhase', payload: action })
+      }
+    }).subscribe((status) => {
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
           if (myActionsStoredLength.current < myActionsRef.current.length) {
@@ -64,6 +76,7 @@ export const useGameChannelUpdater = (challengeId: number | undefined) => {
         // If current phase wasn't acked, try again
         setInterval(() => {
           if (currentPhaseRef.current?.status === 'ok' && currentPhaseRef.current?.acked === false) {
+            console.log(currentPhaseRef, 'failed')
             console.log('Heartbeat failed. Trying again...');
             channel.send({
               type: 'broadcast',
