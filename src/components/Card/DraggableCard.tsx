@@ -1,5 +1,6 @@
 import { useAppSelector } from '@/app/hooks';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
+import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 import { useOpponentContext } from '../Board/OpponentContext';
@@ -60,7 +61,14 @@ export const DraggableCard = (props: DraggableCardProps) => {
   const getIsHidden = () => {
     if (props.isHidden !== undefined) return props.isHidden;
     if (isOpponent && !gameHasStarted) return true;
-  }
+  };
 
-  return <Card ref={drag} isDragging={isDragging} isHidden={getIsHidden()} {...props} />;
+  const shouldDisableDrag = !gameHasStarted && !(props.card.supertype === Supertype.Pokemon && props.card.subtypes.includes(Subtype.Basic));
+
+  const dragProps = {
+    ref: drag,
+    isDragging
+  };
+
+  return <Card {...(shouldDisableDrag ? {} : dragProps)} isHidden={getIsHidden()} {...props} />;
 };
