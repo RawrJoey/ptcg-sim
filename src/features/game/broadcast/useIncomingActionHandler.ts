@@ -1,14 +1,9 @@
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { useCodeToSetMap } from "@/hooks/useCodeToSetMap";
-import { useCallback } from "react";
+import { useAppDispatch } from "@/app/hooks";
 import { acknowledgePhaseChangeWasReceived, drawOpenSeven, layPrizes, loadDeck, moveCard, queueAckToSend, setOpponentPhase } from "../gameSlice";
 import { GameplayAction } from "../types/GameplayActions"
-import { phaseHandler } from "../useGameController";
 
 export const useIncomingActionHandler = () => {
-  const gameState = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
-  const { data: codeToSetMap } = useCodeToSetMap(); 
 
   const gameplayActionHandler = (action: GameplayAction<any>) => {
     console.log('gameplay', action)
