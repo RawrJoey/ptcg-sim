@@ -8,7 +8,9 @@ export const useIncomingActionHandler = () => {
 
   const gameplayActionHandler = useCallback((action: GameplayAction<any>) => {
     if (action.type === 'game/setGamePhase') {
-      dispatch(queueAckToSend(action.payload));
+      if (action.payload.status === 'ok') {
+        dispatch(queueAckToSend(action.payload));
+      }
       dispatch(setOpponentPhase(action.payload));
     } else if (action.type === 'game/loadDeck') {
       dispatch(loadDeck({ payload: action.payload, isOpponent: true }));
