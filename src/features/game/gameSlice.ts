@@ -102,7 +102,7 @@ export const gameSlice = createSlice({
       let targetCard = action.payload.payload.card;
 
       // At start of game, switch phase status to confirm when user chooses active
-      if (action.payload.payload.destination.area === 'active' && state.phase.type === 'choose-active') {
+      if (!action.payload.isOpponent &&action.payload.payload.destination.area === 'active' && state.phase.type === 'choose-active') {
         state.phase.status = 'pending';
       }
 
