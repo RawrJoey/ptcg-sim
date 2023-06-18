@@ -1,8 +1,9 @@
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { acknowledgePhaseChangeWasReceived, drawOpenSeven, layPrizes, loadDeck, moveCard, queueAckToSend, setOpponentPhase } from "../gameSlice";
 import { GameplayAction } from "../types/GameplayActions"
 
 export const useIncomingActionHandler = () => {
+  const currentPhase = useAppSelector((state) => state.game.phase);
   const dispatch = useAppDispatch();
 
   const gameplayActionHandler = (action: GameplayAction<any>) => {
@@ -21,7 +22,9 @@ export const useIncomingActionHandler = () => {
     } else if (action.type === 'game/layPrizes') {
       dispatch(layPrizes({ payload: action.payload, isOpponent: true }));
     } else if (action.type === 'game/queueAckToSend') {
-      dispatch(acknowledgePhaseChangeWasReceived());
+      if (currentPhase.type === action.payload.type) {
+        dispatch(acknowledgePhaseChangeWasReceived());
+      }
     }
   };
 
