@@ -62,7 +62,7 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
               payload: [{ type: 'game/setGamePhase', payload: currentPhaseRef.current }]
             }).catch((err) => console.log(err));
           }
-        }, 2000);
+        }, 500);
       }
     })
 
