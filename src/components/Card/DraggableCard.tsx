@@ -60,6 +60,7 @@ export const DraggableCard = (props: DraggableCardProps) => {
 
   const getIsHidden = () => {
     if (props.isHidden !== undefined) return props.isHidden;
+    if (isOpponent && props.cardOrigin.area === 'hand') return true;
     if (isOpponent && !gameHasStarted) return true;
   };
 
