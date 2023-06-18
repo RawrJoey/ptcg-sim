@@ -1,10 +1,14 @@
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { useCodeToSetMap } from "@/hooks/useCodeToSetMap";
 import { useCallback } from "react";
 import { acknowledgePhaseChangeWasReceived, drawOpenSeven, layPrizes, loadDeck, moveCard, queueAckToSend, setOpponentPhase } from "../gameSlice";
 import { GameplayAction } from "../types/GameplayActions"
+import { phaseHandler } from "../useGameController";
 
 export const useIncomingActionHandler = () => {
+  const gameState = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
+  const { data: codeToSetMap } = useCodeToSetMap(); 
 
   const gameplayActionHandler = useCallback((action: GameplayAction<any>) => {
     console.log('gameplay', action)
@@ -23,6 +27,7 @@ export const useIncomingActionHandler = () => {
       dispatch(layPrizes({ payload: action.payload, isOpponent: true }));
     } else if (action.type === 'game/queueAckToSend') {
       dispatch(acknowledgePhaseChangeWasReceived());
+      phaseHandler(gameState.phase, gameState.opponentPhase, gameState.myDeck.handCards, dispatch, codeToSetMap);
     }
   }, [dispatch]);
 
