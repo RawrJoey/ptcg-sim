@@ -11,10 +11,10 @@ import { CardObject } from '@/components/Card/CardInterface';
 export const useGameController = () => {
   const { data: codeToSetMap, isLoading: codeToSetMapIsLoading } = useCodeToSetMap();
 
-  const gameState = useAppSelector((state) => state.game);
+  const { phase, opponentPhase, myDeck } = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
 
-  const phaseHandler = useCallback((phase: GamePhaseState, opponentPhase: GamePhaseState) => {
+  const phaseHandler = () => {
     const phaseOkAndAcked = phase.status === 'ok' && phase.acked;
     const opponentPhaseOk = opponentPhase.status === 'ok';
     const bothPhasesOkAndAcked = phaseOkAndAcked && opponentPhaseOk;
@@ -73,7 +73,7 @@ export const useGameController = () => {
 
     if (phase.type === 'check-for-basic') {
       if (phase.status === 'pending') {
-        const shouldMulligan = !gameState.myDeck.handCards.some((card: CardObject) => card.supertype === Supertype.Pokemon && card.subtypes.includes(Subtype.Basic));
+        const shouldMulligan = !myDeck.handCards.some((card: CardObject) => card.supertype === Supertype.Pokemon && card.subtypes.includes(Subtype.Basic));
         if (shouldMulligan) {
           dispatch(setGamePhase({
             type: 'mulligan',
@@ -124,11 +124,11 @@ export const useGameController = () => {
       dispatch(drawCard({ payload: undefined }));
     }
 
-  }, [codeToSetMap]);
+  };
 
   useEffect(() => {
     if (!codeToSetMapIsLoading) {
-      phaseHandler(gameState.phase, gameState.opponentPhase);
+      phaseHandler();
     }
-  }, [gameState.phase.type, gameState.phase.status, gameState.phase.acked, gameState.opponentPhase.type, gameState.opponentPhase.status, codeToSetMapIsLoading]);
+  }, [phase, opponentPhase, codeToSetMapIsLoading]);
 }
