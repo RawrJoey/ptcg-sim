@@ -84,12 +84,20 @@ export const gameSlice = createSlice({
 
       state.myDeck.deckCards = shuffle(state.myDeck.deckCards);
     },
-    drawOpenSeven: (state, action: PayloadAction<GamePayload<undefined>>) => {
-      state.gameplayActions.push({ type: 'game/drawOpenSeven' });
+    drawOpenSeven: (state, action: PayloadAction<GamePayload<undefined | CardObject[]>>) => {
+      if (action.payload.isOpponent && action.payload.payload) {
+        // Arbitrarily take 7 out of opponents deck
+        state.opponentDeck.deckCards = state.opponentDeck.deckCards.slice(7);
+        state.opponentDeck.handCards = action.payload.payload;
+      }
 
-      const openSeven = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice((action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 7, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length);
-      (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice(0, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 7);
-      (action.payload.isOpponent ? state.opponentDeck : state.myDeck).handCards = openSeven;
+      if (!action.payload.isOpponent) {
+        const openSeven = state.myDeck.deckCards.slice(state.myDeck.deckCards.length - 7, state.myDeck.deckCards.length);
+        state.gameplayActions.push({ type: 'game/drawOpenSeven', payload: openSeven });
+
+        state.myDeck.deckCards = state.myDeck.handCards.slice(0, state.myDeck.deckCards.length - 7);
+        state.myDeck.handCards = openSeven;
+      }
     },
     layPrizes: (state, action: PayloadAction<GamePayload<undefined>>) => {
       !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/layPrizes' });
