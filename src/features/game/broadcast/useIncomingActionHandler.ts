@@ -22,6 +22,7 @@ export const useIncomingActionHandler = () => {
     } else if (action.type === 'game/layPrizes') {
       dispatch(layPrizes({ payload: action.payload, isOpponent: true }));
     } else if (action.type === 'game/queueAckToSend') {
+      console.log(currentPhase, action.payload)
       if (currentPhase.type === action.payload.type) {
         dispatch(acknowledgePhaseChangeWasReceived());
       }
