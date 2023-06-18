@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/app/hooks";
 import { Box, HStack } from "@chakra-ui/react";
 import { CardObject } from "../Card/CardInterface";
 import { CardZone, DraggableCard } from "../Card/DraggableCard";

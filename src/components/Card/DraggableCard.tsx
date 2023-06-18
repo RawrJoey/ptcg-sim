@@ -1,6 +1,8 @@
+import { useAppSelector } from '@/app/hooks';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { useEffect } from 'react';
 import { useDrag } from 'react-dnd';
+import { useOpponentContext } from '../Board/OpponentContext';
 import { Card } from './Card';
 import { CardInterface, CardObject } from './CardInterface';
 import { CardProps } from './CardProps';
@@ -26,6 +28,9 @@ export interface DraggableCardType {
 }
 
 export const DraggableCard = (props: DraggableCardProps) => {
+  const gameHasStarted = useAppSelector((state) => state.game.phase.type === 'your-turn' || state.game.phase.type === 'opponent-turn' || state.game.phase.type === 'game-end');
+  const isOpponent = useOpponentContext();
+
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: 'card',
@@ -52,5 +57,10 @@ export const DraggableCard = (props: DraggableCardProps) => {
     }
   }, [isDragging]);
 
-  return <Card ref={drag} isDragging={isDragging} {...props} />;
+  const getIsHidden = () => {
+    if (props.isHidden !== undefined) return props.isHidden;
+    if (isOpponent && !gameHasStarted) return true;
+  }
+
+  return <Card ref={drag} isDragging={isDragging} isHidden={getIsHidden()} {...props} />;
 };
