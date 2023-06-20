@@ -23,9 +23,9 @@ export const useIncomingActionHandler = () => {
     } else if (action.type === 'game/queueAckToSend') {
       dispatch(acknowledgePhaseChangeWasReceived(action.payload));
     } else if (action.type === 'game/setWhoIsFlipping') {
-      dispatch(setWhoIsFlipping({ payload: action.payload, isOpponent: true }))
+      dispatch(setWhoIsFlipping({ payload: action.payload.youAreFlipping, isOpponent: true }))
     } else if (action.type === 'game/setIsGoingFirst') {
-      dispatch(setIsGoingFirst({ payload: action.payload.youAreFlipping, isOpponent: true }));
+      dispatch(setIsGoingFirst({ payload: action.payload, isOpponent: true }));
     }
   };
 
