@@ -31,7 +31,7 @@ export const usePhaseActions = () => {
 
   const chooseFirst = (first: boolean) => {
     dispatch(setIsGoingFirst({ payload: first }));
-    dispatch(setGamePhase({ ...gameState.phase, status: 'ok' }));
+    dispatch(setGamePhase({ type: 'choose-going-first', status: 'ok' }));
   }
 
   const phaseActions: PhaseActions = {

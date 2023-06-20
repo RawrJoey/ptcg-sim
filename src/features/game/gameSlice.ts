@@ -65,6 +65,7 @@ export const gameSlice = createSlice({
           status: 'ok',
           acked: false
         }
+        state.isGoingFirst = !action.payload.isGoingFirst;
       }
 
       state.opponentDeck = action.payload.myDeck;
@@ -95,11 +96,6 @@ export const gameSlice = createSlice({
       } else {
         state.gameplayActions.push({ type: 'game/setIsGoingFirst', payload: action.payload });
         state.isGoingFirst = action.payload.payload;
-        state.phase = {
-          type: 'choose-going-first',
-          status: 'ok',
-          acked: false
-        }
       }
     },
     mulliganHandAway: (state) => {
