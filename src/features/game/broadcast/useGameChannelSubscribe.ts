@@ -12,10 +12,8 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
 
   const supabase = useSupabaseClient();
 
-  const sendChannel = supabase.channel(`game-${challengeId}`);
-  const receiveChannel = supabase.channel(`game-${challengeId}`);
-  const presenceReceiveChannel = supabase.channel(`game-${challengeId}-presence`);
-  const presenceSendChannel = supabase.channel(`game-${challengeId}-presence`);
+  const broadcastChannel = supabase.channel(`game-${challengeId}`);
+  const presenceChannel = supabase.channel(`game-${challengeId}-presence`);
 
   const myActions = useAppSelector((state) => state.game.gameplayActions);
   const currentPhase = useAppSelector((state) => state.game.phase);
@@ -37,23 +35,16 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
   useEffect(() => {
     if (!challengeId) return;
 
-    receiveChannel.on('broadcast', { event: GAMEPLAY_ACTION_EVENT }, (event) => {
+    broadcastChannel.on('broadcast', { event: GAMEPLAY_ACTION_EVENT }, (event) => {
       for (const action of event.payload) {
         gameplayActionHandler({ type: action.type, payload: action.payload })
       }
-    })
-    
-    presenceReceiveChannel.on('presence', { event: 'sync' }, () => {
-      const state = receiveChannel.presenceState()
-      console.log(state)
-    }).subscribe()
-    
-    sendChannel.subscribe((status) => {
+    }).subscribe((status) => {
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
           if (myActionsStoredLength.current < myActionsRef.current.length) {
             console.log('sending',  myActionsRef.current[myActionsStoredLength.current]);
-            sendChannel.send({
+            broadcastChannel.send({
               type: 'broadcast',
               event: GAMEPLAY_ACTION_EVENT,
               payload: [myActionsRef.current[myActionsStoredLength.current]],
@@ -68,7 +59,7 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
           if (currentPhaseRef.current?.status === 'ok' && currentPhaseRef.current?.acked === false) {
             console.log(currentPhaseRef, 'failed')
             console.log('Heartbeat failed. Trying again...');
-            sendChannel.send({
+            broadcastChannel.send({
               type: 'broadcast',
               event: GAMEPLAY_ACTION_EVENT,
               payload: [{ type: 'game/setGamePhase', payload: currentPhaseRef.current }]
@@ -77,10 +68,14 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
         }, 2000);
       }
     });
-
-    presenceSendChannel.subscribe((status) => {
+    
+    presenceChannel.on('presence', { event: 'sync' }, () => {
+      console.log('syncing')
+      const state = presenceChannel.presenceState()
+      console.log(state)
+    }).subscribe((status) => {
       if (status === 'SUBSCRIBED') {
-        presenceSendChannel.track({
+        presenceChannel.track({
           user: 'user-1',
           online_at: new Date().toISOString(),
         })
@@ -90,8 +85,8 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
             savedPhaseRef.current = currentPhaseRef.current;
             console.log('phase change to ', currentPhaseRef.current);
 
-            presenceSendChannel.track({
-              ...sendChannel.presenceState(),
+            presenceChannel.track({
+              ...presenceChannel.presenceState(),
               phase: currentPhaseRef.current
             });
           }
