@@ -14,6 +14,10 @@ export const useGameController = () => {
   const { phase, opponentPhase, myDeck, isChallenger, isGoingFirst } = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
 
+  // Only relevant if you are the challenger
+  const randomNum = Math.floor(Math.random() * 2);
+  const iAmFlipping = randomNum === 1;
+
   const phaseHandler = () => {
     console.log('PHASE')
     console.log(phase)
@@ -41,9 +45,6 @@ export const useGameController = () => {
     if (phase.type === 'initialize') {
       if ((opponentPhase.type === 'initialize' && bothPhasesOk) || (opponentPhase.type === 'flip-coin' && phaseOk)) {
         if (isChallenger) {
-          const randomNum = Math.floor(Math.random() * 2);
-          const iAmFlipping = randomNum === 1;
-
           if (iAmFlipping) {
             dispatch(setGamePhase({ type: 'flip-coin', status: 'pending-action-selection'}));
           } else {
