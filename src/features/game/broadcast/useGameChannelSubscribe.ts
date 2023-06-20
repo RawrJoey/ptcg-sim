@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/app/hooks";
-import { useSupabaseClient } from "@supabase/auth-helpers-react"
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 import { useEffect, useRef, MutableRefObject } from "react";
 import { GamePhase, GamePhaseState } from "../types/Game";
 import { GameplayAction } from "../types/GameplayActions";
@@ -8,10 +8,15 @@ import { useIncomingActionHandler } from "./useIncomingActionHandler";
 
 export const useGameChannelSubscribe = (challengeId: number | undefined) => {
   const { gameplayActionHandler } = useIncomingActionHandler();
+  const user = useUser();
 
   const supabase = useSupabaseClient();
+
   const sendChannel = supabase.channel(`game-${challengeId}`);
   const recieveChannel = supabase.channel(`game-${challengeId}`);
+  const presenceSendChannel = supabase.channel(`game-${challengeId}`);
+  const presenceRecieveChannel = supabase.channel(`game-${challengeId}`);
+
   const myActions = useAppSelector((state) => state.game.gameplayActions);
   const currentPhase = useAppSelector((state) => state.game.phase);
 
@@ -69,9 +74,26 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
       }
     })
 
+    presenceRecieveChannel.on('presence', { event: 'join' }, ({ key, newPresences }) => {
+      console.log(key, newPresences)
+    })
+    .subscribe()
+
+    presenceSendChannel.subscribe(async (status) => {
+      if (status === 'SUBSCRIBED') {
+        const presenceTrackStatus = await presenceSendChannel.track({
+          user: user?.id,
+          online_at: new Date().toISOString(),
+        })
+        console.log(presenceTrackStatus)
+      }
+    })
+
     return () => {
       supabase.removeChannel(recieveChannel);
       supabase.removeChannel(sendChannel);
+      supabase.removeChannel(presenceRecieveChannel);
+      supabase.removeChannel(presenceSendChannel);
     };
   }, []);
 }
