@@ -104,7 +104,11 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase, phaseAct
 
   if (phase.type === 'your-turn') {
     return {
-      text: 'Your turn'
+      text: 'Your turn',
+      actions: [{
+        text: 'Pass turn',
+        onClick: phaseActions.passTurn
+      }]
     }
   }
 

@@ -8,6 +8,7 @@ export interface PhaseActions {
   confirmHelperAction: () => void;
   flipCoin: (face: CoinFace) => void;
   chooseFirst: (first: boolean) => void;
+  passTurn: () => void;
 }
 
 export const usePhaseActions = () => {
@@ -34,10 +35,15 @@ export const usePhaseActions = () => {
     dispatch(setGamePhase({ type: 'choose-going-first', status: 'ok' }));
   }
 
+  const passTurn = () => {
+    dispatch(setGamePhase({ type: 'opponent-turn', status: 'ok' }));
+  }
+
   const phaseActions: PhaseActions = {
     confirmHelperAction,
     flipCoin,
-    chooseFirst
+    chooseFirst,
+    passTurn
   }
 
   return phaseActions;

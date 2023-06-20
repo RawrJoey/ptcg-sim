@@ -184,6 +184,16 @@ export const useGameController = () => {
         }));
       }
     }
+
+    if (phase.type === 'opponent-turn') {
+      // Your opponent passed over to you
+      if (opponentPhase.type === 'opponent-turn') {
+        dispatch(setGamePhase({
+          type: 'your-turn',
+          status: 'pending'
+        }))
+      }
+    }
   };
 
   useEffect(() => {
