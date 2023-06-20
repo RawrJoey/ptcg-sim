@@ -4,6 +4,12 @@ import { GamePhaseStatus } from "./types/Game";
 
 export type CoinFace = 'heads' | 'tails';
 
+interface PhaseActions {
+  confirmHelperAction: () => void;
+  flipCoin: (face: CoinFace) => void;
+  chooseFirst: (first: boolean) => void;
+}
+
 export const usePhaseActions = () => {
   const gameState = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
@@ -28,5 +34,11 @@ export const usePhaseActions = () => {
     dispatch(setGamePhase({ ...gameState.phase, status: 'ok' }));
   }
 
-  return { confirmHelperAction, flipCoin, chooseFirst };
+  const phaseActions: PhaseActions = {
+    confirmHelperAction,
+    flipCoin,
+    chooseFirst
+  }
+
+  return phaseActions;
 }
