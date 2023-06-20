@@ -44,6 +44,11 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
           if (myActionsStoredLength.current < myActionsRef.current.length) {
             console.log('sending',  myActionsRef.current[myActionsStoredLength.current]);
 
+            channel.track({
+              ...channel.presenceState(),
+              actions: channel.presenceState().actions ? [...channel.presenceState().actions, myActionsRef.current[myActionsStoredLength.current]] : myActionsRef.current[myActionsStoredLength.current]
+            });
+
             channel.send({
               type: 'broadcast',
               event: GAMEPLAY_ACTION_EVENT,
