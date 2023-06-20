@@ -34,6 +34,8 @@ export const DropZone = (props: DropZoneProps) => {
         const card = (monitor.getItem() as DraggableCardType).card;
         const canDropIntoPokemonZone = card.supertype === Supertype.Pokemon && card.subtypes.includes(Subtype.Basic);
 
+        if (gamePhase === 'opponent-turn') return false;
+
         if (gamePhase !== 'your-turn') {
           if (origin.area === 'prizes' || props.zone.area === 'discard') return false;
         }
