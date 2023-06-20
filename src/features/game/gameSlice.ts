@@ -58,6 +58,10 @@ export const gameSlice = createSlice({
         acked: false
       };
     },
+    setOpponentGameState: (state, action: PayloadAction<GameState>) => {
+      state.opponentDeck = action.payload.myDeck;
+      state.opponentPhase = action.payload.phase;
+    },
     setOpponentPhase: (state, action: PayloadAction<GamePhaseState>) => {
       state.opponentPhase = action.payload;
     },
@@ -286,6 +290,6 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setIsChallenger, setGamePhase, setOpponentPhase, queueAckToSend, acknowledgePhaseChangeWasReceived, setIsGoingFirst, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, layPrizes, takePrize } = gameSlice.actions
+export const { setIsChallenger, setGamePhase, setOpponentGameState, setOpponentPhase, queueAckToSend, acknowledgePhaseChangeWasReceived, setIsGoingFirst, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, layPrizes, takePrize } = gameSlice.actions
 
 export default gameSlice.reducer;

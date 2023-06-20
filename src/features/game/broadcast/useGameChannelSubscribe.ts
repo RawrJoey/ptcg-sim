@@ -1,12 +1,15 @@
-import { useAppSelector } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 import { useEffect, useRef, MutableRefObject } from "react";
+import { setOpponentGameState } from "../gameSlice";
 import { GamePhase, GamePhaseState, GameState } from "../types/Game";
 import { GameplayAction } from "../types/GameplayActions";
 import { GAMEPLAY_ACTION_EVENT, GAME_ACK_EVENT } from "./types";
 import { useIncomingActionHandler } from "./useIncomingActionHandler";
+import type { RealtimePresenceState } from '@supabase/supabase-js';
 
 export const useGameChannelSubscribe = (challengeId: number | undefined) => {
+  const dispatch = useAppDispatch();
   const { gameplayActionHandler } = useIncomingActionHandler();
   const user = useUser();
 
@@ -46,42 +49,50 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
   useEffect(() => {
     if (!challengeId) return;
 
-    broadcastChannel.on('broadcast', { event: GAMEPLAY_ACTION_EVENT }, (event) => {
-      for (const action of event.payload) {
-        gameplayActionHandler({ type: action.type, payload: action.payload })
-      }
-    }).subscribe((status) => {
-      if (status === 'SUBSCRIBED') {
-        setInterval(() => {
-          if (myActionsStoredLength.current < myActionsRef.current.length) {
-            console.log('sending',  myActionsRef.current[myActionsStoredLength.current]);
-            broadcastChannel.send({
-              type: 'broadcast',
-              event: GAMEPLAY_ACTION_EVENT,
-              payload: [myActionsRef.current[myActionsStoredLength.current]],
-            }).catch((err) => console.log(err));
+    // broadcastChannel.on('broadcast', { event: GAMEPLAY_ACTION_EVENT }, (event) => {
+    //   for (const action of event.payload) {
+    //     gameplayActionHandler({ type: action.type, payload: action.payload })
+    //   }
+    // }).subscribe((status) => {
+    //   if (status === 'SUBSCRIBED') {
+    //     setInterval(() => {
+    //       if (myActionsStoredLength.current < myActionsRef.current.length) {
+    //         console.log('sending',  myActionsRef.current[myActionsStoredLength.current]);
+    //         broadcastChannel.send({
+    //           type: 'broadcast',
+    //           event: GAMEPLAY_ACTION_EVENT,
+    //           payload: [myActionsRef.current[myActionsStoredLength.current]],
+    //         }).catch((err) => console.log(err));
 
-            myActionsStoredLength.current += 1;
-          }
-        }, 201);
+    //         myActionsStoredLength.current += 1;
+    //       }
+    //     }, 201);
 
-        // If current phase wasn't acked, try again
-        setInterval(() => {
-          if (currentPhaseRef.current?.status === 'ok' && currentPhaseRef.current?.acked === false) {
-            console.log(currentPhaseRef, 'failed')
-            console.log('Heartbeat failed. Trying again...');
-            broadcastChannel.send({
-              type: 'broadcast',
-              event: GAMEPLAY_ACTION_EVENT,
-              payload: [{ type: 'game/setGamePhase', payload: currentPhaseRef.current }]
-            }).catch((err) => console.log(err));
-          }
-        }, 2000);
-      }
-    });
+    //     // If current phase wasn't acked, try again
+    //     setInterval(() => {
+    //       if (currentPhaseRef.current?.status === 'ok' && currentPhaseRef.current?.acked === false) {
+    //         console.log(currentPhaseRef, 'failed')
+    //         console.log('Heartbeat failed. Trying again...');
+    //         broadcastChannel.send({
+    //           type: 'broadcast',
+    //           event: GAMEPLAY_ACTION_EVENT,
+    //           payload: [{ type: 'game/setGamePhase', payload: currentPhaseRef.current }]
+    //         }).catch((err) => console.log(err));
+    //       }
+    //     }, 2000);
+    //   }
+    // });
     
     presenceChannel.on('presence', { event: 'sync' }, () => {
-      const state = presenceChannel.presenceState();
+      const state: RealtimePresenceState<GameState> = presenceChannel.presenceState();
+      const opponentId = Object.keys(state).find((key) => key !== user?.id);
+
+      if (!opponentId) {
+        return console.log('Opponent is not in the game.');
+      }
+
+      const opponentGameState: GameState = state[opponentId as string][0]
+      dispatch(setOpponentGameState(opponentGameState))
     }).subscribe((status) => {
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
