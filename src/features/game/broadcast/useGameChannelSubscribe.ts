@@ -84,15 +84,14 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
     // });
     
     presenceChannel.on('presence', { event: 'sync' }, () => {
-      const state: RealtimePresenceState<GameState> = presenceChannel.presenceState();
+      const state: RealtimePresenceState<{ gameState: GameState }> = presenceChannel.presenceState();
       const opponentId = Object.keys(state).find((key) => key !== user?.id);
 
       if (!opponentId) {
         return console.log('Opponent is not in the game.');
       }
 
-      const opponentGameState: GameState = state[opponentId as string][0]
-      console.log(opponentGameState)
+      const opponentGameState: GameState = state[opponentId as string][0].gameState;
       if (opponentGameState) {
         dispatch(setOpponentGameState(opponentGameState))
       } else {
