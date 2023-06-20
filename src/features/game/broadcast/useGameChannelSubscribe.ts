@@ -14,7 +14,8 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
 
   const sendChannel = supabase.channel(`game-${challengeId}`);
   const receiveChannel = supabase.channel(`game-${challengeId}`);
-  const presenceReceiveChannel = supabase.channel(`game-${challengeId}`);
+  const presenceReceiveChannel = supabase.channel(`game-${challengeId}-presence`);
+  const presenceSendChannel = supabase.channel(`game-${challengeId}-presence`);
 
   const myActions = useAppSelector((state) => state.game.gameplayActions);
   const currentPhase = useAppSelector((state) => state.game.phase);
@@ -41,27 +42,16 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
       }
     })
     
-    // presenceReceiveChannel.on('presence', { event: 'sync' }, () => {
-    //   const state = receiveChannel.presenceState()
-    //   console.log(state)
-    // }).subscribe()
+    presenceReceiveChannel.on('presence', { event: 'sync' }, () => {
+      const state = receiveChannel.presenceState()
+      console.log(state)
+    }).subscribe()
     
     sendChannel.subscribe((status) => {
       if (status === 'SUBSCRIBED') {
-        // sendChannel.track({
-        //   user: 'user-1',
-        //   online_at: new Date().toISOString(),
-        // }).then((status) => console.log(status))
-
         setInterval(() => {
           if (myActionsStoredLength.current < myActionsRef.current.length) {
             console.log('sending',  myActionsRef.current[myActionsStoredLength.current]);
-
-            // sendChannel.track({
-            //   ...sendChannel.presenceState(),
-            //   actions: sendChannel.presenceState().actions ? [...sendChannel.presenceState().actions, myActionsRef.current[myActionsStoredLength.current]] : myActionsRef.current[myActionsStoredLength.current]
-            // });
-
             sendChannel.send({
               type: 'broadcast',
               event: GAMEPLAY_ACTION_EVENT,
@@ -84,6 +74,26 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
             }).catch((err) => console.log(err));
           }
         }, 2000);
+      }
+    });
+
+    presenceSendChannel.subscribe((status) => {
+      if (status === 'SUBSCRIBED') {
+        presenceSendChannel.track({
+          user: 'user-1',
+          online_at: new Date().toISOString(),
+        })
+
+        setInterval(() => {
+          if (myActionsStoredLength.current < myActionsRef.current.length) {
+            console.log('tracking presence of',  myActionsRef.current[myActionsStoredLength.current]);
+
+            presenceSendChannel.track({
+              ...sendChannel.presenceState(),
+              actions: sendChannel.presenceState().actions ? [...sendChannel.presenceState().actions, myActionsRef.current[myActionsStoredLength.current]] : myActionsRef.current[myActionsStoredLength.current]
+            });
+          }
+        }, 201);
       }
     })
 
