@@ -18,12 +18,12 @@ export const useGameController = () => {
     console.log('PHASE')
     console.log(phase)
     console.log(opponentPhase)
-    const phaseOkAndAcked = phase.status === 'ok' && phase.acked;
+    const phaseOk = phase.status === 'ok';
     const opponentPhaseOk = opponentPhase.status === 'ok';
-    const bothPhasesOkAndAcked = phaseOkAndAcked && opponentPhaseOk;
+    const bothPhasesOk = phaseOk && opponentPhaseOk;
 
     if (phase.type === 'not-started') {
-      if ((opponentPhase.type === 'not-started' && bothPhasesOkAndAcked) || (opponentPhase.type === 'initialize' && phaseOkAndAcked)) {
+      if ((opponentPhase.type === 'not-started' && bothPhasesOk) || (opponentPhase.type === 'initialize' && phaseOk)) {
         dispatch(setGamePhase({
           type: 'initialize',
           status: 'pending'
@@ -39,7 +39,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'initialize') {
-      if ((opponentPhase.type === 'initialize' && bothPhasesOkAndAcked) || (opponentPhase.type === 'flip-coin' && phaseOkAndAcked)) {
+      if ((opponentPhase.type === 'initialize' && bothPhasesOk) || (opponentPhase.type === 'flip-coin' && phaseOk)) {
         if (isChallenger) {
           const randomNum = Math.floor(Math.random() * 2);
           const iAmFlipping = randomNum === 1;
@@ -92,7 +92,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'choose-going-first') {
-      if ((phaseOkAndAcked && opponentPhaseOk) || (opponentPhase.type === 'initial-draw' && phaseOkAndAcked)) {
+      if ((phaseOk && opponentPhaseOk) || (opponentPhase.type === 'initial-draw' && phaseOk)) {
         dispatch(setGamePhase({
           type: 'initial-draw',
           status: 'ok'
@@ -106,7 +106,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'initial-draw') {
-      if ((opponentPhase.type === 'initial-draw' && bothPhasesOkAndAcked) || (opponentPhase.type === 'check-for-basic' && phaseOkAndAcked)) {
+      if ((opponentPhase.type === 'initial-draw' && bothPhasesOk) || (opponentPhase.type === 'check-for-basic' && phaseOk)) {
         dispatch(setGamePhase({
           type: 'check-for-basic',
           status: 'pending',
@@ -157,7 +157,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'lay-prizes') {
-      if ((opponentPhase.type === 'lay-prizes' && bothPhasesOkAndAcked) || ((opponentPhase.type === 'your-turn' || opponentPhase.type === 'opponent-turn') && phaseOkAndAcked)) {
+      if ((opponentPhase.type === 'lay-prizes' && bothPhasesOk) || ((opponentPhase.type === 'your-turn' || opponentPhase.type === 'opponent-turn') && phaseOk)) {
         if (isGoingFirst) {
           dispatch(setGamePhase({ type: 'your-turn', status: 'pending' }));
         } else {
