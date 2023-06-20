@@ -24,6 +24,7 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
   const myActionsStoredLength = useRef(0);
 
   const currentPhaseRef: MutableRefObject<GamePhaseState | undefined> = useRef();
+  const savedPhaseRef: MutableRefObject<GamePhaseState | undefined> = useRef();
 
   useEffect(() => {
     myActionsRef.current = myActions;
@@ -85,12 +86,13 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
         })
 
         setInterval(() => {
-          if (myActionsStoredLength.current < myActionsRef.current.length) {
-            console.log('tracking presence of',  myActionsRef.current[myActionsStoredLength.current]);
+          if (savedPhaseRef.current?.type !== currentPhaseRef.current?.type || savedPhaseRef.current?.status !== currentPhaseRef.current?.status || savedPhaseRef.current?.acked !== currentPhaseRef.current?.acked) {
+            savedPhaseRef.current = currentPhaseRef.current;
+            console.log('phase change to ', currentPhaseRef.current);
 
             presenceSendChannel.track({
               ...sendChannel.presenceState(),
-              actions: sendChannel.presenceState().actions ? [...sendChannel.presenceState().actions, myActionsRef.current[myActionsStoredLength.current]] : myActionsRef.current[myActionsStoredLength.current]
+              phase: currentPhaseRef.current
             });
           }
         }, 201);
