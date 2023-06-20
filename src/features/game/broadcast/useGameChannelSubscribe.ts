@@ -74,8 +74,9 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
       }
     })
 
-    presenceRecieveChannel.on('presence', { event: 'join' }, ({ key, newPresences }) => {
-      console.log(key, newPresences)
+    presenceRecieveChannel.on('presence', { event: 'sync' }, () => {
+      const state = presenceRecieveChannel.presenceState()
+      console.log(state)
     })
     .subscribe()
 
