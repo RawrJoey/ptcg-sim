@@ -23,7 +23,7 @@ export const useGameController = () => {
     const bothPhasesOkAndAcked = phaseOkAndAcked && opponentPhaseOk;
 
     if (phase.type === 'not-started') {
-      if (opponentPhase.type === 'not-started' && bothPhasesOkAndAcked) {
+      if ((opponentPhase.type === 'not-started' && bothPhasesOkAndAcked) || (opponentPhase.type === 'initialize' && phaseOkAndAcked)) {
         dispatch(setGamePhase({
           type: 'initialize',
           status: 'pending'
@@ -39,7 +39,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'initialize') {
-      if (opponentPhase.type === 'initialize' && bothPhasesOkAndAcked) {
+      if ((opponentPhase.type === 'initialize' && bothPhasesOkAndAcked) || (opponentPhase.type === 'flip-coin' && phaseOkAndAcked)) {
         if (isChallenger) {
           const randomNum = Math.floor(Math.random() * 2);
           const iAmFlipping = randomNum === 1;
@@ -92,7 +92,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'choose-going-first') {
-      if (phaseOkAndAcked && opponentPhaseOk) {
+      if ((phaseOkAndAcked && opponentPhaseOk) || (opponentPhase.type === 'initial-draw' && phaseOkAndAcked)) {
         dispatch(setGamePhase({
           type: 'initial-draw',
           status: 'ok'
@@ -106,7 +106,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'initial-draw') {
-      if (opponentPhase.type === 'initial-draw' && bothPhasesOkAndAcked) {
+      if ((opponentPhase.type === 'initial-draw' && bothPhasesOkAndAcked) || (opponentPhase.type === 'check-for-basic' && phaseOkAndAcked)) {
         dispatch(setGamePhase({
           type: 'check-for-basic',
           status: 'pending',
@@ -157,8 +157,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'lay-prizes') {
-      if (opponentPhase.type === 'lay-prizes' && bothPhasesOkAndAcked) {
-        // TODO: Incorporate multiplayer logic, coin flip prior to this to decide first
+      if ((opponentPhase.type === 'lay-prizes' && bothPhasesOkAndAcked) || ((opponentPhase.type === 'your-turn' || opponentPhase.type === 'opponent-turn') && phaseOkAndAcked)) {
         if (isGoingFirst) {
           dispatch(setGamePhase({ type: 'your-turn', status: 'pending' }));
         } else {
