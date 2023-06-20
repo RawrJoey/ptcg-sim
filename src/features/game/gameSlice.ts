@@ -87,6 +87,11 @@ export const gameSlice = createSlice({
       } else {
         state.gameplayActions.push({ type: 'game/setIsGoingFirst', payload: action.payload });
         state.isGoingFirst = action.payload.payload;
+        state.phase = {
+          type: 'choose-going-first',
+          status: 'ok',
+          acked: false
+        }
       }
     },
     mulliganHandAway: (state) => {
