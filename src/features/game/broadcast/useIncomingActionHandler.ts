@@ -25,7 +25,7 @@ export const useIncomingActionHandler = () => {
     } else if (action.type === 'game/setWhoIsFlipping') {
       dispatch(setWhoIsFlipping({ payload: action.payload, isOpponent: true }))
     } else if (action.type === 'game/setIsGoingFirst') {
-      dispatch(setIsGoingFirst({ payload: action.payload, isOpponent: true }));
+      dispatch(setIsGoingFirst({ payload: action.payload.youAreFlipping, isOpponent: true }));
     }
   };
 
