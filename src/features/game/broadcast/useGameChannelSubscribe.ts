@@ -38,6 +38,9 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
       for (const action of event.payload) {
         gameplayActionHandler({ type: action.type, payload: action.payload })
       }
+    }).on('presence', { event: 'sync' }, () => {
+      const state = channel.presenceState()
+      console.log(state)
     }).subscribe(async (status) => {
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
@@ -78,11 +81,7 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
         })
         console.log(presenceTrackStatus)
       }
-    }).on('presence', { event: 'sync' }, () => {
-      const state = channel.presenceState()
-      console.log(state)
     })
-    .subscribe()
 
     return () => {
       supabase.removeChannel(channel);
