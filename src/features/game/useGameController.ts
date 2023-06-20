@@ -11,7 +11,7 @@ import { CardObject } from '@/components/Card/CardInterface';
 export const useGameController = () => {
   const { data: codeToSetMap, isLoading: codeToSetMapIsLoading } = useCodeToSetMap();
 
-  const { phase, opponentPhase, myDeck, isChallenger } = useAppSelector((state) => state.game);
+  const { phase, opponentPhase, myDeck, isChallenger, isGoingFirst } = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
 
   const phaseHandler = () => {
@@ -159,7 +159,11 @@ export const useGameController = () => {
     if (phase.type === 'lay-prizes') {
       if (opponentPhase.type === 'lay-prizes' && bothPhasesOkAndAcked) {
         // TODO: Incorporate multiplayer logic, coin flip prior to this to decide first
-        dispatch(setGamePhase({ type: 'your-turn', status: 'ok' }));
+        if (isGoingFirst) {
+          dispatch(setGamePhase({ type: 'your-turn', status: 'pending' }));
+        } else {
+          dispatch(setGamePhase({ type: 'opponent-turn', status: 'pending'}));
+        }
       }
 
       if (phase.status === 'pending') {
@@ -172,8 +176,12 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'your-turn') {
-      if (phase.status === 'ok') {
+      if (phase.status === 'pending') {
         dispatch(drawCard({ payload: undefined }));
+        dispatch(setGamePhase({
+          type: 'your-turn',
+          status: 'ok'
+        }));
       }
     }
   };
