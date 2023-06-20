@@ -59,7 +59,7 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase, phaseAct
       }
     }
 
-    if (waitingForOpponent) {
+    if (phase.status === 'pending' && opponentPhase.status === 'pending-action-selection') {
       return {
         text: 'You lost the flip. Waiting for opponent to choose turn order...'
       }

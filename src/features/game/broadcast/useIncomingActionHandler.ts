@@ -24,6 +24,7 @@ export const useIncomingActionHandler = () => {
       dispatch(acknowledgePhaseChangeWasReceived(action.payload));
     } else if (action.type === 'game/setIsGoingFirst') {
       dispatch(setIsGoingFirst({ payload: action.payload, isOpponent: true }));
+      dispatch(setGamePhase({ type: 'choose-going-first', status: 'ok' }));
     }
   };
 
