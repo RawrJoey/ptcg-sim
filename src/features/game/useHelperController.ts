@@ -14,7 +14,7 @@ interface HelperControllerReturn {
 }
 
 const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase, phaseActions: PhaseActions): { text?: string, actions?: HelperAction[] } | undefined => {
-  const waitingForOpponent = opponentPhase.status === 'pending' || opponentPhase.status === 'pending-input';
+  const waitingForOpponent = opponentPhase.status === 'pending' || opponentPhase.status === 'pending-input' || opponentPhase.status === 'pending-action-selection';
 
   if (phase.type === 'not-started') {
     if (waitingForOpponent) {
@@ -25,7 +25,7 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase, phaseAct
   }
 
   if (phase.type === 'flip-coin') {
-    if (phase.status === 'pending-input') {
+    if (phase.status === 'pending-action-selection') {
       return {
         text: 'Heads or tails?',
         actions: [{
@@ -46,7 +46,7 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase, phaseAct
   }
 
   if (phase.type === 'choose-going-first') {
-    if (phase.status === 'pending-input') {
+    if (phase.status === 'pending-action-selection') {
       return {
         text: 'You won the flip. First or second?',
         actions: [{

@@ -3,7 +3,7 @@ import { DeckState } from "./Deck";
 import { GameplayAction } from "./GameplayActions";
 
 export type GamePhaseType = 'not-started' | 'initialize' | 'flip-coin' | 'choose-going-first' | 'go-first-message' | 'initial-draw' | 'check-for-basic' | 'mulligan' | 'choose-active' | 'lay-prizes' | 'your-turn' | 'opponent-turn' | 'game-end';
-export type GamePhaseStatus = 'ok' | 'pending' | 'pending-input';
+export type GamePhaseStatus = 'ok' | 'pending' | 'pending-input' | 'pending-action-selection';
 
 export interface GamePhase {
   type: GamePhaseType,

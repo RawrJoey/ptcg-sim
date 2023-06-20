@@ -82,7 +82,7 @@ export const gameSlice = createSlice({
         state.phase = {
           ...state.phase,
           type: 'flip-coin',
-          status: 'pending-input'
+          status: 'pending-action-selection'
         }
       } else {
         state.phase = {

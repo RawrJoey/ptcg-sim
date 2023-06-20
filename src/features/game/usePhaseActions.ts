@@ -23,7 +23,7 @@ export const usePhaseActions = () => {
 
     // Won the flip
     if ((randomNum === 0 && face === 'heads') || randomNum === 1 && face === 'tails') {
-      dispatch(setGamePhase({ type: 'choose-going-first', status: 'pending-input' }));
+      dispatch(setGamePhase({ type: 'choose-going-first', status: 'pending-action-selection' }));
     } else {
       dispatch(setGamePhase({ type: 'choose-going-first', status: 'pending' }));
     }
