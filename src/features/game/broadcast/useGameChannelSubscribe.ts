@@ -92,7 +92,12 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
       }
 
       const opponentGameState: GameState = state[opponentId as string][0]
-      dispatch(setOpponentGameState(opponentGameState))
+      console.log(opponentGameState)
+      if (opponentGameState) {
+        dispatch(setOpponentGameState(opponentGameState))
+      } else {
+        console.log('Whoops, not defined', opponentGameState)
+      }
     }).subscribe((status) => {
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
