@@ -10,7 +10,8 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
   const { gameplayActionHandler } = useIncomingActionHandler();
 
   const supabase = useSupabaseClient();
-  const channel = supabase.channel(`game-${challengeId}`);
+  const sendChannel = supabase.channel(`game-${challengeId}`);
+  const recieveChannel = supabase.channel(`game-${challengeId}`);
   const myActions = useAppSelector((state) => state.game.gameplayActions);
   const currentPhase = useAppSelector((state) => state.game.phase);
 
@@ -31,17 +32,19 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
   useEffect(() => {
     if (!challengeId) return;
 
-    channel.on('broadcast', { event: GAMEPLAY_ACTION_EVENT }, (event) => {
+    recieveChannel.on('broadcast', { event: GAMEPLAY_ACTION_EVENT }, (event) => {
       for (const action of event.payload) {
         gameplayActionHandler({ type: action.type, payload: action.payload })
       }
-    }).subscribe((status) => {
+    })
+    
+    sendChannel.subscribe((status) => {
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
           if (myActionsStoredLength.current < myActionsRef.current.length) {
             console.log('sending',  myActionsRef.current[myActionsStoredLength.current]);
 
-            channel.send({
+            sendChannel.send({
               type: 'broadcast',
               event: GAMEPLAY_ACTION_EVENT,
               payload: [myActionsRef.current[myActionsStoredLength.current]],
@@ -56,7 +59,7 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
           if (currentPhaseRef.current?.status === 'ok' && currentPhaseRef.current?.acked === false) {
             console.log(currentPhaseRef, 'failed')
             console.log('Heartbeat failed. Trying again...');
-            channel.send({
+            sendChannel.send({
               type: 'broadcast',
               event: GAMEPLAY_ACTION_EVENT,
               payload: [{ type: 'game/setGamePhase', payload: currentPhaseRef.current }]
@@ -67,7 +70,8 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
     })
 
     return () => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(recieveChannel);
+      supabase.removeChannel(sendChannel);
     };
   }, []);
 }
