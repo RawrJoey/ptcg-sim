@@ -14,6 +14,7 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
 
   const sendChannel = supabase.channel(`game-${challengeId}`);
   const receiveChannel = supabase.channel(`game-${challengeId}`);
+  const presenceReceiveChannel = supabase.channel(`game-${challengeId}`);
 
   const myActions = useAppSelector((state) => state.game.gameplayActions);
   const currentPhase = useAppSelector((state) => state.game.phase);
@@ -39,7 +40,9 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
       for (const action of event.payload) {
         gameplayActionHandler({ type: action.type, payload: action.payload })
       }
-    }).on('presence', { event: 'sync' }, () => {
+    })
+    
+    presenceReceiveChannel.on('presence', { event: 'sync' }, () => {
       const state = receiveChannel.presenceState()
       console.log(state)
     }).subscribe()
