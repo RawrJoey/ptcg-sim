@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { GamePhase } from "./types/Game";
-import { usePhaseActions } from "./usePhaseActions";
+import { PhaseActions, usePhaseActions } from "./usePhaseActions";
 
 export interface HelperAction {
   text: string;
@@ -13,8 +13,7 @@ interface HelperControllerReturn {
   isDisabled: boolean;
 }
 
-const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase): { text?: string, actions?: HelperAction[] } | undefined => {
-  const { confirmHelperAction, flipCoin, chooseFirst } = usePhaseActions();
+const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase, phaseActions: PhaseActions): { text?: string, actions?: HelperAction[] } | undefined => {
   const waitingForOpponent = opponentPhase.status === 'pending' || opponentPhase.status === 'pending-input';
 
   if (phase.type === 'not-started') {
@@ -31,10 +30,10 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase): { text?
         text: 'Heads or tails?',
         actions: [{
           text: 'Heads',
-          onClick: () => flipCoin('heads')
+          onClick: () => phaseActions.flipCoin('heads')
         }, {
           text: 'Tails',
-          onClick: () => flipCoin('tails')
+          onClick: () => phaseActions.flipCoin('tails')
         }]
       }
     }
@@ -52,10 +51,10 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase): { text?
         text: 'You won the flip. First or second?',
         actions: [{
           text: 'First',
-          onClick: () => chooseFirst(true)
+          onClick: () => phaseActions.chooseFirst(true)
         }, {
           text: 'Second',
-          onClick: () => chooseFirst(false)
+          onClick: () => phaseActions.chooseFirst(false)
         }]
       }
     }
@@ -88,7 +87,7 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase): { text?
       text: 'Choose your starting Pokemon',
       actions: [{
         text: 'Done',
-        onClick: confirmHelperAction
+        onClick: phaseActions.confirmHelperAction
       }]
     }
   }
@@ -98,7 +97,7 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase): { text?
       text: 'You have a mulligan',
       actions: [{
         text: 'Get a new hand',
-        onClick: confirmHelperAction
+        onClick: phaseActions.confirmHelperAction
       }]
     }
   }
@@ -120,7 +119,8 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase): { text?
 
 export const useHelperController = () => {
   const gameState = useAppSelector((state) => state.game);
-  const bubbleInterface = getBubbleInterface(gameState.phase, gameState.opponentPhase);
+  const phaseActions = usePhaseActions();
+  const bubbleInterface = getBubbleInterface(gameState.phase, gameState.opponentPhase, phaseActions);
 
   const ret: HelperControllerReturn = {
     text: bubbleInterface?.text,

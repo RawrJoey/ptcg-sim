@@ -4,7 +4,7 @@ import { GamePhaseStatus } from "./types/Game";
 
 export type CoinFace = 'heads' | 'tails';
 
-interface PhaseActions {
+export interface PhaseActions {
   confirmHelperAction: () => void;
   flipCoin: (face: CoinFace) => void;
   chooseFirst: (first: boolean) => void;
