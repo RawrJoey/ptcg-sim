@@ -73,6 +73,22 @@ export const useGameController = () => {
       if (opponentPhase.type === 'flip-coin' && opponentPhase.status === 'pending' && phase.status === 'pending') {
         dispatch(setGamePhase({ type: 'flip-coin', status: 'pending-action-selection'}));
       }
+
+      if (opponentPhase.type === 'choose-going-first') {
+        if (opponentPhase.status === 'pending') {
+          dispatch(setGamePhase({
+            type: 'choose-going-first',
+            status: 'pending-action-selection'
+          }));
+        }
+
+        if (opponentPhase.status === 'pending-action-selection') {
+          dispatch(setGamePhase({
+            type: 'choose-going-first',
+            status: 'pending'
+          }));
+        }
+      }
     }
 
     if (phase.type === 'choose-going-first') {
