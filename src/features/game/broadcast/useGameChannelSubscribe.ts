@@ -1,7 +1,7 @@
 import { useAppSelector } from "@/app/hooks";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 import { useEffect, useRef, MutableRefObject } from "react";
-import { GamePhase, GamePhaseState } from "../types/Game";
+import { GamePhase, GamePhaseState, GameState } from "../types/Game";
 import { GameplayAction } from "../types/GameplayActions";
 import { GAMEPLAY_ACTION_EVENT, GAME_ACK_EVENT } from "./types";
 import { useIncomingActionHandler } from "./useIncomingActionHandler";
@@ -13,16 +13,23 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
   const supabase = useSupabaseClient();
 
   const broadcastChannel = supabase.channel(`game-${challengeId}`);
-  const presenceChannel = supabase.channel(`game-${challengeId}-presence`);
+  const presenceChannel = supabase.channel(`game-${challengeId}-presence`, {
+    config: {
+      presence: {
+        key: user?.id,
+      },
+    },
+  });
 
   const myActions = useAppSelector((state) => state.game.gameplayActions);
   const currentPhase = useAppSelector((state) => state.game.phase);
+  const gameState = useAppSelector((state) => state.game);
 
   const myActionsRef: MutableRefObject<GameplayAction<any>[]> = useRef([])
   const myActionsStoredLength = useRef(0);
 
   const currentPhaseRef: MutableRefObject<GamePhaseState | undefined> = useRef();
-  const savedPhaseRef: MutableRefObject<GamePhaseState | undefined> = useRef();
+  const gameStateRef: MutableRefObject<GameState | undefined> = useRef()
 
   useEffect(() => {
     myActionsRef.current = myActions;
@@ -31,6 +38,10 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
   useEffect(() => {
     currentPhaseRef.current = currentPhase;
   }, [currentPhase]);
+
+  useEffect(() => {
+    gameStateRef.current = gameState;
+  }, [gameState]);
 
   useEffect(() => {
     if (!challengeId) return;
@@ -70,26 +81,15 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
     });
     
     presenceChannel.on('presence', { event: 'sync' }, () => {
-      console.log('syncing')
-      const state = presenceChannel.presenceState()
-      console.log(state)
+      const state = presenceChannel.presenceState();
     }).subscribe((status) => {
       if (status === 'SUBSCRIBED') {
-        presenceChannel.track({
-          user: 'user-1',
-          online_at: new Date().toISOString(),
-        })
-
         setInterval(() => {
-          if (savedPhaseRef.current?.type !== currentPhaseRef.current?.type || savedPhaseRef.current?.status !== currentPhaseRef.current?.status || savedPhaseRef.current?.acked !== currentPhaseRef.current?.acked) {
-            savedPhaseRef.current = currentPhaseRef.current;
-            console.log('phase change to ', currentPhaseRef.current);
-
-            presenceChannel.track({
-              ...presenceChannel.presenceState(),
-              phase: currentPhaseRef.current
-            });
-          }
+          presenceChannel.track({
+            user: user?.id,
+            online_oot: new Date().toISOString(),
+            gameState: gameStateRef.current
+          })
         }, 201);
       }
     })
