@@ -38,7 +38,7 @@ const getBubbleInterface = (phase: GamePhase, opponentPhase: GamePhase, phaseAct
       }
     }
 
-    if (waitingForOpponent) {
+    if (phase.status === 'pending') {
       return {
         text: 'Waiting for opponent to flip...'
       }
