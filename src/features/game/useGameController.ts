@@ -93,8 +93,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'choose-going-first') {
-      // Check for OR here because only one player is going to choose going first
-      if (opponentPhase.type === 'choose-going-first' && bothPhasesOk) {
+      if ((opponentPhase.type === 'choose-going-first' && bothPhasesOk) || opponentPhase.type === 'choose-active') {
         dispatch(setGamePhase({
           type: 'initial-draw',
           status: 'ok'
