@@ -24,5 +24,6 @@ export interface GameState {
   opponentDeck: DeckState,
   gameplayActions: GameplayAction[],
   acks: GamePhase[],
-  isGoingFirst: boolean | undefined
+  isGoingFirst: boolean | undefined,
+  isChallenger: boolean | undefined
 };

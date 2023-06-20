@@ -1,6 +1,7 @@
 import { useAppDispatch } from "@/app/hooks";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useEffect } from "react";
+import { setIsChallenger } from "../game/gameSlice";
 import { useActiveGame } from "../social/challenges/useActiveGame"
 import { changeScreen } from "./interfaceSlice";
 import { useInterfaceActions } from "./useInterfaceActions";
@@ -15,6 +16,7 @@ export const useInterfaceController = () => {
   useEffect(() => {
     if (activeGame) {
       startGame();
+      dispatch(setIsChallenger(user?.id === activeGame.challenger));
     }
   }, [activeGame]);
 

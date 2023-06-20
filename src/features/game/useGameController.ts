@@ -11,7 +11,7 @@ import { CardObject } from '@/components/Card/CardInterface';
 export const useGameController = () => {
   const { data: codeToSetMap, isLoading: codeToSetMapIsLoading } = useCodeToSetMap();
 
-  const { phase, opponentPhase, myDeck } = useAppSelector((state) => state.game);
+  const { phase, opponentPhase, myDeck, isChallenger } = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
   const choseWhoFlip = useRef(false);
 
@@ -61,7 +61,7 @@ export const useGameController = () => {
     if (phase.type === 'flip-coin') {
       if (phase.status === 'pending') {
         // The first person who acks their opponents gets to decide who flips
-        if (opponentPhase.type === 'flip-coin' && !choseWhoFlip.current) {
+        if (isChallenger && !choseWhoFlip.current) {
           const randomNum = Math.floor(Math.random() * 2);
           const iAmFlipping = randomNum === 1
           dispatch(setWhoIsFlipping({ payload: iAmFlipping }));
