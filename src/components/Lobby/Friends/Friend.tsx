@@ -7,6 +7,7 @@ import { useState } from "react";
 
 interface FriendProps {
   friend: FriendType;
+  isOnline?: boolean;
 }
 
 export const Friend = (props: FriendProps) => {
@@ -29,9 +30,9 @@ export const Friend = (props: FriendProps) => {
 
   return (
     <HStack spacing={4}>
-      {/* <Avatar>
-        <AvatarBadge borderColor='papayawhip' bg={props.friend.onlineStatus ? 'green.500' : 'tomato'} boxSize='1.25em' />
-      </Avatar> */}
+      <Avatar>
+        <AvatarBadge borderColor='papayawhip' bg={props.isOnline ? 'green.500' : 'tomato'} boxSize='1.25em' />
+      </Avatar>
       <Text>{props.friend.name}</Text>
       {!props.friend.challengeId && (
         <Button isDisabled={alreadyChallenged} onClick={() => {
