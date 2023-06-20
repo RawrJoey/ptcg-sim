@@ -107,7 +107,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'initial-draw') {
-      if ((opponentPhase.type === 'initial-draw' && bothPhasesOk) || (opponentPhase.type === 'check-for-basic' && phaseOk)) {
+      if (phase.status === 'ok') {
         dispatch(setGamePhase({
           type: 'check-for-basic',
           status: 'pending',
