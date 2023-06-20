@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { acknowledgePhaseChangeWasReceived, drawOpenSeven, layPrizes, loadDeck, moveCard, queueAckToSend, setGamePhase, setIsGoingFirst, setOpponentPhase, setWhoIsFlipping } from "../gameSlice";
+import { acknowledgePhaseChangeWasReceived, drawOpenSeven, layPrizes, loadDeck, moveCard, queueAckToSend, setGamePhase, setIsGoingFirst, setOpponentPhase } from "../gameSlice";
 import { GameplayAction } from "../types/GameplayActions"
 
 export const useIncomingActionHandler = () => {
@@ -22,8 +22,6 @@ export const useIncomingActionHandler = () => {
       dispatch(layPrizes({ payload: action.payload, isOpponent: true }));
     } else if (action.type === 'game/queueAckToSend') {
       dispatch(acknowledgePhaseChangeWasReceived(action.payload));
-    } else if (action.type === 'game/setWhoIsFlipping') {
-      dispatch(setWhoIsFlipping({ payload: action.payload.youAreFlipping, isOpponent: true }))
     } else if (action.type === 'game/setIsGoingFirst') {
       dispatch(setIsGoingFirst({ payload: action.payload, isOpponent: true }));
     }

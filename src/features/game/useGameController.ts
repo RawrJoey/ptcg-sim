@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
-import { drawCard, drawOpenSeven, layPrizes, loadDeck, mulliganHandAway, setGamePhase, setWhoIsFlipping } from './gameSlice';
+import { drawCard, drawOpenSeven, layPrizes, loadDeck, mulliganHandAway, setGamePhase } from './gameSlice';
 import { loadDeckList } from './helpers';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
@@ -13,7 +13,6 @@ export const useGameController = () => {
 
   const { phase, opponentPhase, myDeck, isChallenger } = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
-  const choseWhoFlip = useRef(false);
 
   const phaseHandler = () => {
     console.log('PHASE')
@@ -41,10 +40,21 @@ export const useGameController = () => {
 
     if (phase.type === 'initialize') {
       if (opponentPhase.type === 'initialize' && bothPhasesOkAndAcked) {
-        dispatch(setGamePhase({
-          type: 'flip-coin',
-          status: 'pending',
-        }));
+        if (isChallenger) {
+          const randomNum = Math.floor(Math.random() * 2);
+          const iAmFlipping = randomNum === 1;
+
+          if (iAmFlipping) {
+            dispatch(setGamePhase({ type: 'flip-coin', status: 'pending-action-selection'}));
+          } else {
+            dispatch(setGamePhase({ type: 'flip-coin', status: 'pending' }));
+          }
+        } else {
+          dispatch(setGamePhase({
+            type: 'flip-coin',
+            status: 'pending',
+          }));
+        }
       }
 
       if (phase.status === 'pending') {
@@ -59,14 +69,9 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'flip-coin') {
-      if (phase.status === 'pending') {
-        // The first person who acks their opponents gets to decide who flips
-        if (isChallenger && !choseWhoFlip.current) {
-          const randomNum = Math.floor(Math.random() * 2);
-          const iAmFlipping = randomNum === 1
-          dispatch(setWhoIsFlipping({ payload: iAmFlipping }));
-          choseWhoFlip.current = true;
-        }
+      // If opponent decided who flips and it's you, start flipping
+      if (opponentPhase.type === 'flip-coin' && opponentPhase.status === 'pending' && phase.status === 'pending') {
+        dispatch(setGamePhase({ type: 'flip-coin', status: 'pending-action-selection'}));
       }
     }
 

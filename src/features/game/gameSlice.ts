@@ -77,25 +77,6 @@ export const gameSlice = createSlice({
 
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = shuffle(action.payload.payload);
     },
-    setWhoIsFlipping: (state, action: PayloadAction<GamePayload<boolean>>) => {
-      if (action.payload.payload) {
-        state.phase = {
-          ...state.phase,
-          type: 'flip-coin',
-          status: 'pending-action-selection'
-        }
-      } else {
-        state.phase = {
-          ...state.phase,
-          type: 'flip-coin',
-          status: 'pending'
-        }
-      }
-
-      if (!action.payload.isOpponent) {
-        state.gameplayActions.push({ type: 'game/setWhoIsFlipping', payload: { youAreFlipping: !action.payload.payload } });
-      }
-    },
     setIsGoingFirst: (state, action: PayloadAction<GamePayload<boolean>>) => {
       if (action.payload.isOpponent) {
         state.isGoingFirst = !action.payload.payload;
@@ -307,6 +288,6 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setIsChallenger, setGamePhase, setOpponentPhase, queueAckToSend, acknowledgePhaseChangeWasReceived, setWhoIsFlipping, setIsGoingFirst, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, layPrizes, takePrize } = gameSlice.actions
+export const { setIsChallenger, setGamePhase, setOpponentPhase, queueAckToSend, acknowledgePhaseChangeWasReceived, setIsGoingFirst, loadDeck, shuffleDeck, drawOpenSeven, moveCard, drawCard, mulliganHandAway, layPrizes, takePrize } = gameSlice.actions
 
 export default gameSlice.reducer;
