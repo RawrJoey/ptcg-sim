@@ -22,7 +22,6 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
   const myActionsRef: MutableRefObject<GameplayAction<any>[]> = useRef([])
   const myActionsStoredLength = useRef(0);
 
-
   const currentPhaseRef: MutableRefObject<GamePhaseState | undefined> = useRef();
 
   useEffect(() => {
@@ -42,21 +41,26 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
       }
     })
     
-    presenceReceiveChannel.on('presence', { event: 'sync' }, () => {
-      const state = receiveChannel.presenceState()
-      console.log(state)
-    }).subscribe()
+    // presenceReceiveChannel.on('presence', { event: 'sync' }, () => {
+    //   const state = receiveChannel.presenceState()
+    //   console.log(state)
+    // }).subscribe()
     
-    sendChannel.subscribe(async (status) => {
+    sendChannel.subscribe((status) => {
       if (status === 'SUBSCRIBED') {
+        // sendChannel.track({
+        //   user: 'user-1',
+        //   online_at: new Date().toISOString(),
+        // }).then((status) => console.log(status))
+
         setInterval(() => {
           if (myActionsStoredLength.current < myActionsRef.current.length) {
             console.log('sending',  myActionsRef.current[myActionsStoredLength.current]);
 
-            sendChannel.track({
-              ...sendChannel.presenceState(),
-              actions: sendChannel.presenceState().actions ? [...sendChannel.presenceState().actions, myActionsRef.current[myActionsStoredLength.current]] : myActionsRef.current[myActionsStoredLength.current]
-            });
+            // sendChannel.track({
+            //   ...sendChannel.presenceState(),
+            //   actions: sendChannel.presenceState().actions ? [...sendChannel.presenceState().actions, myActionsRef.current[myActionsStoredLength.current]] : myActionsRef.current[myActionsStoredLength.current]
+            // });
 
             sendChannel.send({
               type: 'broadcast',
@@ -80,18 +84,11 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
             }).catch((err) => console.log(err));
           }
         }, 2000);
-
-        const presenceTrackStatus = await sendChannel.track({
-          user: user?.id,
-          online_at: new Date().toISOString(),
-        })
-        console.log(presenceTrackStatus)
       }
     })
 
     return () => {
-      supabase.removeChannel(receiveChannel);
-      supabase.removeChannel(sendChannel);
+      supabase.removeAllChannels();
     };
   }, []);
 }
