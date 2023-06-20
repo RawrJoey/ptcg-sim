@@ -59,7 +59,7 @@ export const gameSlice = createSlice({
       };
     },
     setOpponentGameState: (state, action: PayloadAction<GameState>) => {
-      if (action.payload.phase.type === 'choose-going-first' && action.payload.phase.status === 'ok') {
+      if (state.phase.type === 'choose-going-first' && action.payload.phase.type === 'choose-going-first' && action.payload.phase.status === 'ok') {
         state.phase = {
           type: 'choose-going-first',
           status: 'ok',
