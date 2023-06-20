@@ -101,8 +101,6 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
           presenceChannel.track({
-            user: user?.id,
-            online_oot: new Date().toISOString(),
             gameState: gameStateRef.current
           })
         }, 201);
