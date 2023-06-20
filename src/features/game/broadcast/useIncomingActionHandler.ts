@@ -11,6 +11,10 @@ export const useIncomingActionHandler = () => {
       if (action.payload.status === 'ok') {
         dispatch(queueAckToSend(action.payload));
       }
+
+      if (action.payload.type === 'lay-prizes') {
+        dispatch(layPrizes({ payload: action.payload, isOpponent: true }));
+      }
       dispatch(setOpponentPhase(action.payload));
     } else if (action.type === 'game/loadDeck') {
       dispatch(loadDeck({ payload: action.payload, isOpponent: true }));
@@ -18,8 +22,6 @@ export const useIncomingActionHandler = () => {
       dispatch(drawOpenSeven({ payload: action.payload, isOpponent: true }));
     } else if (action.type === 'game/moveCard') {
       dispatch(moveCard({ payload: action.payload, isOpponent: true }));
-    } else if (action.type === 'game/layPrizes') {
-      dispatch(layPrizes({ payload: action.payload, isOpponent: true }));
     } else if (action.type === 'game/queueAckToSend') {
       dispatch(acknowledgePhaseChangeWasReceived(action.payload));
     } else if (action.type === 'game/setIsGoingFirst') {

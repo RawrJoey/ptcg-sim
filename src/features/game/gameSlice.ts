@@ -113,8 +113,6 @@ export const gameSlice = createSlice({
       }
     },
     layPrizes: (state, action: PayloadAction<GamePayload<undefined>>) => {
-      !action.payload.isOpponent && state.gameplayActions.push({ type: 'game/layPrizes' });
-      
       const prizes = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice((action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 6, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length);
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards = (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.slice(0, (action.payload.isOpponent ? state.opponentDeck : state.myDeck).deckCards.length - 6);
       (action.payload.isOpponent ? state.opponentDeck : state.myDeck).prizes = prizes;
