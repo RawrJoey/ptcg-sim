@@ -23,7 +23,7 @@ export const useGameController = () => {
     const bothPhasesOk = phaseOk && opponentPhaseOk;
 
     if (phase.type === 'not-started') {
-      if ((opponentPhase.type === 'not-started' && bothPhasesOk) || (opponentPhase.type === 'initialize' && phaseOk)) {
+      if ((opponentPhase.type === 'not-started' && bothPhasesOk)) {
         dispatch(setGamePhase({
           type: 'initialize',
           status: 'pending'
@@ -39,7 +39,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'initialize') {
-      if ((opponentPhase.type === 'initialize' && bothPhasesOk) || (opponentPhase.type === 'flip-coin' && phaseOk)) {
+      if ((opponentPhase.type === 'initialize' && bothPhasesOk)) {
         if (isChallenger) {
           const randomNum = Math.floor(Math.random() * 2);
           const iAmFlipping = randomNum === 1;
@@ -158,7 +158,7 @@ export const useGameController = () => {
     }
 
     if (phase.type === 'lay-prizes') {
-      if ((opponentPhase.type === 'lay-prizes' && bothPhasesOk) || ((opponentPhase.type === 'your-turn' || opponentPhase.type === 'opponent-turn') && phaseOk)) {
+      if ((opponentPhase.type === 'lay-prizes' && bothPhasesOk)) {
         if (isGoingFirst) {
           dispatch(setGamePhase({ type: 'your-turn', status: 'pending' }));
         } else {
