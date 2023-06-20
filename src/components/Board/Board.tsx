@@ -33,12 +33,11 @@ export const Board = (props: BoardProps) => {
       "lost-zone stadium . . ."
       `
       : `
-      "lost-zone stadium . . ."
       "prizes stadium active . deck"
       "prizes bench bench bench discard"
       "hand hand hand hand hand"
       `}
-        gridTemplateRows={'0.5fr 1fr 1fr 1fr'}
+        gridTemplateRows={'1fr 1fr 1fr'}
         gridTemplateColumns={'1fr 1fr 1fr 1fr 1fr'}
         columnGap={4}
         rowGap={4}
