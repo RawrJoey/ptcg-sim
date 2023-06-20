@@ -10,8 +10,8 @@ export const HelperBubble = () => {
     <Stack>
       {text && <Text>{text}</Text>}
       <HStack>
-        {actions?.map((action) => (
-          <Button isDisabled={isDisabled} onClick={action.onClick}>{action.text}</Button>
+        {actions?.map((action, idx) => (
+          <Button key={`heads-up-action-${idx}`} isDisabled={isDisabled} onClick={action.onClick}>{action.text}</Button>
         ))}
       </HStack>
     </Stack>
