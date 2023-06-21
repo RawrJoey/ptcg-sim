@@ -7,6 +7,7 @@ export const FriendList = () => {
   const { data: friends } = useFriends();
   const activeFriends = useActiveFriendsController();
 
+
   return (
     <Stack>
       <Heading>Friends</Heading>

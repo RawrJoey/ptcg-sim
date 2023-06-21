@@ -22,33 +22,38 @@ export const useActiveFriendsController = () => {
       },
     },
   });
-
-  presenceChannel.on('presence', { event: 'sync' }, () => {
-    const state: RealtimePresenceState<{ id: string, online_at: string }> = presenceChannel.presenceState();
-    const friendActiveStatus: Record<string, boolean> | undefined = friendsRef.current?.reduce((acc, curr) => {
-      if (Object.values(state).some(activePlayer => activePlayer[0].id === curr.id)) {
+  
+  useEffect(() => {
+    presenceChannel.on('presence', { event: 'sync' }, () => {
+      const state: RealtimePresenceState<{ id: string, online_at: string }> = presenceChannel.presenceState();
+      const friendActiveStatus: Record<string, boolean> | undefined = friendsRef.current?.reduce((acc, curr) => {
+        if (Object.values(state).some(activePlayer => activePlayer[0].id === curr.id)) {
+          return {
+            ...acc,
+            [curr.id]: true
+          }
+        }
+  
         return {
           ...acc,
-          [curr.id]: true
+          [curr.id]: false
         }
+      }, {});
+  
+      setActiveFriends(friendActiveStatus)
+    }).subscribe((status) => {
+      if (status === 'SUBSCRIBED') {
+        presenceChannel.track({
+          id: user?.id,
+          online_at: new Date().toISOString(),
+        })
       }
+    });
 
-      return {
-        ...acc,
-        [curr.id]: false
-      }
-    }, {});
-    console.log(state)
-
-    setActiveFriends(friendActiveStatus)
-  }).subscribe((status) => {
-    if (status === 'SUBSCRIBED') {
-      presenceChannel.track({
-        id: user?.id,
-        online_at: new Date().toISOString(),
-      })
-    }
-  });
+    return () => {
+      supabase.removeChannel(presenceChannel)
+    };
+  })
 
   return activeFriends;
 }
