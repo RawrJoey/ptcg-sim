@@ -5,7 +5,7 @@ export const fetchCardsAutoComplete = async (name: string) => {
   if (name.length === 0) return [];
 
   const cards = await PokemonTCG.findCardsByQueries({
-    q: `name:"${name}"`
+    q: name.includes(' ') ? `name:"${name}"` : `name:*${name}*`
   });
   return cards;
 }
