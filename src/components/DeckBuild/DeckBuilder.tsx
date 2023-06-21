@@ -4,6 +4,8 @@ import { useCardsAutoComplete } from './useCardsAutoComplete';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
+import { BatchOfCards, CardWithImage } from './DeckBuilderModal';
+import { getDeckLength, getTrueCardCount } from './helpers';
 
 // function debounce( callback: () => void, delay: number ) {
 //   let timeout: any;
@@ -24,10 +26,14 @@ const getCardSortScore = (card: PokemonTCG.Card) => {
   return 8;
 }
 
-export const DeckBuilder = () => {
+interface DeckBuilderProps {
+  cards: BatchOfCards;
+  setCards: (cards: BatchOfCards) => void;
+}
+
+export const DeckBuilder = (props: DeckBuilderProps) => {
   const [cardSearch, setCardSearch] = useState('');
   const { data: searchedCards } = useCardsAutoComplete(cardSearch);
-  const [cards, setCards] = useState<Record<string, { count: number, card: PokemonTCG.Card }>>({});
   const toast = useToast();
 
   const sortMyDeck = (a: { count: number, card: PokemonTCG.Card }, b: { count: number, card: PokemonTCG.Card }) => {
@@ -46,36 +52,25 @@ export const DeckBuilder = () => {
     return aScore - bScore;
   }
 
-  const getTrueCardCount = (card: PokemonTCG.Card) => {
-    return Object.values(cards).reduce((acc: number, curr) => {
-      if (curr.card.name === card.name) return acc + curr.count;
-      return acc;
-    }, 0);
-  }
-
-  const getDeckLength = () => {
-    return Object.values(cards).reduce((acc, curr) => acc + curr.count, 0);
-  }
-
   const handleAddCard = (card: PokemonTCG.Card) => {
-    if (getTrueCardCount(card) >= 4 && !(card.supertype === Supertype.Energy && card.subtypes.includes(Subtype.Basic))) {
+    if (getTrueCardCount(props.cards, card) >= 4 && !(card.supertype === Supertype.Energy && card.subtypes.includes(Subtype.Basic))) {
       return toast({
         status: 'error',
         title: 'Only 4 per card!'
       })
     }
 
-    if (cards[card.id]) {
-      setCards({
-        ...cards,
+    if (props.cards[card.id]) {
+      props.setCards({
+        ...props.cards,
         [card.id]: {
-          ...cards[card.id],
-          count: cards[card.id].count + 1
+          ...props.cards[card.id],
+          count: props.cards[card.id].count + 1
         }
       });
     } else {
-      setCards({
-        ...cards,
+      props.setCards({
+        ...props.cards,
         [card.id]: {
           card,
           count: 1
@@ -85,7 +80,7 @@ export const DeckBuilder = () => {
   };
 
   const handleRemoveCard = (card: PokemonTCG.Card) => {
-    const newCards = { ...cards };
+    const newCards = { ...props.cards };
 
     if (newCards[card.id].count === 1) {
       delete newCards[card.id];
@@ -93,7 +88,7 @@ export const DeckBuilder = () => {
       newCards[card.id].count -= 1;
     }
 
-    setCards(newCards)
+    props.setCards(newCards)
   }
 
   return (
@@ -109,9 +104,9 @@ export const DeckBuilder = () => {
         </Grid>
       </Stack>
       <Stack>
-        <Heading size='md'>My deck ({getDeckLength()})</Heading>
+        <Heading size='md'>My deck ({getDeckLength(props.cards)})</Heading>
         <Grid gridTemplateColumns={'1fr 1fr 1fr'}>
-          {Object.values(cards).sort(sortMyDeck).map(({ count, card }) => (
+          {Object.values(props.cards).sort(sortMyDeck).map(({ count, card }) => (
             <Stack key={card.id}>
               <Image src={card.images.small} />
               <HStack>
