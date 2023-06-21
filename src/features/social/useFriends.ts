@@ -25,7 +25,7 @@ const fetchProfiles = async (supabaseClient: SupabaseClient, userIdList: string[
 
   const { data, error } = await supabaseClient
     .from('Profiles')
-    .select('id,name')
+    .select('id,name,username')
     .filter('id', 'in', `(${userIdList.reduce((acc, curr) => acc === '' ? `"${curr}"` : `"${acc}","${curr}"`, '')})`)
   
   return data ?? [];

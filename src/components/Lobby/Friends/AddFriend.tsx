@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Button, Input, Modal, ModalContent, ModalFooter, ModalHeader, ModalBody, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react"
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
+import { useFriends } from '@/features/social/useFriends';
 
 export const AddFriend = () => {
+  const { data: friends } = useFriends();
   const user = useUser();
   const [username, setUsername] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -10,12 +12,28 @@ export const AddFriend = () => {
   const toast = useToast();
 
   const handleSendFriendRequestClick = async () => {
+    if (friends?.some((friend) => friend.username === username)) {
+      return toast({
+        status: 'error',
+        title: 'You are already friends with ' + username + '!',
+      })
+    }
+
     const res = await supabase.from('Profiles').select('id').eq('username', username).single();
 
     if (!res.data) {
       return toast({
         status: 'error',
         title: 'No user with username ' + username + '.'
+      })
+    }
+
+    const checkMadeRequestRes = await supabase.from('Friend Requests').select('id').eq('username', username).single();
+
+    if (checkMadeRequestRes.error) {
+      return toast({
+        status: 'error',
+        title: 'You already sent a request to this user!',
       })
     }
 
