@@ -24,9 +24,9 @@ export const useActiveFriendsController = () => {
   });
 
   presenceChannel.on('presence', { event: 'sync' }, () => {
-    const state: RealtimePresenceState<{ online_at: string }> = presenceChannel.presenceState();
+    const state: RealtimePresenceState<{ id: string, online_at: string }> = presenceChannel.presenceState();
     const friendActiveStatus: Record<string, boolean> | undefined = friendsRef.current?.reduce((acc, curr) => {
-      if (Object.keys(state).some(activePlayer => activePlayer === curr.id)) {
+      if (Object.values(state).some(activePlayer => activePlayer[0].id === curr.id)) {
         return {
           ...acc,
           [curr.id]: true
@@ -38,11 +38,13 @@ export const useActiveFriendsController = () => {
         [curr.id]: false
       }
     }, {});
+    console.log(state)
 
     setActiveFriends(friendActiveStatus)
   }).subscribe((status) => {
     if (status === 'SUBSCRIBED') {
       presenceChannel.track({
+        id: user?.id,
         online_at: new Date().toISOString(),
       })
     }
