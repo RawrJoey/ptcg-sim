@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, HStack, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useToast } from "@chakra-ui/react"
 import { DeckBuilder } from "./DeckBuilder";
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { getDeckLength } from './helpers';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
-import { useDecks } from '@/features/decks/useDecks';
+import { SavedDeck, useDecks } from '@/features/decks/useDecks';
 
 export type BatchOfCards = Record<string, { count: number, card: PokemonTCG.Card }>;
 
@@ -16,15 +16,22 @@ export interface CardWithImage {
 interface DeckBuilderModalProps {
   isOpen: boolean;
   onClose: () => void;
+  editingDeck?: SavedDeck;
 }
 
 export const DeckBuilderModal = (props: DeckBuilderModalProps) => {
-  const [cards, setCards] = useState<Record<string, { count: number, card: PokemonTCG.Card }>>({});
+  const [cards, setCards] = useState<BatchOfCards>({});
   const [deckName, setDeckName] = useState('');
   const supabaseClient = useSupabaseClient();
   const user = useUser();
   const { data: decks, refetch } = useDecks(user?.id);
   const toast = useToast();
+
+  useEffect(() => {
+    if (props.editingDeck?.deck) {
+      setCards(props.editingDeck.deck)
+    }
+  }, [props.editingDeck?.deck])
 
   const handleDeckSave = async () => {
     if (deckName.length === 0) {
@@ -61,7 +68,7 @@ export const DeckBuilderModal = (props: DeckBuilderModalProps) => {
     <Modal isOpen={props.isOpen} onClose={() => {}} size='2xl'>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create deck</ModalHeader>
+        <ModalHeader>{props.editingDeck ? props.editingDeck.name : 'Create deck'}</ModalHeader>
         <ModalBody>
           <DeckBuilder cards={cards} setCards={setCards} deckName={deckName} setDeckName={setDeckName} />
         </ModalBody>

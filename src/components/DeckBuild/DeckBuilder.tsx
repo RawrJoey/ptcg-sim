@@ -6,6 +6,7 @@ import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { BatchOfCards, CardWithImage } from './DeckBuilderModal';
 import { getDeckLength, getTrueCardCount } from './helpers';
+import { SavedDeck } from '@/features/decks/useDecks';
 
 // function debounce( callback: () => void, delay: number ) {
 //   let timeout: any;

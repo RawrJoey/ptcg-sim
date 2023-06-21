@@ -5,6 +5,7 @@ import { FinishSetupModal } from "./FinishSetupModal";
 import { FriendList } from "./Friends/FriendList";
 import { useCurrentProfile } from "../../features/social/useCurrentProfile";
 import { DeckBuilderOpenButton } from "../DeckBuild/DeckBuilderOpenButton";
+import { ListOfMyDecks } from "../DeckBuild/ListOfMyDecks";
 
 export const Lobby = () => {
   const profile = useCurrentProfile();
@@ -17,6 +18,7 @@ export const Lobby = () => {
       {profile.data?.username && (
         <Stack>
           <FriendList />
+          <ListOfMyDecks />
           <DeckBuilderOpenButton />
         </Stack>
       )}
