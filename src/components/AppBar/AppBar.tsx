@@ -11,9 +11,9 @@ export const AppBar = () => {
 <link rel="preconnect" href="https://fonts.gstatic.com" />
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@500&family=Crete+Round&display=swap" rel="stylesheet" />
       </Head>
-      <HStack spacing={0} alignItems='center'>
+      <HStack spacing={'-1.5'} alignItems='center'>
         <Image src='/app-logo.png' alt='Twinleaf app logo' width='72' height='72' />
-        <Text fontFamily={'Be Vietnam Pro'} fontSize='28' pt='3' fontWeight='500'>twinleaf</Text>
+        <Text fontFamily={'Be Vietnam Pro'} fontSize='28' pt='3' fontWeight='500' color='gray.800'>twinleaf.gg</Text>
       </HStack>
       <Login />
     </Grid>
