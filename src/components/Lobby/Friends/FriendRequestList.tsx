@@ -1,4 +1,5 @@
 import { useCurrentProfile } from "@/features/social/useCurrentProfile";
+import { useFriends } from "@/features/social/useFriends";
 import { useMyFriendRequests } from "@/features/social/useMyFriendRequests"
 import { Button, Heading, HStack, Stack, Text, useToast } from "@chakra-ui/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
@@ -6,11 +7,13 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 export const FriendRequestList = () => {
   const { data: profile } = useCurrentProfile();
   const { data: friendRequests, refetch } = useMyFriendRequests();
+  const { refetch: refetchFriends } = useFriends();
   const supabase = useSupabaseClient();
   const toast = useToast();
 
   const handleAcceptFriendRequest = async (fromId: string) => {
-    const updateRes = await supabase.from('Friend Requests').update({ accepted: true }).eq('to', profile?.username).eq('from', fromId);
+    console.log(profile?.username, fromId)
+    const updateRes = await supabase.from('Friend Requests').update({ accepted: true }).match({ to: profile?.username, from: fromId });
 
     if (updateRes.error) {
       return toast({
@@ -41,6 +44,7 @@ export const FriendRequestList = () => {
     }
 
     await refetch();
+    await refetchFriends();
     toast({
       status: 'success',
       title: 'Friend added!',

@@ -14,46 +14,31 @@ const fetchFriends = async (supabaseClient: SupabaseClient, currentUser: string 
 
   const { data, error } = await supabaseClient
     .from('Friends')
-    .select('friend')
-    .eq('user', currentUser);
+    .select('friend(id,name,username)')
+    .eq('user', currentUser)
+    .returns<{ friend: { id: string, name: string, username: string }}[]>();
 
   return data?.map(({ friend }) => friend) ?? [];
-};
-
-const fetchProfiles = async (supabaseClient: SupabaseClient, userIdList: string[] | undefined) => {
-  if (!userIdList) return [];
-
-  const { data, error } = await supabaseClient
-    .from('Profiles')
-    .select('id,name,username')
-    .filter('id', 'in', `(${userIdList.reduce((acc, curr) => acc === '' ? `"${curr}"` : `"${acc}","${curr}"`, '')})`)
-  
-  return data ?? [];
 };
 
 export const useFriends = () => {
   const supabase = useSupabaseClient();
   const user = useUser();
 
-  const { data: friendIds, isLoading: friendIdsIsLoading } = useQuery({
+  const { data: friends, ...rest } = useQuery({
     queryKey: ['friend-ids', user?.id],
     queryFn: () => fetchFriends(supabase, user?.id)
-  });
-
-  const { data: friendList, isLoading: friendListIsLoading } = useQuery({
-    queryKey: ['friend-list', friendIds],
-    queryFn: () => fetchProfiles(supabase, friendIds)
   });
 
   const { data: activeChallenges } = useActiveChallenges(user?.id);
 
   return {
     // TODO: Update online status
-    data: friendList?.map((friend) => ({
+    data: friends?.map((friend) => ({
       ...friend,
       onlineStatus: false,
       challengeId: activeChallenges?.find((challenge) => challenge.challenger === friend.id)?.id
     })),
-    isLoading: friendIdsIsLoading || friendListIsLoading
+    ...rest
   }
 }
