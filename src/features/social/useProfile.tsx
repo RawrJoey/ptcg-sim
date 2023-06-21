@@ -2,7 +2,7 @@ import { SupabaseClient, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useQuery } from "@tanstack/react-query"
 
 const fetchProfile = async (supabase: SupabaseClient, userId: string) => {
-  const res = await supabase.from('Profiles').select('name,username').eq('id', userId).single();
+  const res = await supabase.from('Profiles').select('id,name,username').eq('id', userId).single();
 
   return res.data;
 }

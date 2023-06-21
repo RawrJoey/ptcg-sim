@@ -28,7 +28,7 @@ export const AddFriend = () => {
       })
     }
 
-    const checkMadeRequestRes = await supabase.from('Friend Requests').select('id').eq('username', username).single();
+    const checkMadeRequestRes = await supabase.from('Friend Requests').select('id').eq('to', username).eq('from', user?.id).single();
 
     if (checkMadeRequestRes.error) {
       return toast({
