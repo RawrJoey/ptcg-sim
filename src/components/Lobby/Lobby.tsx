@@ -1,5 +1,5 @@
 import { useGameStartedListener } from "@/features/game/broadcast/useGameStartedListener"
-import { Stack } from "@chakra-ui/react";
+import { Container, Stack } from "@chakra-ui/react";
 import { Login } from "../Login";
 import { FinishSetupModal } from "./FinishSetupModal";
 import { FriendList } from "./Friends/FriendList";
@@ -10,15 +10,16 @@ export const Lobby = () => {
   useGameStartedListener();
 
   return (
-    <Stack
+    <Container
       height='100%'
-      justifyContent={'center'}
-      align='center'
-      maxWidth={'100%'}
+      alignItems='center'
+      size='md'
     >
-      <FinishSetupModal />
-      <Login />
-      {profile.data?.username && <FriendList />}
-    </Stack>
+      <Stack height='100%'>
+        <FinishSetupModal />
+        <Login />
+        {profile.data?.username && <FriendList />}
+      </Stack>
+    </Container>
   )
 }
