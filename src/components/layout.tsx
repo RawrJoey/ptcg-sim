@@ -4,7 +4,7 @@ import { AppBar } from "./AppBar/AppBar"
 
 export const Layout = (props: PropsWithChildren) => {
   return (
-    <Stack>
+    <Stack width='100%'>
       <AppBar />
       {props.children}
     </Stack>

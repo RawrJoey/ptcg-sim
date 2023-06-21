@@ -10,15 +10,9 @@ export const Lobby = () => {
   useGameStartedListener();
 
   return (
-    <Container
-      height='100%'
-      alignItems='center'
-      size='md'
-    >
-      <Stack height='100%'>
-        <FinishSetupModal />
-        {profile.data?.username && <FriendList />}
-      </Stack>
-    </Container>
+    <Stack height='100%' paddingY={8} paddingX={16}>
+      <FinishSetupModal />
+      {profile.data?.username && <FriendList />}
+    </Stack>
   )
 }
