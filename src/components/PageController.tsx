@@ -23,7 +23,6 @@ export const PageController = () => {
         align='center'
         maxWidth={'100%'}
       >
-        <Login />
         <GameController />
       </Stack>
     )

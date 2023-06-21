@@ -1,10 +1,11 @@
 import { Grid, HStack, Text } from "@chakra-ui/react"
 import Head from "next/head";
 import Image from "next/image";
+import { Login } from "../Login";
 
 export const AppBar = () => {
   return (
-    <Grid gridTemplateColumns={'1fr auto'} backgroundColor='green.100' boxShadow='md'>
+    <Grid gridTemplateColumns={'1fr auto'} backgroundColor='green.100' boxShadow='md' pr={4}>
       <Head>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -14,6 +15,7 @@ export const AppBar = () => {
         <Image src='/app-logo.png' alt='Twinleaf app logo' width='72' height='72' />
         <Text fontFamily={'Be Vietnam Pro'} fontSize='28' pt='3' fontWeight='500'>twinleaf</Text>
       </HStack>
+      <Login />
     </Grid>
   )
 }

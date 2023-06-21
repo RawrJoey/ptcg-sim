@@ -17,7 +17,6 @@ export const Lobby = () => {
     >
       <Stack height='100%'>
         <FinishSetupModal />
-        <Login />
         {profile.data?.username && <FriendList />}
       </Stack>
     </Container>
