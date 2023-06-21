@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
-import { useProfile } from "./useProfile";
+import { useProfile } from "../../features/social/useProfile";
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, useDisclosure, useToast } from "@chakra-ui/react";
 
 export const FinishSetupModal = () => {

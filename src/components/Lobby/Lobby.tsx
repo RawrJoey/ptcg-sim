@@ -3,7 +3,7 @@ import { Container, Stack } from "@chakra-ui/react";
 import { Login } from "../Login";
 import { FinishSetupModal } from "./FinishSetupModal";
 import { FriendList } from "./Friends/FriendList";
-import { useCurrentProfile } from "./useCurrentProfile";
+import { useCurrentProfile } from "../../features/social/useCurrentProfile";
 
 export const Lobby = () => {
   const profile = useCurrentProfile();
