@@ -15,7 +15,7 @@ export const FinishSetupModal = () => {
   const toast = useToast();
 
   useEffect(() => {
-    if (!isLoading && !profile?.username) {
+    if (!isLoading && user?.id && !profile?.username) {
       onOpen();
     }
   }, [profile, isLoading]);
