@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { Layout } from '@/components/layout';
 
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
@@ -33,7 +34,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <QueryClientProvider client={queryClient}>
           <ChakraProvider>
             <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
-              <Component {...pageProps} />
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
             </DndProvider>
           </ChakraProvider>
         </QueryClientProvider>
