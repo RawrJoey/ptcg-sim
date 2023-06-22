@@ -1,12 +1,13 @@
 import { SupabaseClient } from "@supabase/supabase-js"
 
-export const sendChallenge = async (supabaseClient: SupabaseClient, currentUserId: string, challengedUserId: string) => {
+export const sendChallenge = async (supabaseClient: SupabaseClient, currentUserId: string, challengedUserId: string, deckId: string) => {
   await supabaseClient.from('Challenges')
     .insert({
       challenger: currentUserId,
       challengee: challengedUserId,
       active: true,
-      gameIsRunning: false
+      gameIsRunning: false,
+      deck_id: deckId
     });
 };
 

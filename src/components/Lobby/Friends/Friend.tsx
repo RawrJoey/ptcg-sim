@@ -1,9 +1,11 @@
+import { useDecks } from "@/features/decks/useDecks";
 import { acceptChallenge, sendChallenge } from "@/features/social/challenges/mutators";
 import { useActiveChallenges } from "@/features/social/challenges/useActiveChallenges";
 import { FriendType } from "@/features/social/useFriends"
-import { Avatar, AvatarBadge, Button, HStack, Text } from "@chakra-ui/react";
+import { Avatar, AvatarBadge, Button, HStack, Text, useDisclosure, useToast } from "@chakra-ui/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useState } from "react";
+import { ChallengeFriendModal } from "./ChallengeFriendModal";
 
 interface FriendProps {
   friend: FriendType;
@@ -19,6 +21,9 @@ export const Friend = (props: FriendProps) => {
   const { data: activeFriendChallenges, refetch } = useActiveChallenges(props.friend.id);
   const alreadyChallenged = tempDisable || activeFriendChallenges?.some((friendOfFriend) => friendOfFriend.challenger === user?.id);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+
   const handleAcceptChallenge = async () => {
     if (!props.friend.challengeId) return;
 
@@ -26,19 +31,26 @@ export const Friend = (props: FriendProps) => {
     refetch();
   }
 
+  const handleSendChallenge = (deckId: string) => {
+    setTempDisable(true);
+    user && sendChallenge(supabase, user.id, props.friend.id, deckId);
+    onClose();
+    toast({
+      title: 'Challenge sent'
+    })
+  }
+
   if (!user) return <Text>{'Loading...'}</Text>;
 
   return (
     <HStack spacing={4}>
+      <ChallengeFriendModal isOpen={isOpen} onClose={onClose} sendChallenge={handleSendChallenge} friend={props.friend} />
       <Avatar>
         <AvatarBadge borderColor='papayawhip' bg={props.isOnline ? 'green.500' : 'tomato'} boxSize='1.25em' />
       </Avatar>
-      <Text>{props.friend.name}</Text>
+      <Text>{props.friend.username}</Text>
       {!props.friend.challengeId && (
-        <Button isDisabled={alreadyChallenged} onClick={() => {
-          setTempDisable(true);
-          sendChallenge(supabase, user.id, props.friend.id);
-        }}>{alreadyChallenged ? 'Waiting...' : 'Challenge'}</Button>
+        <Button isDisabled={alreadyChallenged} onClick={onOpen}>{alreadyChallenged ? 'Waiting...' : 'Challenge'}</Button>
       )
       }
       {props.friend.challengeId && (

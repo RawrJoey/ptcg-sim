@@ -5,6 +5,7 @@ import { useActiveChallenges } from "./challenges/useActiveChallenges";
 export interface FriendType {
   id: string;
   name: string;
+  username: string;
   onlineStatus: boolean;
   challengeId: number | undefined;
 }
