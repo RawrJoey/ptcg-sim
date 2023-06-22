@@ -100,9 +100,32 @@ export const useGameChannelSubscribe = (challengeId: number | undefined) => {
     }).subscribe((status) => {
       if (status === 'SUBSCRIBED') {
         setInterval(() => {
-          presenceChannel.track({
-            gameState: gameStateRef.current
-          })
+          const state: RealtimePresenceState<{ gameState: GameState }> = presenceChannel.presenceState();
+
+          if (user?.id) {
+            const myPresence = state[user.id];
+
+            if (myPresence) {
+              const savedGameState = myPresence.at(0)?.gameState;
+  
+              if (savedGameState) {
+                const actionWasPerformed = gameStateRef.current?.gameplayActions.length !== savedGameState.gameplayActions.length
+                // probably redundant
+                const phaseChanged = gameStateRef.current?.phase.type !== savedGameState.phase.type || gameStateRef.current.phase.status !== savedGameState.phase.status;
+                const somethingChanged = actionWasPerformed || phaseChanged;
+
+                if (somethingChanged) {
+                  presenceChannel.track({
+                    gameState: gameStateRef.current
+                  })
+                }
+              }
+            } else {
+              presenceChannel.track({
+                gameState: gameStateRef.current
+              })
+            }
+          }
         }, 201);
       }
     })
