@@ -22,12 +22,13 @@ export const Friend = (props: FriendProps) => {
   const alreadyChallenged = tempDisable || activeFriendChallenges?.some((friendOfFriend) => friendOfFriend.challenger === user?.id);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isAcceptingOpen, onOpen: onAcceptingOpen, onClose: onAcceptingClose } = useDisclosure();
   const toast = useToast();
 
-  const handleAcceptChallenge = async () => {
+  const handleAcceptChallenge = async (deckId: string) => {
     if (!props.friend.challengeId) return;
 
-    await acceptChallenge(supabase, props.friend.challengeId);
+    await acceptChallenge(supabase, props.friend.challengeId, deckId);
     refetch();
   }
 
@@ -44,7 +45,8 @@ export const Friend = (props: FriendProps) => {
 
   return (
     <HStack spacing={4}>
-      <ChallengeFriendModal isOpen={isOpen} onClose={onClose} sendChallenge={handleSendChallenge} friend={props.friend} />
+      <ChallengeFriendModal isOpen={isOpen} onClose={onClose} onConfirm={handleSendChallenge} friend={props.friend} />
+      <ChallengeFriendModal isOpen={isAcceptingOpen} onClose={onAcceptingClose} onConfirm={handleAcceptChallenge} friend={props.friend} isAcceptingChallenge />
       <Avatar>
         <AvatarBadge borderColor='papayawhip' bg={props.isOnline ? 'green.500' : 'tomato'} boxSize='1.25em' />
       </Avatar>
@@ -54,7 +56,7 @@ export const Friend = (props: FriendProps) => {
       )
       }
       {props.friend.challengeId && (
-        <Button colorScheme='red' onClick={handleAcceptChallenge}>
+        <Button colorScheme='red' onClick={onAcceptingOpen}>
           Accept challenge
         </Button>
       )}
