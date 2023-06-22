@@ -1,4 +1,5 @@
 import { CardObject } from "@/components/Card/CardInterface";
+import { BatchOfCards } from "@/components/DeckBuild/DeckBuilderModal";
 import { parseDeckList } from "@/helpers/deck/parse";
 import { PokemonTCG } from "pokemon-tcg-sdk-typescript";
 import { Subtype, Supertype } from "pokemon-tcg-sdk-typescript/dist/sdk";
@@ -31,6 +32,19 @@ export const loadDeckList = async (list: string, codeToSetMap: Record<string, st
  }
 
  return deck;
+}
+
+export const loadSavedDeck = async (deck: BatchOfCards) => {
+  const loadedDeck = [];
+
+  for (const cardClump of Object.values(deck)) {
+    for (let idx = 0; idx < cardClump.count; idx++) {
+      const cardObj: CardObject = {...cardClump.card, uuid: uuidv4(), energyAttached: [], toolsAttached: [], evolvedPokemonAttached: [] };
+      loadedDeck.push(cardObj);
+    }
+  }
+
+  return loadedDeck;
 }
 
 export const getAttachmentType = (attachedCard: CardObject) => {
