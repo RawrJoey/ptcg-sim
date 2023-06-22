@@ -6,10 +6,17 @@ import { FriendList } from "./Friends/FriendList";
 import { useCurrentProfile } from "../../features/social/useCurrentProfile";
 import { DeckBuilderOpenButton } from "../DeckBuild/DeckBuilderOpenButton";
 import { ListOfMyDecks } from "../DeckBuild/ListOfMyDecks";
+import { useUser } from "@supabase/auth-helpers-react";
+import { SplashPage } from "../SplashPage";
 
 export const Lobby = () => {
+  const user = useUser();
   const profile = useCurrentProfile();
   useGameStartedListener();
+
+  if (!user?.id) {
+    return <SplashPage />
+  }
 
   return (
     <Stack height='100%' paddingY={8} paddingX={16}>
