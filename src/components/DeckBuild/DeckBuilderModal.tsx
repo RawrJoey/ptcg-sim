@@ -34,20 +34,27 @@ export const DeckBuilderModal = (props: DeckBuilderModalProps) => {
   }, [props.editingDeck?.deck])
 
   const handleDeckSave = async () => {
-    if (deckName.length === 0) {
-      return toast({
-        status: 'error',
-        title: 'Please put in a deck name'
-      })
+    let res;
+    if (props.editingDeck) {
+      res = await supabaseClient.from('Decks').update({
+        deck: cards
+      }).match({ id: props.editingDeck.id });
+    } else {
+      if (deckName.length === 0) {
+        return toast({
+          status: 'error',
+          title: 'Please put in a deck name'
+        })
+      }
+
+      res = await supabaseClient.from('Decks').insert({
+        owner: user?.id,
+        deck: cards,
+        name: deckName
+      });
     }
 
-    const res = await supabaseClient.from('Decks').insert({
-      owner: user?.id,
-      deck: cards,
-      name: deckName
-    });
-
-    if (res.error) {
+    if (res?.error) {
       return toast({
         status: 'error',
         title: 'Failed to save deck.',
@@ -68,9 +75,9 @@ export const DeckBuilderModal = (props: DeckBuilderModalProps) => {
     <Modal isOpen={props.isOpen} onClose={() => {}} size='2xl'>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{props.editingDeck ? props.editingDeck.name : 'Create deck'}</ModalHeader>
+        <ModalHeader>{props.editingDeck ? `${props.editingDeck.name} (${getDeckLength(cards)})` : 'Create deck'}</ModalHeader>
         <ModalBody>
-          <DeckBuilder cards={cards} setCards={setCards} deckName={deckName} setDeckName={setDeckName} />
+          <DeckBuilder cards={cards} setCards={setCards} deckName={deckName} setDeckName={setDeckName} editingDeck={props.editingDeck} />
         </ModalBody>
         <ModalFooter>
           <HStack>

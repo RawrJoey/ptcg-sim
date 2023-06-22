@@ -32,6 +32,7 @@ interface DeckBuilderProps {
   setCards: (cards: BatchOfCards) => void;
   deckName: string;
   setDeckName: (name: string) => void;
+  editingDeck?: SavedDeck;
 }
 
 export const DeckBuilder = (props: DeckBuilderProps) => {
@@ -107,10 +108,10 @@ export const DeckBuilder = (props: DeckBuilderProps) => {
         </Grid>
       </Stack>
       <Stack>
-        <Grid gridTemplateColumns={'1fr 0.2fr'} alignItems='center' columnGap={2}>
+        {!props.editingDeck && <Grid gridTemplateColumns={'1fr 0.2fr'} alignItems='center' columnGap={2}>
           <Input value={props.deckName} onChange={(e) => props.setDeckName(e.target.value)} placeholder='Enter deck name' />
           <Heading size='md'>({getDeckLength(props.cards)})</Heading>
-        </Grid>
+        </Grid>}
         <Grid gridTemplateColumns={'1fr 1fr 1fr'}>
           {Object.values(props.cards).sort(sortMyDeck).map(({ count, card }) => (
             <Stack key={card.id}>
