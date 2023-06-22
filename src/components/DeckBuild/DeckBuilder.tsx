@@ -96,10 +96,10 @@ export const DeckBuilder = (props: DeckBuilderProps) => {
   }
 
   return (
-    <Grid gridTemplateColumns={'1fr 1fr'} columnGap={8}>
+    <Grid gridTemplateColumns={'1fr 2fr'} columnGap={8}>
       <Stack>
         <Input placeholder="Search" onChange={e => setCardSearch(e.target.value)} />
-        <Grid gridTemplateColumns={'1fr 1fr'} overflowY='scroll' maxHeight='70vh'>
+        <Grid gridTemplateColumns={'1fr 1fr'} overflowY='scroll' maxHeight='80vh'>
           {searchedCards?.slice().reverse()?.map((card) => (
             <Box key={card.id} cursor='pointer' onClick={() => handleAddCard(card)}>
               <Image src={card.images.small} />
@@ -112,7 +112,7 @@ export const DeckBuilder = (props: DeckBuilderProps) => {
           <Input value={props.deckName} onChange={(e) => props.setDeckName(e.target.value)} placeholder='Enter deck name' />
           <Heading size='md'>({getDeckLength(props.cards)})</Heading>
         </Grid>}
-        <Grid gridTemplateColumns={'1fr 1fr 1fr'}>
+        <Grid gridTemplateColumns={'1fr 1fr 1fr 1fr'} overflowY='scroll' maxHeight={'65vh'}>
           {Object.values(props.cards).sort(sortMyDeck).map(({ count, card }) => (
             <Stack key={card.id}>
               <Image src={card.images.small} />
