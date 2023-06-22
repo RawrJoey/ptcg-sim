@@ -28,9 +28,9 @@ export const AddFriend = () => {
       })
     }
 
-    const checkMadeRequestRes = await supabase.from('Friend Requests').select('id').eq('to', username).eq('from', user?.id).single();
+    const checkMadeRequestRes = await supabase.from('Friend Requests').select('id').eq('to', username).eq('from', user?.id);
 
-    if (checkMadeRequestRes.error) {
+    if (checkMadeRequestRes.data) {
       return toast({
         status: 'error',
         title: 'You already sent a request to this user!',
