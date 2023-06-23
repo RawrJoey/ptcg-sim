@@ -35,7 +35,7 @@ export const DeckBuilderModal = (props: DeckBuilderModalProps) => {
 
   const handleDeckSave = async () => {
     let res;
-    if (props.editingDeck) {
+    if (props.editingDeck?.id) {
       res = await supabaseClient.from('Decks').update({
         deck: cards
       }).match({ id: props.editingDeck.id });
