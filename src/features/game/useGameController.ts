@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { drawCard, drawOpenSeven, layPrizes, loadDeck, mulliganHandAway, setGamePhase } from './gameSlice';
-import { loadDeckList } from './helpers';
+import { loadDeckListIntoCardObjects } from './helpers';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
 import { GamePhaseState } from './types/Game';
@@ -59,7 +59,7 @@ export const useGameController = () => {
       }
 
       if (phase.status === 'pending') {
-        loadDeckList(SAMPLE_LIST, codeToSetMap).then((loadedDeckList) => {
+        loadDeckListIntoCardObjects(SAMPLE_LIST, codeToSetMap).then((loadedDeckList) => {
           dispatch(loadDeck({ payload: loadedDeckList }));
           dispatch(setGamePhase({
             type: 'initialize',

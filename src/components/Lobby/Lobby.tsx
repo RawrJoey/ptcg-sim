@@ -1,5 +1,5 @@
 import { useGameStartedListener } from "@/features/game/broadcast/useGameStartedListener"
-import { Container, Stack } from "@chakra-ui/react";
+import { Container, HStack, Stack } from "@chakra-ui/react";
 import { Login } from "../Login";
 import { FinishSetupModal } from "./FinishSetupModal";
 import { FriendList } from "./Friends/FriendList";
@@ -8,6 +8,7 @@ import { DeckBuilderOpenButton } from "../DeckBuild/DeckBuilderOpenButton";
 import { ListOfMyDecks } from "../DeckBuild/ListOfMyDecks";
 import { useUser } from "@supabase/auth-helpers-react";
 import { SplashPage } from "../SplashPage";
+import { DeckImportButton } from "../DeckBuild/DeckImport/DeckImportButton";
 
 export const Lobby = () => {
   const user = useUser();
@@ -26,7 +27,10 @@ export const Lobby = () => {
         <Stack>
           <FriendList />
           <ListOfMyDecks />
-          <DeckBuilderOpenButton />
+          <HStack>
+            <DeckBuilderOpenButton />
+            <DeckImportButton  />
+          </HStack>
         </Stack>
       )}
     </Stack>

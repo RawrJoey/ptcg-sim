@@ -5,7 +5,7 @@ import { PokemonTCG } from "pokemon-tcg-sdk-typescript";
 import { Subtype, Supertype } from "pokemon-tcg-sdk-typescript/dist/sdk";
 import { v4 as uuidv4 } from 'uuid';
 
-export const loadDeckList = async (list: string, codeToSetMap: Record<string, string>): Promise<CardObject[]> => {
+export const loadDeckList = async (list: string, codeToSetMap: Record<string, string>): Promise<BatchOfCards> => {
   const uniqueCards = parseDeckList(list, codeToSetMap, true);
   const query = uniqueCards.reduce((acc, curr) => {
     const queryStr = `(set.id:${curr.set} number:${curr.number})`;
@@ -15,23 +15,39 @@ export const loadDeckList = async (list: string, codeToSetMap: Record<string, st
     return `${acc} OR ${queryStr}`;
   }, '');
 
- const cards = await PokemonTCG.findCardsByQueries({ q: query});
- const deck = [];
+  const cards = await PokemonTCG.findCardsByQueries({ q: query});
+  const cardBatch: BatchOfCards = {};
 
- for (const card of uniqueCards) {
-   const foundCard = cards.find((apiCard) => apiCard.id === `${card.set}-${card.number}`);
+  for (const card of uniqueCards) {
+    const foundCard = cards.find((apiCard) => apiCard.id === `${card.set}-${card.number}`);
 
-   if (foundCard) {
-     for (let idx = 0; idx < (card.count ?? 0); idx++) {
-        const cardObj: CardObject = {...foundCard, uuid: uuidv4(), energyAttached: [], toolsAttached: [], evolvedPokemonAttached: [] };
-        deck.push(cardObj);
-     }
-   } else {
-    console.error('Did not find', card);
-   }
- }
+    if (foundCard && card.count) {
+      cardBatch[foundCard.id] = {
+        count: card.count,
+        card: foundCard
+      }
 
- return deck;
+    } else {
+      console.error('Did not find', card);
+    }
+  }
+
+  return cardBatch;
+}
+
+// TODO: Deprecate
+export const loadDeckListIntoCardObjects = async (list: string, codeToSetMap: Record<string, string>): Promise<CardObject[]> => {
+  const loadedDeckList = await loadDeckList(list, codeToSetMap);
+  const deck = [];
+
+  for (const card of Object.values(loadedDeckList)) {
+    for (let idx = 0; idx < (card.count ?? 0); idx++) {
+      const cardObj: CardObject = {...card.card, uuid: uuidv4(), energyAttached: [], toolsAttached: [], evolvedPokemonAttached: [] };
+      deck.push(cardObj);
+    }
+  }
+
+  return deck;
 }
 
 export const loadSavedDeck = async (deck: BatchOfCards) => {
