@@ -75,7 +75,7 @@ export const DeckBuilderModal = (props: DeckBuilderModalProps) => {
     <Modal isOpen={props.isOpen} onClose={props.editingDeck ? props.onClose : () => {}} size='4xl'>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{props.editingDeck ? `${props.editingDeck.name} (${getDeckLength(cards)})` : 'Create deck'}</ModalHeader>
+        <ModalHeader>{props.editingDeck?.name ? `${props.editingDeck.name} (${getDeckLength(cards)})` : 'Create deck'}</ModalHeader>
         <ModalBody>
           <DeckBuilder cards={cards} setCards={setCards} deckName={deckName} setDeckName={setDeckName} editingDeck={props.editingDeck} />
         </ModalBody>

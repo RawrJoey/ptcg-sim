@@ -108,7 +108,7 @@ export const DeckBuilder = (props: DeckBuilderProps) => {
         </Grid>
       </Stack>
       <Stack>
-        {!props.editingDeck && <Grid gridTemplateColumns={'1fr 0.2fr'} alignItems='center' columnGap={2}>
+        {!props.editingDeck?.name && <Grid gridTemplateColumns={'1fr 0.2fr'} alignItems='center' columnGap={2}>
           <Input value={props.deckName} onChange={(e) => props.setDeckName(e.target.value)} placeholder='Enter deck name' />
           <Heading size='md'>({getDeckLength(props.cards)})</Heading>
         </Grid>}
