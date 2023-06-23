@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, useDisclosure } from "@chakra-ui/react"
+import { Button, useDisclosure, useToast } from "@chakra-ui/react"
 import { BatchOfCards, DeckBuilderModal } from "../DeckBuilderModal";
 import { DeckImportModal } from "./DeckImportModal";
 import { loadDeckList } from '@/features/game/helpers';
@@ -11,10 +11,17 @@ export const DeckImportButton = () => {
   const { data: codeToSetMap } = useCodeToSetMap();
 
   const { isOpen: isEditorOpen, onOpen: onEditorOpen, onClose: onEditorClose } = useDisclosure();
+  const toast = useToast();
 
   const onListImport = async (deckList: string) => {
     const deck = await loadDeckList(deckList, codeToSetMap);
     setEditingDeck(deck);
+    onClose();
+    onEditorOpen();
+    toast({
+      status: 'success',
+      title: 'Deck imported!'
+    })
   }
 
   return (
