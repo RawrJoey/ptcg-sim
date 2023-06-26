@@ -8,13 +8,15 @@ import { GamePhaseState } from './types/Game';
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { CardObject } from '@/components/Card/CardInterface';
 import { useActiveGame } from '../social/challenges/useActiveGame';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { fetchActiveDeck } from '../social/challenges/fetchers';
 
 export const useGameController = () => {
   const { data: codeToSetMap, isLoading: codeToSetMapIsLoading } = useCodeToSetMap();
 
   const { phase, opponentPhase, myDeck, isChallenger, isGoingFirst } = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
-  const game = useActiveGame();
+  const supabaseClient = useSupabaseClient();
 
   // Only relevant if you are the challenger
   const randomNum = Math.floor(Math.random() * 2);
@@ -61,16 +63,12 @@ export const useGameController = () => {
       }
 
       if (phase.status === 'pending') {
-        let loadedDeck: CardObject[] = [];
-        if (isChallenger && game?.deck_id.deck) {
-          loadedDeck = await loadSavedDeck(game.deck_id.deck)
-        } else if (!isChallenger && game?.challengee_deck_id.deck) {
-          loadedDeck = await loadSavedDeck(game.challengee_deck_id.deck)
-        }
+        const fetchedDeck = await fetchActiveDeck(supabaseClient, isChallenger);
 
-        if (loadDeck.length === 0) {
-          console.error('Oops the deck cant load')
+        if (!fetchedDeck) {
+          console.error('Oops the deck cant be fetched')
         } else {
+          const loadedDeck = await loadSavedDeck(fetchedDeck!);
           dispatch(loadDeck({ payload: loadedDeck }));
           dispatch(setGamePhase({
             type: 'initialize',
