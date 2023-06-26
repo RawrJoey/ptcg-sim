@@ -1,5 +1,6 @@
 import '@/styles/globals.css';
 import { ChakraProvider } from '@chakra-ui/react';
+import { Analytics } from '@vercel/analytics/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { AppProps } from 'next/app';
 import { DndProvider } from 'react-dnd';
@@ -36,6 +37,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
               <Layout>
                 <Component {...pageProps} />
+                <Analytics />
               </Layout>
             </DndProvider>
           </ChakraProvider>
