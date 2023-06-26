@@ -3,6 +3,7 @@ import { useDecks } from "@/features/decks/useDecks";
 import { FriendType } from "@/features/social/useFriends";
 import { Button, Heading, HStack, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
+import { getDeckLength } from '@/components/DeckBuild/helpers';
 
 interface ChallengeFriendModalProps {
   isOpen: boolean;
@@ -27,7 +28,7 @@ export const ChallengeFriendModal = (props: ChallengeFriendModalProps) => {
         <ModalBody>
         <Stack>
           <Text>Select deck to play with</Text>
-          {myDecks && myDecks.length > 0 && <HStack>{myDecks?.map((deck) => <Button isDisabled={deck.deck.length !== 60} key={'challenge-deck' + deck.id} colorScheme={selectedDeck === deck.id ? 'blue' : 'gray'} onClick={() => setSelectedDeck(deck.id)}>{deck.name}</Button>)}</HStack>}
+          {myDecks && myDecks.length > 0 && <HStack>{myDecks?.map((deck) => <Button isDisabled={getDeckLength(deck.deck) !== 60} key={'challenge-deck' + deck.id} colorScheme={selectedDeck === deck.id ? 'blue' : 'gray'} onClick={() => setSelectedDeck(deck.id)}>{deck.name}</Button>)}</HStack>}
           {hasNoDecks && <Text>You have no decks. Make one first before playing in a game!</Text>}
         </Stack>
         </ModalBody>
