@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useDecks } from "@/features/decks/useDecks";
 import { loadDeck } from "@/features/game/gameSlice";
 import { loadSavedDeck } from "@/features/game/helpers";
@@ -30,7 +31,7 @@ export const Friend = (props: FriendProps) => {
   const { isOpen: isAcceptingOpen, onOpen: onAcceptingOpen, onClose: onAcceptingClose } = useDisclosure();
   const toast = useToast();
 
-  const handleAcceptChallenge = async (deckId: number) => {
+  const handleAcceptChallenge = useCallback(async (deckId: number) => {
     if (!props.friend.challengeId) return;
 
     await acceptChallenge(supabase, props.friend.challengeId, deckId);
@@ -42,16 +43,16 @@ export const Friend = (props: FriendProps) => {
 
     dispatch(loadDeck({ payload: loadedDeck }));
     refetch();
-  }
+  }, [supabase, decks, acceptChallenge, loadDeck, dispatch, refetch])
 
-  const handleSendChallenge = (deckId: number) => {
+  const handleSendChallenge = useCallback((deckId: number) => {
     setTempDisable(true);
     user && sendChallenge(supabase, user.id, props.friend.id, deckId);
     onClose();
     toast({
       title: 'Challenge sent'
     })
-  }
+  }, [setTempDisable, user, supabase, sendChallenge, onClose, toast])
 
   if (!user) return <Text>{'Loading...'}</Text>;
 

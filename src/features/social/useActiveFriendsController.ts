@@ -13,7 +13,7 @@ export const useActiveFriendsController = () => {
 
   useEffect(() => {
     friendsRef.current = friends.data;
-  }, [friends.data]);
+  }, [friends.data?.length]);
 
   const presenceChannel = supabase.channel(`online`, {
     config: {
@@ -43,6 +43,7 @@ export const useActiveFriendsController = () => {
       setActiveFriends(friendActiveStatus)
     }).subscribe((status) => {
       if (status === 'SUBSCRIBED') {
+        console.log('DOIN')
         presenceChannel.track({
           id: user?.id,
           online_at: new Date().toISOString(),
@@ -53,7 +54,7 @@ export const useActiveFriendsController = () => {
     return () => {
       supabase.removeChannel(presenceChannel)
     };
-  })
+  }, []);
 
   return activeFriends;
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useDecks } from "@/features/decks/useDecks";
 import { FriendType } from "@/features/social/useFriends";
 import { Button, Heading, HStack, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text } from "@chakra-ui/react";
@@ -18,7 +18,7 @@ export const ChallengeFriendModal = (props: ChallengeFriendModalProps) => {
   const { data: myDecks } = useDecks(user?.id);
   const [selectedDeck, setSelectedDeck] = useState<number | undefined>();
 
-  const hasNoDecks = myDecks?.length === 0;
+  const hasNoDecks = useMemo(() => myDecks?.length === 0, [myDecks?.length]);
 
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose}>
