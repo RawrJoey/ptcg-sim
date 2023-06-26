@@ -5,8 +5,9 @@ import { Challenge } from "./useChallenges";
 export const fetchActiveDeck = async (supabaseClient: SupabaseClient, isChallenger: boolean | undefined) => {
   const { data } = await supabaseClient
     .from('Challenges')
-    .select(isChallenger ? 'deck_id->deck' : 'challengee_deck_id->deck')
-    .returns<{ deck: BatchOfCards }>()
+    .select('deck_id(deck),challengee_deck_id(deck)')
+    .eq('gameIsRunning', true)
+    .returns<{ deck_id: { deck: BatchOfCards }, challengee_deck_id: { deck: BatchOfCards} }[]>()
 
-  return data?.deck;
+  return isChallenger ? data?.[0]?.deck_id.deck : data?.[0]?.challengee_deck_id.deck;
 }
