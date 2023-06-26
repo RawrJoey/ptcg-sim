@@ -1,0 +1,320 @@
+<style>
+
+.parent {
+  position: absolute;
+
+  top: 40%;
+  left: 0;
+}
+
+.image1 {
+  position: relative;
+  left: 0;
+top: 0;
+z-index: 2;
+opacity: 1;
+}
+
+:root {
+  --color-text: white;
+  --color-bg: 18, 42, 35;
+  /*   --size: clamp(10rem, 1rem + 40vmin, 30rem); */
+  --size: 14rem;
+  /*   --gap: calc(var(--size) / 12); */
+  --gap: 16px;
+  --duration: 60s;
+  --scroll-start: 0;
+  --scroll-end: calc(-100% - var(--gap));
+}
+
+
+
+
+.wrapper {
+          z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  margin: 0 auto;
+
+  opacity: 0.3;
+}
+
+.wrapper:after {
+  pointer-events: none;
+  content: "";
+  position: absolute;
+  display: block;
+
+
+  inset: 0;
+  background: linear-gradient(
+      90deg,
+      rgba(var(--color-bg), 1) 0%,
+      rgba(var(--color-bg), 0) 20%,
+      rgba(var(--color-bg), 0) 80%,
+      rgba(var(--color-bg), 1) 100%
+    ),
+    radial-gradient(
+      ellipse at top,
+      rgba(var(--color-bg), 0) 0%,
+      rgba(var(--color-bg), 1) 100%
+    );
+}
+
+.marquee {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: var(--gap);
+  
+
+}
+
+.marquee__group {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  /*   justify-content: space-around; */
+  gap: var(--gap);
+  animation: scroll-x var(--duration) linear infinite;
+}
+
+.marquee--reverse .marquee__group {
+  animation-direction: reverse;
+    flex-shrink: 0;
+  display: flex;
+ 
+}
+
+.marquee__item {
+  flex-grow: 1;
+  display: grid;
+  place-items: center;
+  width: var(--size);
+
+
+  /*   padding: calc(var(--size) / 10); */
+  border-radius: 12px;
+}
+
+@keyframes scroll-x {
+  from {
+    transform: translateX(var(--scroll-start));
+  }
+  to {
+    transform: translateX(var(--scroll-end));
+  }
+}
+
+/* Reset and basic setup stuff */
+*,
+*:before {
+      box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+
+  overflow-x: hidden;
+    overflow-y: hidden;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  background: rgb(var(--color-bg));
+  color: var(--color-text);
+  padding: 2rem 0;
+}
+
+
+</style>
+
+
+<div class="parent">
+
+<center><img align ="vertical-align:middle" class="image1" src="img/twinleaf-cs.png" height width="40%"/></center>
+
+</div>
+
+<div class="wrapper">
+
+
+  <div class="marquee">
+    <div class="marquee__group">
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00003317.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002667.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006873.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00001853.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00003783.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002106.png" width="90%" height="90%"></div>
+                                    <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002647.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002590.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005651.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00003004.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00001863.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00001818.png" width="90%" height="90%"></div>
+    </div>
+    <div class="marquee__group">
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00003317.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002667.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006873.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00001853.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00003783.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002106.png" width="90%" height="90%"></div>
+                                    <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002647.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002590.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005651.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00003004.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00001863.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00001818.png" width="90%" height="90%"></div>
+    </div>
+  </div>
+
+
+
+  <div class="marquee marquee--reverse">
+    <div class="marquee__group">
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00001461.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002382.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002581.png" width="90%" height="90%"></div>
+<div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002728.png" width="90%" height="90%"></div>
+<div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002646.png" width="90%" height="90%"></div>
+<div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002733.png" width="90%" height="90%"></div>
+<div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00001534.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002308.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00000632.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002398.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00003585.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00003317.png" width="90%" height="90%"></div>
+    </div>
+    
+    
+    <div class="marquee__group">
+
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00001461.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002382.png" width="90%" height="90%"></div>
+                                    <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002581.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002728.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002646.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002733.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00001534.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002308.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00000632.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00002398.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00003585.png" width="90%" height="90%"></div>
+                                    <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00003317.png" width="90%" height="90%"></div>
+                                    <!-- Start of second tow going up -->
+    </div>
+    
+    
+  </div>
+
+
+
+
+
+  <div class="marquee">
+    <div class="marquee__group">
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006817.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006827.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006839.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006849.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006852.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006864.png" width="90%" height="90%"></div>
+                                    <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006873.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006875.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006891.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006898.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006905.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006929.png" width="90%" height="90%"></div>
+    </div>
+    <div class="marquee__group">
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006873.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006875.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006891.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006898.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006905.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006929.png" width="90%" height="90%"></div>
+                                    <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006817.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006827.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006839.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006849.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006852.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006864.png" width="90%" height="90%"></div>
+    </div>
+  </div>
+
+<div class="marquee marquee--reverse">
+    <div class="marquee__group">
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006939.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006942.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006962.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006965.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006981.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005728.png" width="90%" height="90%"></div>
+                                    <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005651.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005658.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005693.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005701.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005713.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005728.png" width="90%" height="90%"></div>
+    </div>
+    
+    
+    <div class="marquee__group">
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005651.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005658.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005693.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005701.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005713.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005728.png" width="90%" height="90%"></div>
+                                    <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006939.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006942.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006962.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006965.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006981.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005728.png" width="90%" height="90%"></div>
+    </div>
+    
+    
+  </div>
+  
+    <div class="marquee">
+    <div class="marquee__group">
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006817.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006827.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006839.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006849.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006852.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006864.png" width="90%" height="90%"></div>
+                                    <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006939.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006942.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006962.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006965.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006981.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005728.png" width="90%" height="90%"></div>
+                                    <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006817.png" width="90%" height="90%"></div>
+    </div>
+    <div class="marquee__group">
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006939.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006942.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006962.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006965.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006981.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00005728.png" width="90%" height="90%"></div>
+                                    <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006817.png" width="90%" height="90%"></div>
+      <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006827.png" width="90%" height="90%"></div>
+            <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006839.png" width="90%" height="90%"></div>
+                  <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006849.png" width="90%" height="90%"></div>
+                        <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006852.png" width="90%" height="90%"></div>
+                              <div class="marquee__item"><img src="https://asia.pokemon-card.com/sg/card-img/default00006864.png" width="90%" height="90%"></div>
+    </div>
+  </div>
+
+
+</div>
