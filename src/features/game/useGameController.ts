@@ -1,24 +1,26 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { drawCard, drawOpenSeven, layPrizes, loadDeck, mulliganHandAway, setGamePhase } from './gameSlice';
-import { loadDeckListIntoCardObjects } from './helpers';
+import { loadDeckListIntoCardObjects, loadSavedDeck } from './helpers';
 import { useCodeToSetMap } from '@/hooks/useCodeToSetMap';
 import { SAMPLE_LIST } from '@/helpers/deck/mocks';
 import { GamePhaseState } from './types/Game';
 import { Subtype, Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { CardObject } from '@/components/Card/CardInterface';
+import { useActiveGame } from '../social/challenges/useActiveGame';
 
 export const useGameController = () => {
   const { data: codeToSetMap, isLoading: codeToSetMapIsLoading } = useCodeToSetMap();
 
   const { phase, opponentPhase, myDeck, isChallenger, isGoingFirst } = useAppSelector((state) => state.game);
   const dispatch = useAppDispatch();
+  const game = useActiveGame();
 
   // Only relevant if you are the challenger
   const randomNum = Math.floor(Math.random() * 2);
   const iAmFlipping = randomNum === 1;
 
-  const phaseHandler = () => {
+  const phaseHandler = async () => {
     console.log('PHASE')
     console.log(phase)
     console.log(opponentPhase)
@@ -59,13 +61,22 @@ export const useGameController = () => {
       }
 
       if (phase.status === 'pending') {
-        loadDeckListIntoCardObjects(SAMPLE_LIST, codeToSetMap).then((loadedDeckList) => {
-          dispatch(loadDeck({ payload: loadedDeckList }));
+        let loadedDeck: CardObject[] = [];
+        if (isChallenger && game?.deck_id.deck) {
+          loadedDeck = await loadSavedDeck(game.deck_id.deck)
+        } else if (!isChallenger && game?.challengee_deck_id.deck) {
+          loadedDeck = await loadSavedDeck(game.challengee_deck_id.deck)
+        }
+
+        if (loadDeck.length === 0) {
+          console.error('Oops the deck cant load')
+        } else {
+          dispatch(loadDeck({ payload: loadedDeck }));
           dispatch(setGamePhase({
             type: 'initialize',
             status: 'ok',
           }));
-        });
+        }
       }
     }
 
