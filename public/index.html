@@ -2,42 +2,41 @@
 
 .parent {
   position: absolute;
-
   top: 40%;
   left: 0;
 }
 
-.image1 {
+.twinleaf {
   position: relative;
   left: 0;
 top: 0;
 z-index: 2;
 opacity: 1;
+      font-family: "forma-djr-display", sans-serif;
+  font-size: 42;
+font-weight: 500;
+font-style: normal;
+color: #449058;
 }
 
 :root {
-  --color-text: white;
   --color-bg: 18, 42, 35;
-  /*   --size: clamp(10rem, 1rem + 40vmin, 30rem); */
   --size: 14rem;
-  /*   --gap: calc(var(--size) / 12); */
   --gap: 16px;
   --duration: 60s;
   --scroll-start: 0;
-  --scroll-end: calc(-100% - var(--gap));
+  --scroll-end: calc(-25% - var(--gap));
 }
-
 
 
 
 .wrapper {
-          z-index: 1;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: var(--gap);
   margin: 0 auto;
 
-  opacity: 0.3;
 }
 
 .wrapper:after {
@@ -67,14 +66,14 @@ opacity: 1;
   overflow: hidden;
   user-select: none;
   gap: var(--gap);
-  
+    opacity: 0.3;
 
 }
 
 .marquee__group {
   flex-shrink: 0;
   display: flex;
-  align-items: center;
+    align-items: center;
   /*   justify-content: space-around; */
   gap: var(--gap);
   animation: scroll-x var(--duration) linear infinite;
@@ -82,10 +81,12 @@ opacity: 1;
 
 .marquee--reverse .marquee__group {
   animation-direction: reverse;
-    flex-shrink: 0;
+  animation: scroll-x var linear infinite;
+  flex-shrink: 0;
   display: flex;
  
 }
+
 
 .marquee__item {
   flex-grow: 1;
@@ -110,7 +111,7 @@ opacity: 1;
 /* Reset and basic setup stuff */
 *,
 *:before {
-      box-sizing: border-box;
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
@@ -122,8 +123,7 @@ opacity: 1;
 body {
 
   overflow-x: hidden;
-    overflow-y: hidden;
-  display: grid;
+  overflow-y: hidden;
   justify-content: center;
   align-content: center;
   background: rgb(var(--color-bg));
@@ -131,14 +131,23 @@ body {
   padding: 2rem 0;
 }
 
+}
+
 
 </style>
 
 
 <div class="parent">
+<div class="twinleaf">
 
-<center><img align ="vertical-align:middle" class="image1" src="img/twinleaf-cs.png" height width="40%"/></center>
+<center>
+    
+<img align ="vertical-align:middle" class="twinleaf" src="img/twinleaf-2.png" height width="40%"/>
+<br>
+any text here can now be changed into anything
 
+</center>
+</div>
 </div>
 
 <div class="wrapper">
