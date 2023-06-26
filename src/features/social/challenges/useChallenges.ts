@@ -1,3 +1,4 @@
+import { BatchOfCards } from "@/components/DeckBuild/DeckBuilderModal";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { SupabaseClient } from "@supabase/supabase-js"
 import { useQuery } from "@tanstack/react-query";
@@ -8,13 +9,13 @@ export interface Challenge {
   challenger: string;
   active: boolean;
   gameIsRunning: boolean;
-  deck_id: number;
+  deck_id: { deck: BatchOfCards };
 }
 
 const fetchChallenges = async (supabaseClient: SupabaseClient) => {
   const { data } = await supabaseClient
     .from('Challenges')
-    .select('id,challengee,challenger,active,gameIsRunning,deck_id')
+    .select('id,challengee,challenger,active,gameIsRunning,deck_id(deck)')
     .returns<Challenge[]>();
 
   return data ?? [];

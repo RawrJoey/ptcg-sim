@@ -14,8 +14,6 @@ export const useInterfaceController = () => {
 
   const user = useUser();
   const activeGame = useActiveGame();
-  const { data: challengerDeck } = useSavedDeck(user?.id, activeGame?.deck_id)
-
   const onGameStart = async () => {
     try {
       const isChallenger = user?.id === activeGame?.challenger;
@@ -23,8 +21,8 @@ export const useInterfaceController = () => {
       startGame();
       dispatch(setIsChallenger(user?.id === activeGame?.challenger));
       
-      if (isChallenger) {
-        const loadedDeck = await loadSavedDeck(challengerDeck?.deck);
+      if (isChallenger && activeGame?.deck_id?.deck) {
+        const loadedDeck = await loadSavedDeck(activeGame?.deck_id?.deck);
         dispatch(loadDeck({ payload: loadedDeck }));
       }
     } catch(err) {
