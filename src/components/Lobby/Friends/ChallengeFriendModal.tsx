@@ -7,7 +7,7 @@ import { useUser } from "@supabase/auth-helpers-react";
 interface ChallengeFriendModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (deckId: string) => void;
+  onConfirm: (deckId: number) => void;
   friend: FriendType;
   isAcceptingChallenge?: boolean;
 }
@@ -15,7 +15,7 @@ interface ChallengeFriendModalProps {
 export const ChallengeFriendModal = (props: ChallengeFriendModalProps) => {
   const user = useUser();
   const { data: myDecks } = useDecks(user?.id);
-  const [selectedDeck, setSelectedDeck] = useState<string | undefined>();
+  const [selectedDeck, setSelectedDeck] = useState<number | undefined>();
 
   const hasNoDecks = myDecks?.length === 0;
 

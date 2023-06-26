@@ -1,7 +1,7 @@
 import { SupabaseClient, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useQuery } from "@tanstack/react-query";
 
-export interface SavedDeck { id?: string, owner?: string, deck: any, name?: string }
+export interface SavedDeck { id?: number, owner?: string, deck: any, name?: string }
 
 const fetchDecks = async (supabase: SupabaseClient, userId: string | undefined) => {
   if (!userId) return [];

@@ -8,12 +8,13 @@ export interface Challenge {
   challenger: string;
   active: boolean;
   gameIsRunning: boolean;
+  deck_id: number;
 }
 
 const fetchChallenges = async (supabaseClient: SupabaseClient) => {
   const { data } = await supabaseClient
     .from('Challenges')
-    .select('id,challengee,challenger,active,gameIsRunning')
+    .select('id,challengee,challenger,active,gameIsRunning,deck_id')
     .returns<Challenge[]>();
 
   return data ?? [];

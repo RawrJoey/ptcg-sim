@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js"
 
-export const sendChallenge = async (supabaseClient: SupabaseClient, currentUserId: string, challengedUserId: string, deckId: string) => {
+export const sendChallenge = async (supabaseClient: SupabaseClient, currentUserId: string, challengedUserId: string, deckId: number) => {
   await supabaseClient.from('Challenges')
     .insert({
       challenger: currentUserId,
@@ -11,7 +11,7 @@ export const sendChallenge = async (supabaseClient: SupabaseClient, currentUserI
     });
 };
 
-export const acceptChallenge = async (supabaseClient: SupabaseClient, challengeId: number, deckId: string) => {
+export const acceptChallenge = async (supabaseClient: SupabaseClient, challengeId: number, deckId: number) => {
   const { data, error } = await supabaseClient.from('Challenges')
     .update({ gameIsRunning: true, active: false, challengee_deck_id: deckId })
     .eq('id', challengeId);
